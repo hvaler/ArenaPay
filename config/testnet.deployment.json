@@ -1,0 +1,12 @@
+{
+  "network": "testnet",
+  "rpcUrl": "https://soroban-testnet.stellar.org/",
+  "readRpcUrls": [],
+  "contractId": "CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID",
+  "tokenId": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+  "adminPublicKey": "GDAQTNXEXDOIRJCAMHVWZDKBRWV5CGR7T47ILYKW6BSQJ7H6XK7HWENV",
+  "refereePublicKey": "ce0c2642e5ed033cdf9c7f96fddcb35e934e28dfe3e58a2b094082a8e6ce8483",
+  "deployTx": "d4d1ce70c5436ffe1c27d75ca876775b4c55640d6951783a3b0b90cbd77c1cff",
+  "wasmHash": "1f87a3db0c44078864130bdcadc05ff36c78c41a964a6570edd57597ecc91141",
+  "deployedAt": "2026-09-11T22:30:31.489Z"
+}

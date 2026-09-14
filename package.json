@@ -1,0 +1,69 @@
+{
+  "name": "arenapay",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "author": "Hugo Carlos Valer Rojas",
+  "homepage": "https://arenapay.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hvaler/ArenaPay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hvaler/ArenaPay/issues"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "workspaces": [
+    "src/apps/*",
+    "src/packages/*",
+    "src/services/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n engine,web \"npm run dev:engine\" \"npm run dev:web\"",
+    "dev:engine": "tsx watch src/services/match-engine/src/server.ts",
+    "start:engine": "node --import tsx src/services/match-engine/src/server.ts",
+    "dev:web": "vite --config src/apps/web/vite.config.ts",
+    "build": "tsc --noEmit && vite build --config src/apps/web/vite.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:operational": "playwright test --config playwright.operational.config.ts",
+    "check": "npm test && npm run build",
+    "deploy:testnet": "node --import tsx src/scripts/deploy-testnet.ts",
+    "rehearse:testnet": "node --import tsx src/scripts/rehearse-testnet.ts",
+    "test:contract": "powershell -NoProfile -ExecutionPolicy Bypass -File src/scripts/cargo.ps1 test -p arena_escrow",
+    "build:contract": "stellar contract build --package arena_escrow --optimize=false",
+    "build:public": "node src/scripts/build-public.mjs",
+    "build:operational": "node src/scripts/build-operational.mjs",
+    "build:vercel": "node src/scripts/build-vercel.mjs",
+    "dev:cloudflare": "npm run build:operational && wrangler dev",
+    "deploy:cloudflare": "npm run build:operational && wrangler deploy",
+    "deploy:vercel": "npm run build:vercel && npx vercel@59.16.0 deploy public-operational --prod --yes --project arenapay",
+    "docs:runbook": "node src/scripts/build-runbook.mjs"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@stellar/freighter-api": "^6.0.1",
+    "@stellar/stellar-sdk": "^17.0.1",
+    "fastify": "^5.6.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsx": "^4.23.13",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260911.1",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "concurrently": "^9.2.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0",
+    "wrangler": "^4.131.1"
+  }
+}

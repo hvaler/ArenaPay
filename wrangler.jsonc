@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "arenapay",
+  "main": "src/services/cloudflare-worker/src/index.ts",
+  "compatibility_date": "2026-09-13",
+  "assets": {
+    "directory": "public-operational",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "ARENA", "class_name": "ArenaCoordinator" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["ArenaCoordinator"] }
+  ],
+  "vars": {
+    "ARENAPAY_ALLOWED_ORIGINS": "https://arenapay.vercel.app,https://hvaler.github.io",
+    "ARENAPAY_DAILY_MATCH_LIMIT": "20"
+  },
+  "observability": { "enabled": true }
+}
