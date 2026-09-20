@@ -47,6 +47,8 @@ Edita `docs/guias/runbook-pruebas-arenapay.md` y ejecuta `npm run docs:runbook`.
 
 La rama `main` contiene el código. La rama `gh-pages` publica la edición offline compilada. Vercel publica la edición operativa y reenvía `/api/*` al Worker de Cloudflare. No incluyas `data/`, `.env.testnet` ni credenciales en la publicación. Mantén el directorio de ejecución fuera de las carpetas servidas por Vite.
 
+El trabajo mantenido por el titular se realiza en el repositorio privado `ArenaPay-Dev`; las versiones seleccionadas se preparan como commits independientes en el repositorio público `ArenaPay`. No fusiones sus historiales ni envíes la rama privada al remoto público. Sigue la [guía de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md).
+
 Las futuras evidencias del ensayo v2 se guardan en archivos con sufijo `-v2`; los vectores v1 permanecen como regresiones históricas. Antes de cambiar el ejemplo visible, actualiza también las referencias de pruebas y documentación.
 
 La estructura vigente y el índice documental se describen en [`docs/README.md`](docs/README.md). Todo el código y las pruebas del producto viven en `src/`; la raíz conserva configuración, metadatos y archivos estándar del repositorio.

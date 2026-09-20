@@ -30,5 +30,9 @@ Versión corta, si el formulario limita caracteres:
 - Repositorio: <https://github.com/hvaler/ArenaPay>
 - Demo offline: <https://hvaler.github.io/ArenaPay/>
 - Backend público: <https://arenapay.arenapay.workers.dev/>
+- Demo completa: <https://youtu.be/LECz_vXmFi0>
+- Pitch: <https://youtu.be/thcnJ7IS7fE>
+- Diagrama editable: <https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86>
+- Archivo audiovisual y copias maestras: [docs/evidencia/media](../evidencia/media/README.md)
 
 Antes de enviar el formulario, confirmar que los datos personales visibles pertenecen al participante y que se han leído las bases, condiciones del evento y tratamiento de datos.

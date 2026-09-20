@@ -5,6 +5,7 @@ test('public demo: documented payout, independent replay and practice without a 
   page.on('pageerror', e => errors.push(e.message));
   page.on('request', req => { if (new URL(req.url()).pathname.startsWith('/api/')) apiRequests.push(req.url()); });
   await page.goto('./');
+  await expect(page.getByText('Demo sin wallet', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Nueva partida en Testnet', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Ver una partida pagada en Testnet' }).click();
   await expect(page.getByRole('region', { name: 'Ensayo documentado' })).toContainText('Nova recibió 2 XLM');

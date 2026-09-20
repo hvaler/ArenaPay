@@ -16,11 +16,11 @@ describe('local evidence verifier boundaries', () => {
 
   it('rejects a selected evidence file redirected through a symbolic link', async () => {
     const root = await mkdtemp(join(tmpdir(), 'arenapay-evidence-'));
-    await mkdir(join(root, 'docs'));
+    await mkdir(join(root, 'docs', 'evidencia'), { recursive: true });
     const outside = join(root, 'outside.json');
     await writeFile(outside, '{}');
     try {
-      await symlink(outside, join(root, 'docs', 'testnet-evidence.json'));
+      await symlink(outside, join(root, 'docs', 'evidencia', 'testnet-evidence.json'));
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === 'EPERM') return;
       throw error;

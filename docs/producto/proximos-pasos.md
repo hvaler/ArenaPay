@@ -1,6 +1,6 @@
 # Próximos pasos de ArenaPay
 
-Fecha de corte: 14 de septiembre de 2026.
+Fecha de corte: 20 de septiembre de 2026.
 
 Este documento conserva el estado del proyecto después de publicar el backend persistente. Sirve como checklist operativo para terminar la demostración, comprobar la recuperación del servicio y preparar una futura etapa de producción.
 
@@ -46,12 +46,13 @@ La evidencia técnica del backend se encuentra en [public-backend-evidence.json]
 
 ### 3. Grabación final de la demostración
 
-- [ ] Preparar Chrome, Freighter, las dos cuentas y una partida nueva.
-- [ ] Grabar de forma continua el recorrido del punto 1.
-- [ ] Mostrar las confirmaciones de Freighter sin revelar claves privadas ni frases de recuperación.
-- [ ] Mostrar el replay, el ganador, la liquidación y la transacción en Stellar Expert.
-- [ ] Añadir una explicación breve de qué prueba cada fase.
-- [ ] Publicar o enlazar el vídeo desde el README y la web.
+- [x] Preparar Chrome, Freighter, las dos cuentas y una partida nueva.
+- [x] Grabar el recorrido operativo.
+- [x] Mostrar las confirmaciones de Freighter sin revelar claves privadas ni frases de recuperación.
+- [x] Mostrar el replay, el ganador, la liquidación y la transacción en Stellar Expert.
+- [x] Añadir narración y subtítulos en español.
+- [x] Publicar la [demo completa](https://youtu.be/LECz_vXmFi0) y archivarla en el [repositorio](../evidencia/media/README.md).
+- [x] Publicar un [pitch independiente](https://youtu.be/thcnJ7IS7fE) de menos de tres minutos.
 
 **Qué demuestra:** convierte la evidencia técnica en una demostración comprensible y revisable por terceros.
 
@@ -98,7 +99,7 @@ La evidencia técnica del backend se encuentra en [public-backend-evidence.json]
 
 ## Próxima acción
 
-La siguiente tarea útil es completar el **ensayo público completo con Freighter**. Las firmas deben aprobarse en la extensión del usuario; ArenaPay solo necesita las direcciones públicas y nunca debe solicitar una clave secreta o frase de recuperación.
+La siguiente tarea útil es completar y documentar el **ensayo de vencimiento y devolución con Freighter**. Las firmas deben aprobarse en la extensión del usuario; ArenaPay solo necesita las direcciones públicas y nunca debe solicitar una clave secreta o frase de recuperación.
 
 ## Trabajo reservado para después de la hackathon
 

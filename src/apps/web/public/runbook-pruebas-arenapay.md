@@ -323,6 +323,8 @@ Considera superado el recorrido de pago cuando se confirman las dos inscripcione
 
 ## 14 Preparar un vídeo entendible
 
+La demostración final grabada el 20 de septiembre de 2026 está disponible en [YouTube](https://youtu.be/LECz_vXmFi0) y en el [archivo audiovisual del repositorio](../evidencia/media/README.md). Es una presentación del recorrido operativo; no convierte retrospectivamente los ensayos históricos en pruebas con dos personas independientes.
+
 Antes de grabar, importa las cuentas y oculta cualquier archivo privado. Mantén cerrados los menús ajenos a la demo. Comprueba Testnet, saldo y servicios. El plazo de una partida sigue avanzando mientras explicas: prepara el guion antes de crearla.
 
 Para mostrar un pago nuevo, graba desde la creación y conserva las confirmaciones de presupuesto y depósito de ambos participantes. Explica que autorizar 3 XLM es un límite, mientras depositar 1 XLM es una transferencia. Luego muestra la competición, la verificación, la firma del cobro, Settled, la coincidencia con la cadena y el recibo.

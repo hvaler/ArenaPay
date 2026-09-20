@@ -1,0 +1,49 @@
+1
+00:00:04,000 --> 00:00:17,000
+ArenaPay es una plataforma para competiciones verificables sobre Soroban.
+En esta demostración, Atlas y Nova compiten por recursos y el resultado puede reproducirse y comprobarse.
+
+2
+00:00:18,800 --> 00:00:32,800
+Creo una partida nueva en la red de pruebas de Stellar.
+El servidor elige una semilla secreta y publica su compromiso, evitando que los participantes conozcan el resultado antes de financiarla.
+
+3
+00:00:34,300 --> 00:00:47,300
+Conecto Freighter configurado en Testnet.
+Todo el recorrido utiliza XLM de prueba y cada operación que mueve fondos debe confirmarse en la wallet.
+
+4
+00:00:48,800 --> 00:01:05,300
+Los dos participantes autorizan sus presupuestos y depositan un XLM de prueba por persona.
+El contrato bloquea ambos depósitos como garantía, y la competición solo comienza cuando la financiación está completa.
+
+5
+00:01:06,600 --> 00:01:17,600
+Con los dos depósitos confirmados, ejecuto la competición.
+Atlas prioriza los recursos cercanos y Nova combina el valor de cada recurso con la distancia.
+
+6
+00:01:20,100 --> 00:01:37,100
+La simulación registra los movimientos de ambos agentes durante sesenta ticks.
+Las mismas entradas producen exactamente el mismo replay y el mismo resultado.
+
+7
+00:01:39,100 --> 00:01:51,100
+Nova consigue diecinueve puntos y Atlas consigue dieciséis.
+El navegador vuelve a ejecutar el juego, verifica su hash y comprueba la firma del árbitro.
+
+8
+00:01:52,600 --> 00:02:05,600
+El contrato valida la firma y paga el premio a Nova.
+Quien solicita el pago no puede elegir al ganador.
+
+9
+00:02:07,600 --> 00:02:21,600
+Finalmente, comparo el replay con el contrato.
+El ganador y el hash coinciden, y la liquidación queda disponible en Stellar Testnet.
+
+10
+00:02:24,600 --> 00:02:38,600
+También puedo importar el replay, verificarlo de nuevo y descargarlo como evidencia JSON.
+Cualquier persona puede conservar la evidencia y volver a calcular el resultado.

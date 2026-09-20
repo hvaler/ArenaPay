@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://arenapay.arenapay.workers.dev/api/:path*"
+    }
+  ]
+}

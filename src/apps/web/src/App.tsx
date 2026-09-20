@@ -1,17 +1,17 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ENGINE_VERSION, PRODUCT_STATEMENT, TICKS, replaySchema, type LocalMatch, type Replay } from '../../../packages/shared/src/contracts';
 import { initialState, runSimulation, verifyReplay } from '../../../packages/shared/src/simulation';
 import { Arena } from './components/Arena';
 import { matchApi } from './lib/api';
-import { publicDemo } from './lib/runtime';
+import { operationalPublic, publicDemo } from './lib/runtime';
 import { Journey } from './components/Journey';
+import { TestnetPanel } from './components/TestnetPanel';
 // Evidencia del motor vigente (v2). El ensayo v1 se conserva en docs/evidencia/fixtures/testnet-replay.json
 // como vector de regresion historico: src/packages/shared/test/simulation.test.ts comprueba que el
 // motor congelado sigue reproduciendo sus hashes.
 import evidence from '../../../../docs/evidencia/testnet-evidence-v2.json';
 import exampleReplay from '../../../../docs/evidencia/fixtures/testnet-replay-v2.json';
 import type { ChainMatch } from '../../../packages/shared/src/stellar';
-const TestnetPanel = lazy(() => import('./components/TestnetPanel').then(module => ({ default: module.TestnetPanel })));
 
 type Verification = 'idle' | 'checking' | 'valid' | 'invalid';
 const agentName = (player: 'A' | 'B') => player === 'A' ? 'Atlas' : 'Nova';
@@ -49,6 +49,17 @@ export default function App() {
     const timer = window.setTimeout(() => setTick(current => Math.min(TICKS, current + 1)), 280 / speed);
     return () => window.clearTimeout(timer);
   }, [playing, tick, replay, speed]);
+
+  useEffect(() => {
+    if (!testnetMode) return;
+    const target = document.getElementById('testnet-title');
+    if (!target) return;
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  }, [testnetMode]);
 
   async function createMatch() {
     if (!/^\d+$/.test(seed) || !Number.isSafeInteger(Number(seed)) || Number(seed) > 0xffffffff) {
@@ -107,7 +118,7 @@ export default function App() {
     <header className="site-header">
       <a className="brand" href="./" aria-label="ArenaPay, inicio"><span className="brand-mark">A</span>ArenaPay<span className="brand-lab">Lab</span></a>
       <nav aria-label="Navegación principal"><a className="active" href="#arena">Arena</a><a href="#evidence">Evidencia</a><a href="#roadmap">Proyecto</a></nav>
-      <span className="mode-pill"><span />{match?.testnet ? 'Testnet' : 'Demo local'}</span>
+      <span className="mode-pill"><span />{match?.testnet || testnetMode ? 'Stellar Testnet' : publicDemo ? 'Demo sin wallet' : operationalPublic ? 'Stellar Testnet' : 'Desarrollo local'}</span>
     </header>
 
     <main id="arena">
@@ -118,8 +129,8 @@ export default function App() {
 
       <div className="entry-actions">
         <button className="button secondary" onClick={() => { setTestnetMode(false); document.getElementById('seed')?.focus(); }}>Probar la arena</button>
-        <button className="button primary" disabled={inFlight} onClick={() => { loadReplay(replaySchema.parse(exampleReplay)); setMatch(undefined); setChain(undefined); setImported(true); setHistorical(true); setTestnetMode(false); setPlaying(false); setProofReady(false); setTick(TICKS); }}>Ver una partida pagada en Testnet</button>
-        {!publicDemo && <button className="button secondary" onClick={() => { setTestnetMode(true); document.getElementById('testnet-title')?.focus(); }}>Nueva partida en Testnet</button>}
+        {!publicDemo && <button className="button primary" onClick={() => setTestnetMode(true)}>Nueva partida en Testnet</button>}
+        <button className={`button ${publicDemo ? 'primary' : 'secondary'}`} disabled={inFlight} onClick={() => { loadReplay(replaySchema.parse(exampleReplay)); setMatch(undefined); setChain(undefined); setImported(true); setHistorical(true); setTestnetMode(false); setPlaying(false); setProofReady(false); setTick(TICKS); }}>Ver una partida pagada en Testnet</button>
       </div>
       {historical && <section className="recorded-proof" aria-label="Ensayo documentado">
         <div><strong>Nova recibió 2 XLM de prueba</strong><p>Ensayo del 12 de septiembre de 2026. Evidencia guardada; consulta el recibo para comprobar la operación en Stellar.</p></div>
@@ -144,13 +155,13 @@ export default function App() {
         </section>
 
         <aside className={`side-panel ${testnetMode || match?.testnet ? 'testnet-active' : historical ? 'history-active' : 'practice-active'}`}>
-          <Suspense fallback={<p role="status">Cargando integración de Testnet…</p>}><TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={created => { setChain(undefined); setHistorical(false); setTestnetMode(true); setProofReady(false); setMatch(created); if (created.seed !== undefined) setSeed(String(created.seed)); if (created.replay) loadReplay(created.replay); else { setReplay(undefined); const preview = initialState(created.seed ?? 2026); if (created.seed === undefined) preview.resources = []; setFrames([preview]); } setTick(0); setPlaying(false); setVerification('idle'); setImported(false); }} /></Suspense>
+          <TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={created => { setChain(undefined); setHistorical(false); setTestnetMode(true); setProofReady(false); setMatch(created); if (created.seed !== undefined) setSeed(String(created.seed)); if (created.replay) loadReplay(created.replay); else { setReplay(undefined); const preview = initialState(created.seed ?? 2026); if (created.seed === undefined) preview.resources = []; setFrames([preview]); } setTick(0); setPlaying(false); setVerification('idle'); setImported(false); }} />
           <section className="setup" aria-labelledby="setup-heading"><h2 id="setup-heading">Tu próxima partida</h2><p>Cambia la semilla para explorar otra arena. Las estrategias se mantienen.</p>
             <form onSubmit={event => { event.preventDefault(); void createMatch(); }}><label htmlFor="seed">Semilla de la arena</label><div className="seed-control"><span aria-hidden="true">#</span><input id="seed" inputMode="numeric" value={seed} maxLength={10} disabled={inFlight} onChange={event => setSeed(event.target.value)} /><button type="button" aria-label="Generar otra semilla" disabled={inFlight} onClick={() => setSeed(String(crypto.getRandomValues(new Uint32Array(1))[0]))}>⤨</button></div>
-              <button className={match && !replay ? 'button secondary full' : 'button primary full'} type="submit" disabled={inFlight}>{busy ? 'Preparando…' : match || replay ? 'Crear nueva partida' : 'Crear partida'}<span aria-hidden="true">＋</span></button>
+              <button className={match && !replay ? 'button secondary full' : 'button primary full'} type="submit" disabled={inFlight}>{busy ? 'Preparando…' : match || replay ? 'Crear nueva partida de práctica' : 'Crear partida de práctica'}<span aria-hidden="true">＋</span></button>
             </form>
             {match && !match.testnet && !replay && <button className="button primary full run-button" disabled={inFlight || (!!match.testnet && chain?.status !== 'Funded')} onClick={() => void runMatch()}>Ejecutar simulación <span aria-hidden="true">▶</span></button>}
-            <p className="local-note">{publicDemo ? 'Práctica sin fondos. Descarga el replay para conservarlo al cerrar la página.' : 'Crear nueva partida inicia una práctica local. Para depósitos, utiliza el panel Testnet.'}</p>
+            <p className="local-note">{publicDemo ? 'Práctica sin fondos. Descarga el replay para conservarlo al cerrar la página.' : 'La práctica se ejecuta en tu navegador. Para depósitos, utiliza el panel Testnet.'}</p>
           </section>
 
           <section className="evidence" id="evidence" aria-labelledby="evidence-heading"><div className="evidence-title"><h2 id="evidence-heading">Prueba de la partida</h2><span aria-hidden="true">◇</span></div>

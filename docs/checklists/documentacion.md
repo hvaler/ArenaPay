@@ -74,6 +74,16 @@ esta entrega. El runbook MD/HTML ya existente conserva su publicación.
 - [x] Actualizar índices, estado, próximos pasos y referencias cruzadas.
 - [x] Validar enlaces y anclas en 52 documentos, 67 pruebas TypeScript, compilación, Wrangler y 8 escenarios locales.
 
+## Presentación final — 20 de septiembre de 2026
+
+- [x] Archivar la demo completa y sus subtítulos en `docs/evidencia/media/`.
+- [x] Publicar y enlazar la [demo completa](https://youtu.be/LECz_vXmFi0).
+- [x] Archivar el pitch, sus subtítulos y su miniatura.
+- [x] Publicar y enlazar el [pitch](https://youtu.be/thcnJ7IS7fE), con duración inferior a tres minutos.
+- [x] Conservar el diagrama profesional como [PNG](../assets/arenapay-flujo-verificable.png), [documento de arquitectura](../arquitectura/flujo-checkpoint-stellar-odyssey.md) y [FigJam editable](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86).
+- [x] Registrar las huellas SHA-256 y distinguir los entregables finales del vídeo histórico.
+- [x] Referenciar los entregables desde README, índices, guías, estado del MVP y registro de candidatura.
+
 ## Pendientes técnicos y de ensayo
 
 El orden y el significado de las tareas restantes se mantienen en [Próximos pasos de ArenaPay](../producto/proximos-pasos.md).
@@ -82,7 +92,8 @@ El orden y el significado de las tareas restantes se mantienen en [Próximos pas
 - [x] Confirmar el análisis de SonarCloud del commit 9f68173: gate OK, calificaciones A, cero incidencias abiertas y 0,0 % de duplicación.
 - [x] Reconciliar una respuesta de envío perdida por el hash calculado, sin reenvío, con pruebas de éxito posterior y 45 consultas sin confirmación.
 - [x] Completar el ensayo manual v2 con dos cuentas Freighter, seis recibos y comparación final contra el contrato.
-- [ ] Grabar el recorrido v2 continuo y completar una devolución por vencimiento con Freighter.
+- [x] Grabar, editar, subtitular y publicar la demo final del recorrido Testnet.
+- [ ] Completar una devolución por vencimiento con Freighter.
 - [ ] Ensayar restauración de datos, archivado y pérdida controlada de respuesta en Testnet; la simulación unitaria del último caso ya está completada.
 - [ ] Resolver los criterios de producción antes de cualquier uso con fondos reales.
 
@@ -94,6 +105,16 @@ El orden y el significado de las tareas restantes se mantienen en [Próximos pas
 - [x] Revisar el alcance de MIT y documentar MIT, AGPL, licencia propietaria y licencia dual.
 - [x] Adoptar AGPL-3.0-only con opción de licencia comercial para la primera publicación consolidada.
 - [ ] Definir un acuerdo de contribución antes de aceptar aportes externos importantes.
+
+## Flujo privado y publicación — 14 de septiembre de 2026
+
+- [x] Mantener `ArenaPay-Dev` como repositorio privado de trabajo y `ArenaPay` como repositorio público de versiones.
+- [x] Conectar el acceso GitHub `hvaler` a la cuenta Vercel del titular sin publicar su correo de acceso.
+- [x] Conectar `hvaler/ArenaPay`, rama `main`, al proyecto Vercel `arenapay`.
+- [x] Configurar la compilación automática con `npm run build:vercel` y salida `public-operational`.
+- [x] Documentar un proceso que no mezcle ni exponga el historial privado.
+- [x] Añadir una preparación reproducible que revisa repositorios, estado y patrones de secretos sin hacer commit ni push.
+- [x] Crear la skill `$arenapay-release` para aplicar el proceso en sesiones posteriores.
 
 ## Visión posterior a la hackathon
 

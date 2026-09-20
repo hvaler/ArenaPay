@@ -11,3 +11,7 @@ Duración objetivo: 60–90 segundos. El vídeo de navegación es una captura de
 **Práctica:** crear una partida con semilla 2026 y ejecutar la simulación. «Atlas busca recursos cercanos; Nova pondera valor y distancia. Son políticas deterministas. El replay permite revisar cada movimiento y compartir el JSON».
 
 **Cierre:** «En la versión con servidor, el contrato exige los dos depósitos, aplica el presupuesto y verifica la firma antes de pagar. Cada depósito requiere una firma del participante. La demo pública permite explorar y revisar evidencia sin wallet».
+
+## Resultado final
+
+Este guion breve se conserva como alternativa de navegación. La entrega final amplía el recorrido y está disponible como [demo completa en YouTube](https://youtu.be/LECz_vXmFi0), [copia MP4 y subtítulos](../evidencia/media/README.md). El [pitch de 2:44](https://youtu.be/thcnJ7IS7fE) presenta la propuesta de valor por separado.

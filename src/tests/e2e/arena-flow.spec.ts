@@ -9,7 +9,7 @@ test('creates, runs, scrubs, verifies and downloads the same persisted replay', 
   await expect(page.getByRole('button', { name: 'Verificar reproducibilidad' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Ejecutar simulación' })).toHaveCount(0);
   await page.getByLabel('Semilla de la arena').fill('2026');
-  await page.getByRole('button', { name: 'Crear partida', exact: true }).click();
+  await page.getByRole('button', { name: 'Crear partida de práctica', exact: true }).click();
   await expect(page.getByText('Semilla 2026 fijada antes de ejecutar')).toBeVisible();
   await page.getByRole('button', { name: 'Ejecutar simulación' }).click();
   await expect(page.getByText('120 inputs · 60 ticks · 2 agentes')).toBeVisible();
@@ -49,7 +49,7 @@ test('mobile layout fits and invalid seeds are actionable', async ({ page }) => 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.getByLabel('Semilla de la arena').fill('abc');
-  await page.getByRole('button', { name: 'Crear partida', exact: true }).click();
+  await page.getByRole('button', { name: 'Crear partida de práctica', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Escribe una semilla entera');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/arenapay-mobile.png', fullPage: true });
@@ -58,11 +58,11 @@ test('mobile layout fits and invalid seeds are actionable', async ({ page }) => 
 test('explains an API failure and allows retrying', async ({ page }) => {
   await page.goto('/');
   await page.route('**/api/matches', route => route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ message: 'No se pudo guardar la partida.' }) }));
-  await page.getByRole('button', { name: 'Crear partida', exact: true }).click();
+  await page.getByRole('button', { name: 'Crear partida de práctica', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('No se pudo guardar');
-  await expect(page.getByRole('button', { name: 'Crear partida', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Crear partida de práctica', exact: true })).toBeEnabled();
   await page.unroute('**/api/matches');
-  await page.getByRole('button', { name: 'Crear partida', exact: true }).click();
+  await page.getByRole('button', { name: 'Crear partida de práctica', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Ejecutar simulación' })).toBeVisible();
 });
 

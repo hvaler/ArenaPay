@@ -1,6 +1,6 @@
 # Índice de evidencia por versión
 
-Fecha de revisión: 14 de septiembre de 2026. Este índice distingue evidencia guardada, pruebas automatizadas, acciones humanas y publicaciones. Los commits indicados registran incorporación al repositorio, no necesariamente el código exacto ejecutado durante cada firma.
+Fecha de revisión: 20 de septiembre de 2026. Este índice distingue evidencia guardada, pruebas automatizadas, acciones humanas y publicaciones. Los commits indicados registran incorporación al repositorio, no necesariamente el código exacto ejecutado durante cada firma.
 
 Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID.
 
@@ -13,7 +13,10 @@ Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RI
 | [Vector de firma](fixtures/resolution-v2.json) | Dominio de firma ARENAPAY_V2 | Vector compartido Rust/TS | Mismos campos XDR, digest y firma; no representa por sí solo un pago |
 | [Revisión y pruebas](../auditorias/revision-readme-2026-09-13.md) | Fuente revisada 8d507d6 | Registro posterior 0b33b00 | 59 pruebas TS, 16 Rust, 8 navegador y compilación registradas |
 | [Captura v2](screenshots/evidencia-v2.png) | resource-arena/2.0.0 | 8d507d6 | Pantalla de liquidación y comparación con contrato |
-| [Vídeo anterior](media/arenapay-demo.webm) | Demo anterior | Archivo histórico | Presentación anterior; no grabación nueva de firmas v2 |
+| [Demo final](media/arenapay-demo-testnet-es.mp4), [subtítulos](media/arenapay-demo-testnet-es.srt) y [YouTube](https://youtu.be/LECz_vXmFi0) | Entrega audiovisual 20-sep-2026 | [Índice audiovisual](media/README.md) | Recorrido completo narrado; complementa, pero no sustituye, los recibos y replays |
+| [Pitch final](media/arenapay-pitch-es.mp4), [subtítulos](media/arenapay-pitch-es.srt), [miniatura](media/arenapay-pitch-thumbnail.png) y [YouTube](https://youtu.be/thcnJ7IS7fE) | Entrega audiovisual 20-sep-2026 | [Índice audiovisual](media/README.md) | Presentación de 2:44 para el formulario de la hackathon |
+| [Diagrama de flujo](../arquitectura/flujo-checkpoint-stellar-odyssey.md), [PNG](../assets/arenapay-flujo-verificable.png) y [FigJam](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86) | Arquitectura visual 20-sep-2026 | Repositorio y FigJam | Preparación, motor, replay, verificación y liquidación |
+| [Vídeo anterior](media/arenapay-demo.webm) | Demo anterior | Archivo histórico | Presentación anterior conservada para trazabilidad |
 | [Publicación 14-sep-2026](publicacion-2026-09-14.md) | resource-arena/2.0.0 | `main` 39ac664 · `gh-pages` 4068b3a | Versiones y pruebas públicas; no representa un pago nuevo |
 
 ## Recibos principales
@@ -30,6 +33,6 @@ El hash v1 manual completo figura en el registro del ensayo. La revisión de REA
 Registrar fecha UTC, commit ejecutado, versión del motor, contrato/WASM, IDs local y de cadena, recibos, replay revelado, tipo de firma, resultados observados y pruebas omitidas. Separar datos observados de inferencias. No publicar registros privados de partidas pendientes.
 
 - [x] Ensayo manual v2 con ambas cuentas Freighter, replay y pago contrastados.
-- [ ] Pendiente: vídeo continuo del recorrido v2 con ambas firmas.
+- [x] Demo final publicada, archivada con subtítulos y enlazada desde la documentación. Los recibos y replays mantienen su identidad propia.
 - [ ] Pendiente: ensayo documentado de devolución con Freighter.
 - [ ] Pendiente: recuperación tras archivado y caída con envío ambiguo.

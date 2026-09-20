@@ -42,7 +42,7 @@ Los límites por visitante viven en memoria y vuelven a cero si Cloudflare reini
 | `src/services/cloudflare-worker/src/index.ts` | API, almacenamiento, límites y conexión con Testnet |
 | `config/testnet.deployment.json` | Identificadores públicos saneados del contrato existente |
 | `src/scripts/build-operational.mjs` | Compila la web con el panel Testnet activo |
-| `config/vercel-operational.json` | Reenvía la API de Vercel al Worker persistente |
+| `vercel.json` y `config/vercel-operational.json` | Reenvían la API de Vercel al Worker persistente en ambos métodos de publicación |
 | `.dev.vars` | Secretos locales ignorados por Git |
 
 ## Configuración inicial en Cloudflare
@@ -138,6 +138,6 @@ Una restauración no revierte Stellar. La cadena sigue siendo la fuente de verda
 
 ## Relación con Vercel y GitHub Pages
 
-Vercel reenvía `/api/*` al Worker mediante `config/vercel-operational.json`; por eso su origen debe
+Vercel reenvía `/api/*` al Worker mediante `vercel.json` (y su copia para publicación estática); por eso su origen debe
 estar permitido en Cloudflare. GitHub Pages no llama al Worker y permanece como demo offline. Las
 instrucciones completas están en [Vercel](vercel.md) y [GitHub Pages](github-pages.md).

@@ -2,7 +2,7 @@
 
 > **Registro histórico.** Este documento conserva la primera revisión y sus carencias originales. No debe usarse como estado vigente. Consulta la [visión general](vision-general.md), el [estado del MVP](../producto/estado-y-limites.md) y el [índice de evidencia](../evidencia/README.md).
 
-**Actualización del 14 de septiembre de 2026:** ya están implementados el escrow Soroban, los presupuestos, el árbitro Ed25519, Freighter, el nonce v2, los respaldos de lectura y el backend persistente. Vercel, Cloudflare y GitHub Pages están publicados. Se completó un ensayo manual v2 con dos cuentas operadas por una persona. Siguen pendientes el vídeo continuo v2, una devolución manual, recuperación integrada y una prueba con participantes independientes. La tabla siguiente conserva deliberadamente el estado de la primera entrega.
+**Actualización del 20 de septiembre de 2026:** ya están implementados el escrow Soroban, los presupuestos, el árbitro Ed25519, Freighter, el nonce v2, los respaldos de lectura y el backend persistente. Vercel, Cloudflare y GitHub Pages están publicados. Se completó un ensayo manual v2 con dos cuentas operadas por una persona, y la demo final y el pitch quedaron publicados y archivados con subtítulos. Siguen pendientes una devolución manual, recuperación integrada y una prueba con participantes independientes. La tabla siguiente conserva deliberadamente el estado de la primera entrega.
 
 Se revisaron `ArenaPay_Propuesta_Stellar_Odyssey.docx`, su conversión Markdown y `2026-09-11-arenapay-mvp.md`. La propuesta Word y el Markdown contienen el mismo alcance funcional. El directorio inicial contenía únicamente estos tres documentos, sin código ni repositorio Git.
 

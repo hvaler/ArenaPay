@@ -12,6 +12,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 ## Arquitectura
 
 - [Visión general del sistema vigente](arquitectura/vision-general.md)
+- [Flujo visual del checkpoint y FigJam](arquitectura/flujo-checkpoint-stellar-odyssey.md)
 - [Análisis y decisiones](arquitectura/analisis-y-decisiones.md)
 - [ArenaPay como plataforma](arquitectura/plataforma-y-reutilizacion.md)
 - [Reutilización con juegos y jugadores](arquitectura/reutilizacion-juegos-y-jugadores.md)
@@ -38,8 +39,12 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Ensayo manual histórico](guias/ensayo-manual-freighter.md)
 - [Validación guiada](guias/validacion-guiada.md)
 - [Operación y recuperación](guias/operacion-y-recuperacion.md)
+- [Desarrollo privado y publicación](guias/flujo-desarrollo-y-publicacion.md)
 - [Guion de la demostración](guias/demo-script.md)
 - [Guion de vídeo público](guias/guion-demo-publica.md)
+- [Grabación completa de la demo Testnet: checklist y narración](guias/grabacion-demo-testnet.md) · [versión para imprimir](guias/grabacion-demo-testnet.html)
+- [Locución en español para la demo Testnet](guias/locucion-demo-testnet.md) · [versión para imprimir](guias/locucion-demo-testnet.html)
+- [Montaje, publicación y metadatos del pitch](guias/montaje-pitch-youtube.md)
 
 ## Despliegue
 
@@ -65,7 +70,11 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Persistencia del backend público](evidencia/public-backend-evidence.json)
 - [Fixtures y replays](evidencia/fixtures/)
 - [Capturas](evidencia/screenshots/)
-- [Vídeo disponible](evidencia/media/arenapay-demo.webm)
+- [Archivo audiovisual y huellas SHA-256](evidencia/media/README.md)
+- [Demo final en YouTube](https://youtu.be/LECz_vXmFi0) · [copia MP4](evidencia/media/arenapay-demo-testnet-es.mp4) · [subtítulos](evidencia/media/arenapay-demo-testnet-es.srt)
+- [Pitch en YouTube](https://youtu.be/thcnJ7IS7fE) · [copia MP4](evidencia/media/arenapay-pitch-es.mp4) · [subtítulos](evidencia/media/arenapay-pitch-es.srt)
+- [Diagrama estable en PNG](assets/arenapay-flujo-verificable.png) · [FigJam editable](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86)
+- [Vídeo histórico](evidencia/media/arenapay-demo.webm)
 
 ## Producto y evolución
 

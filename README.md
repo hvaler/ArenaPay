@@ -34,6 +34,13 @@
   · <a href="docs/README.md">Documentación</a>
 </p>
 
+<p align="center">
+  <a href="https://youtu.be/LECz_vXmFi0"><strong>Demo completa</strong></a>
+  · <a href="https://youtu.be/thcnJ7IS7fE">Pitch</a>
+  · <a href="https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86">Diagrama FigJam</a>
+  · <a href="docs/evidencia/media/README.md">Archivo audiovisual</a>
+</p>
+
 > **ArenaPay es una plataforma para competiciones verificables sobre Soroban. Su MVP enfrenta a Atlas y Nova, dos agentes deterministas.**
 
 ## Resumen del proyecto
@@ -105,6 +112,10 @@ El cuarto paso no necesita terminal: en la demo, **Ver una partida pagada en Tes
 ![Ensayo v2: premio liquidado y replay contrastado con el contrato](docs/evidencia/screenshots/evidencia-v2.png)
 
 ## Arquitectura
+
+[![Flujo verificable de ArenaPay](docs/assets/arenapay-flujo-verificable.png)](docs/arquitectura/flujo-checkpoint-stellar-odyssey.md)
+
+El [flujo visual para el checkpoint](docs/arquitectura/flujo-checkpoint-stellar-odyssey.md) conecta la preparación, la competición fuera de cadena, la verificación y la liquidación. La versión editable está en [FigJam](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86).
 
 La [visión general de la arquitectura](docs/arquitectura/vision-general.md) describe los componentes,
 la persistencia y el recorrido completo de una partida Testnet.
@@ -273,7 +284,7 @@ posterior a la hackathon y no funcionalidad disponible en el MVP.
   pretende ser una fuente de aleatoriedad imparcial para premios reales.
 - Disputas descentralizadas, préstamos y fondos reales quedan fuera de alcance.
 
-[Estado completo y pendientes de vídeo/validación con usuarios](docs/producto/estado-y-limites.md).
+[Estado completo y límites pendientes](docs/producto/estado-y-limites.md).
 
 ## Estructura del repositorio
 
@@ -294,9 +305,9 @@ El servicio decide cuándo ejecutarlo y guarda sus resultados.
 
 ## Más documentación
 
-[Índice completo de documentación](docs/README.md) · [Visión general](docs/arquitectura/vision-general.md) · [Glosario](docs/glosario/README.md) · [Decisiones de arquitectura](docs/adr/README.md) · [Modos de prueba](docs/guias/modos-de-prueba.md) · [Despliegues](docs/despliegue/README.md).
+[Índice completo de documentación](docs/README.md) · [Visión general](docs/arquitectura/vision-general.md) · [Glosario](docs/glosario/README.md) · [Decisiones de arquitectura](docs/adr/README.md) · [Modos de prueba](docs/guias/modos-de-prueba.md) · [Flujo de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md) · [Despliegues](docs/despliegue/README.md).
 
-[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Vídeo anterior](docs/evidencia/media/arenapay-demo.webm) · [Contribuir](CONTRIBUTING.md).
+[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Pitch](https://youtu.be/thcnJ7IS7fE) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
 
 ## Licencia
 
