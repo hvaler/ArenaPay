@@ -12,7 +12,7 @@ GitHub Pages solo sirve archivos estáticos. Esta edición permite práctica loc
 1. Abre **Settings → Pages** en GitHub.
 2. Selecciona **GitHub Actions** como origen.
 3. Conserva el entorno `github-pages` creado por GitHub.
-4. Ejecuta manualmente **Deploy GitHub Pages** una primera vez o envía un cambio a `main`.
+4. Ejecuta manualmente **Deploy GitHub Pages** una primera vez.
 5. Conserva `.nojekyll` en la raíz de la rama para servir los activos compilados sin procesamiento Jekyll.
 
 ## Preparar un worktree de publicación
@@ -48,8 +48,9 @@ El resultado queda en `public-demo/`. Antes de copiarlo, confirma que no contien
    git -C .publish/arenapay push origin gh-pages
    ```
 
-3. La siguiente actualización de `main` ejecuta el workflow. Si `main` no va a cambiar, abre
-   **Actions → Deploy GitHub Pages → Run workflow**.
+3. Abre **Actions → Deploy GitHub Pages → Run workflow** y ejecuta la publicación manual.
+   El flujo no se activa con cada cambio en `main`: la rama `gh-pages` es la fuente del sitio y
+   así se evitan despliegues redundantes mientras GitHub aún procesa una publicación anterior.
 4. Espera a que el trabajo `deploy` termine correctamente y comprueba el hash del activo servido.
 
 No copies la carpeta `.git` ni la elimines. Si el worktree ya existe, no vuelvas a ejecutar `git worktree add`.
