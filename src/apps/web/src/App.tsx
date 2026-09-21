@@ -16,6 +16,7 @@ import { absoluteMatchUrl, matchIdFromPath, replaceMatchPath } from './lib/match
 import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
 type Verification = 'idle' | 'checking' | 'valid' | 'invalid';
+type MainSection = 'arena' | 'evidence' | 'roadmap';
 const agentName = (player: 'A' | 'B') => player === 'A' ? 'Atlas' : 'Nova';
 const activeGames = registeredEngineDescriptors().filter(engine => engine.lifecycle === 'active');
 
@@ -36,6 +37,7 @@ export default function App() {
   const [testnetMode, setTestnetMode] = useState(false);
   const [chain, setChain] = useState<ChainMatch>();
   const [selectedEngineVersion, setSelectedEngineVersion] = useState(ENGINE_VERSION);
+  const [activeSection, setActiveSection] = useState<MainSection>('arena');
   const fileInput = useRef<HTMLInputElement>(null);
   const matchRef = useRef(match); matchRef.current = match;
   const state = frames[Math.min(tick, frames.length - 1)];
@@ -88,6 +90,29 @@ export default function App() {
     const timer = window.setTimeout(() => setTick(current => Math.min(TICKS, current + 1)), 280 / speed);
     return () => window.clearTimeout(timer);
   }, [playing, tick, replay, speed]);
+
+  useEffect(() => {
+    const sections: MainSection[] = ['arena', 'evidence', 'roadmap'];
+    const updateActiveSection = () => {
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) {
+        setActiveSection('roadmap');
+        return;
+      }
+      const threshold = Math.min(160, window.innerHeight * 0.25);
+      const visible = sections.filter(id => {
+        const element = document.getElementById(id);
+        return element && element.getBoundingClientRect().top <= threshold;
+      });
+      setActiveSection(visible.at(-1) ?? 'arena');
+    };
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('resize', updateActiveSection);
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('resize', updateActiveSection);
+    };
+  }, []);
 
   useEffect(() => {
     if (!testnetMode) return;
@@ -156,7 +181,7 @@ export default function App() {
     <a className="skip-link" href="#workspace">Saltar a la arena</a>
     <header className="site-header">
       <a className="brand" href="./" aria-label="ArenaPay, inicio"><span className="brand-mark">A</span>ArenaPay<span className="brand-lab">Lab</span></a>
-      <nav aria-label="Navegación principal"><a className="active" href="#arena">Arena</a><a href="#evidence">Evidencia</a><a href="#roadmap">Proyecto</a></nav>
+      <nav aria-label="Navegación principal"><a className={activeSection === 'arena' ? 'active' : ''} aria-current={activeSection === 'arena' ? 'location' : undefined} href="#arena" onClick={() => setActiveSection('arena')}>Arena</a><a className={activeSection === 'evidence' ? 'active' : ''} aria-current={activeSection === 'evidence' ? 'location' : undefined} href="#evidence" onClick={() => setActiveSection('evidence')}>Evidencia</a><a className={activeSection === 'roadmap' ? 'active' : ''} aria-current={activeSection === 'roadmap' ? 'location' : undefined} href="#roadmap" onClick={() => setActiveSection('roadmap')}>Proyecto</a></nav>
       <span className="mode-pill"><span />{match?.testnet || testnetMode ? 'Stellar Testnet' : publicDemo ? 'Demo sin wallet' : operationalPublic ? 'Stellar Testnet' : 'Desarrollo local'}</span>
     </header>
 
@@ -216,8 +241,8 @@ export default function App() {
       </div>
 
 
-      <section className="project-strip" id="roadmap"><div><h2>De la partida al premio verificable.</h2><p>{PRODUCT_STATEMENT}</p><p className="scope-note">Práctica local y operaciones firmadas en Stellar Testnet.</p></div><ol><li className="current"><span>01</span><strong>Simulación y replay</strong><small>Disponible</small></li><li className="current"><span>02</span><strong>Escrow Soroban</strong><small>Flujo Testnet</small></li><li><span>03</span><strong>Demo final</strong><small>Preparación de evidencia</small></li></ol></section>
+      <section className="project-strip" id="roadmap"><div><h2>De la partida al premio verificable.</h2><p>{PRODUCT_STATEMENT}</p><p className="scope-note">Práctica local y operaciones firmadas en Stellar Testnet.</p></div><ol><li className="current"><span>01</span><strong>Motor y replay</strong><small>Operativo</small></li><li className="current"><span>02</span><strong>Escrow Soroban</strong><small>Operativo en Testnet</small></li><li className="current"><span>03</span><strong>Evidencia pública</strong><small>Demo y entrega publicadas</small></li></ol></section>
     </main>
-    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href="./runbook-pruebas-arenapay.html">Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey · MVP 0.1</span></footer>
+    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href="./runbook-pruebas-arenapay.html">Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.4.0</span></footer>
   </div>;
 }

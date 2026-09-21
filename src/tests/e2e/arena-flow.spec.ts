@@ -1,6 +1,22 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
+test('navigates between the public sections and reports the published milestone', async ({ page }) => {
+  await page.goto('/');
+  const navigation = page.getByRole('navigation', { name: 'Navegación principal' });
+  await expect(navigation.getByRole('link', { name: 'Arena' })).toHaveAttribute('aria-current', 'location');
+
+  await navigation.getByRole('link', { name: 'Evidencia' }).click();
+  await expect(page).toHaveURL(/#evidence$/);
+  await expect(navigation.getByRole('link', { name: 'Evidencia' })).toHaveAttribute('aria-current', 'location');
+
+  await navigation.getByRole('link', { name: 'Proyecto' }).click();
+  await expect(page).toHaveURL(/#roadmap$/);
+  await expect(navigation.getByRole('link', { name: 'Proyecto' })).toHaveAttribute('aria-current', 'location');
+  await expect(page.locator('#roadmap')).toContainText('Demo y entrega publicadas');
+  await expect(page.locator('footer')).toContainText('ArenaPay 0.4.0');
+});
+
 test('creates, runs, scrubs, verifies and downloads the same persisted replay', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
