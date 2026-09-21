@@ -13,7 +13,7 @@ No incorpora todavía Hex ni representa una nueva partida pagada en Stellar Test
 | Repositorio privado | `hvaler/ArenaPay-Dev` · `1478951` |
 | Repositorio público | `hvaler/ArenaPay` · `26b8727` |
 | Etiqueta y release | [`v0.4.0`](https://github.com/hvaler/ArenaPay/releases/tag/v0.4.0) |
-| GitHub Pages | `gh-pages` · `87f7b12` · publicación mediante `deploy-pages.yml` |
+| GitHub Pages | `gh-pages` · `87f7b12` · [workflow 35620991054](https://github.com/hvaler/ArenaPay/actions/runs/35620991054) |
 | Cloudflare Worker | `e03bc322-7d8d-4e04-abb5-4e6ad584bd58` |
 | Vercel | `arenapay.vercel.app` · activo `index-2_wCmz2f.js` comprobado |
 
@@ -36,7 +36,8 @@ No incorpora todavía Hex ni representa una nueva partida pagada en Stellar Test
 - [Cloudflare](https://arenapay.arenapay.workers.dev/): despliegue confirmado conservando el Durable Object.
 - `/api/health` en Vercel y Cloudflare: HTTP 200, `mode: public` y `persistence: durable-object`.
 - `/api/games` en ambos dominios: v1 con `lifecycle: historical` y v2 con `lifecycle: active`.
-- [GitHub Pages](https://hvaler.github.io/ArenaPay/): rama `gh-pages` actualizada con la edición offline 0.4.0; la ejecución enlazada registra su despliegue.
+- [GitHub Pages](https://hvaler.github.io/ArenaPay/): HTTP 200 y activo offline
+  `index-ZT-qTWmU.js`; workflow de Actions completado correctamente.
 
 ## Validación
 
