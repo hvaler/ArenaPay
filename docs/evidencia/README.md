@@ -1,6 +1,6 @@
 # Índice de evidencia por versión
 
-Fecha de revisión: 20 de septiembre de 2026. Este índice distingue evidencia guardada, pruebas automatizadas, acciones humanas y publicaciones. Los commits indicados registran incorporación al repositorio, no necesariamente el código exacto ejecutado durante cada firma.
+Fecha de revisión: 21 de septiembre de 2026. Este índice distingue evidencia guardada, pruebas automatizadas, acciones humanas y publicaciones. Los commits indicados registran incorporación al repositorio, no necesariamente el código exacto ejecutado durante cada firma.
 
 Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID.
 
@@ -19,6 +19,7 @@ Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RI
 | [Diagrama de flujo](../arquitectura/flujo-checkpoint-stellar-odyssey.md), [PNG](../assets/arenapay-flujo-verificable.png) y [FigJam](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86) | Arquitectura visual 20-sep-2026 | Repositorio y FigJam | Preparación, motor, replay, verificación y liquidación |
 | [Confirmación de entrega](entrega-stellar-odyssey-2026-09-20.md) y [captura](screenshots/entrega-stellar-odyssey-2026-09-20.png) | Stellar Odyssey Perú 2026 | Plataforma de Stellar Build Perú, 20-sep-2026 | Proyecto entregado con repositorio, despliegue, demo, pitch y evidencia Testnet v2 |
 | [Vídeo anterior](media/arenapay-demo.webm) | Demo anterior | Archivo histórico | Presentación anterior conservada para trazabilidad |
+| [Publicación 0.2.0 — 21-sep-2026](publicacion-2026-09-21.md) | resource-arena/2.0.0 | `main` 931c243 · `gh-pages` 9b35529 | Release, despliegues y pruebas públicas de la arquitectura multimotor |
 | [Publicación 14-sep-2026](publicacion-2026-09-14.md) | resource-arena/2.0.0 | `main` 39ac664 · `gh-pages` 4068b3a | Versiones y pruebas públicas; no representa un pago nuevo |
 
 ## Recibos principales
