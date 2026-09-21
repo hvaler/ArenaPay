@@ -1,6 +1,6 @@
 # Backend público persistente en Cloudflare
 
-Estado: publicado inicialmente el 13 de septiembre y actualizado con ArenaPay 0.2.0 el 21 de septiembre de 2026 en **<https://arenapay.arenapay.workers.dev/>**. La versión y las pruebas públicas más recientes están en la [evidencia de publicación](../evidencia/publicacion-2026-09-21.md).
+Estado: publicado inicialmente el 13 de septiembre y actualizado con ArenaPay 0.3.0 el 21 de septiembre de 2026 en **<https://arenapay.arenapay.workers.dev/>**. La versión y las pruebas públicas más recientes están en la [evidencia de publicación 0.3.0](../evidencia/publicacion-0.3.0-2026-09-21.md).
 
 La prueba de humo creó la partida `5e449ed2-4b18-429a-bad0-ddf776473ace`, redesplegó el Worker y volvió a leerla en estado `Created` sin revelar semilla ni nonce. El registro público está en [`public-backend-evidence.json`](../evidencia/public-backend-evidence.json) y la creación puede comprobarse en [Stellar Expert](https://stellar.expert/explorer/testnet/tx/a0a18ba400da6880e8d5abc919e7ac1c7962d52099ad340f4f4034555688ebb8).
 

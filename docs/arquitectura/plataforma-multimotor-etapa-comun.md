@@ -1,6 +1,6 @@
 # Plataforma multimotor: etapa común antes de Hex
 
-Fecha: 21 de septiembre de 2026. Estado: **implementada en desarrollo**.
+Fecha: 21 de septiembre de 2026. Estado: **publicada en ArenaPay 0.3.0**.
 
 Esta etapa prepara ArenaPay para incorporar Hex sin alterar los motores ni los replays publicados de
 la arena de recursos. Separa las responsabilidades del juego, la presentación, la coordinación y la

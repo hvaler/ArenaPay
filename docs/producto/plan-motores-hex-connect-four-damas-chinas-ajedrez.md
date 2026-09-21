@@ -1,6 +1,6 @@
 # Plan de desarrollo de motores: Hex, Connect Four, Damas chinas y Ajedrez
 
-Fecha: 21 de septiembre de 2026. Estado: **etapa común en desarrollo; juegos todavía no implementados**.
+Fecha: 21 de septiembre de 2026. Estado: **base común publicada en 0.3.0; juegos todavía no implementados**.
 
 Este plan convierte ArenaPay en una plataforma multimotor mediante cuatro juegos, en este orden:
 
