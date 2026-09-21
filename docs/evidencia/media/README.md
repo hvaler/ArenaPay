@@ -12,6 +12,7 @@ Esta carpeta conserva los entregables audiovisuales finales y sus subtítulos. L
 | Arquitectura y plataforma | [MP4](pitch-v2/arenapay-arquitectura-stellar-es.mp4) · [subtítulos SRT](pitch-v2/arenapay-pitch-v2-es.srt) | [YouTube](https://youtu.be/4uiet8NSKwo) | 2:44 | Presentación recomendada: arquitectura, motores, juegos y hoja de ruta |
 | Miniatura de arquitectura | [PNG](pitch-v2/arenapay-arquitectura-thumbnail.png) | Usada en YouTube | 1920 × 1080 | Identidad visual de la presentación recomendada |
 | Presentación inicial | [MP4](arenapay-pitch-es.mp4) · [subtítulos SRT](arenapay-pitch-es.srt) · [miniatura](arenapay-pitch-thumbnail.png) | [YouTube](https://youtu.be/thcnJ7IS7fE) | 2:44 | Pieza histórica utilizada en la entrega inicial |
+| Competición con el motor 3.0.0 | [MP4](arenapay-competicion-v3-es.mp4) | Sin publicar | 0:20 | Sustituye el fragmento de competición de la demo, grabado con el motor que ya corrige el bloqueo |
 
 ## Presentación de arquitectura publicada
 
@@ -53,6 +54,7 @@ Algoritmo: SHA-256.
 | `pitch-v2/arenapay-pitch-v2-es.srt` | `13090f2e9d734b2b0fe85fdbf08604f336b14511659d315d8fa34a54ab23558e` |
 | `pitch-v2/arenapay-arquitectura-thumbnail.png` | `ba38e65ea92b2dbb7198400d911c4bcadf671f6c3ac465b1f2b6ff9f42a4e0a8` |
 | `arenapay-demo.webm` | `bbfa0a0d8487f1c8cba55f9417a0061e6ab858d938ba10555c6e4a717457bce6` |
+| `arenapay-competicion-v3-es.mp4` | `b889b2cf1527ad72ce5b7fc78cf654c32999397aee0b2024fe0aaa6fca74e762` |
 
 Para volver a comprobar una huella en PowerShell:
 
@@ -61,3 +63,25 @@ Get-FileHash docs/evidencia/media/arenapay-demo-testnet-es.mp4 -Algorithm SHA256
 ```
 
 La publicación en YouTube puede ser recodificada por la plataforma. Las huellas anteriores corresponden a las copias maestras incluidas en este repositorio.
+
+## Fragmento de competición con el motor 3.0.0
+
+La demo publicada se grabó con `resource-arena/2.0.0`, que podía detener la competición cuando los dos agentes pedían la misma casilla. La partida que aparece en ese vídeo no quedó afectada —se movió hasta el tick 52 de 60— y el recorrido completo sigue siendo válido y reproducible. Aun así, el fragmento de competición se regrabó con el motor vigente para que muestre una arena disputada de principio a fin.
+
+| Dato | Valor |
+|---|---|
+| Archivo | [`arenapay-competicion-v3-es.mp4`](arenapay-competicion-v3-es.mp4) · 1280 × 900 · 20 s, sin audio |
+| Motor | `resource-arena/3.0.0` |
+| Semilla | `2042`, fijada antes de ejecutar |
+| Resultado | Atlas 27 · Nova 25, tick 60 de 60 |
+| Tablero final | Sin recursos pendientes |
+
+Se grabó sobre <https://arenapay.vercel.app/> con una partida de práctica. La práctica se ejecuta en el navegador con el mismo motor que una partida financiada, así que el tablero es idéntico; lo que no aparece son las firmas de Freighter, que pertenecen a los pasos anteriores del recorrido.
+
+Para volver a grabarlo:
+
+```powershell
+npm run media:arena-clip
+```
+
+El guion acepta `--seed`, `--url`, `--out` y `--name`. Deja un `.webm` y, si hay `ffmpeg` disponible, el `.mp4` ya recortado. Elegir otra semilla cambia la partida: conviene comprobar antes que no se congela y que el marcador queda reñido.

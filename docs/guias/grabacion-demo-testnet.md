@@ -96,6 +96,8 @@ Audio posterior: «Nova deposita su XLM. Con los dos depósitos confirmados, la 
 
 Qué significa: Atlas y Nova son políticas deterministas que compiten fuera de la cadena. La semilla y el nonce se revelan con el replay. La simulación terminada todavía no equivale a un premio pagado.
 
+El motor vigente es `resource-arena/3.0.0`. El anterior podía detener la competición cuando ambos agentes pedían la misma casilla, así que una grabación hecha con él podía mostrar el tablero quieto durante la mayor parte del replay; ya no ocurre. Si solo se quiere rehacer este fragmento sin repetir las firmas, `npm run media:arena-clip` lo graba sobre la aplicación desplegada y deja el archivo en el [archivo audiovisual](../evidencia/media/README.md).
+
 Audio posterior: «Los agentes compiten con estrategias deterministas. El replay registra sus movimientos y permite reproducir el resultado».
 
 ## 7. Verificar replay y firma

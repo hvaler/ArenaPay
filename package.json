@@ -1,6 +1,6 @@
 {
   "name": "arenapay",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "AGPL-3.0-only",
   "author": "Hugo Carlos Valer Rojas",
   "homepage": "https://arenapay.vercel.app/",
@@ -44,7 +44,8 @@
     "deploy:vercel": "npm run build:vercel && npx vercel@59.16.0 deploy . --prod --yes --project arenapay",
     "release:public:plan": "node src/scripts/prepare-public-release.mjs",
     "release:public:prepare": "node src/scripts/prepare-public-release.mjs --apply",
-    "docs:runbook": "node src/scripts/build-runbook.mjs"
+    "docs:runbook": "node src/scripts/build-runbook.mjs",
+    "media:arena-clip": "node src/scripts/record-arena-clip.mjs"
   },
   "dependencies": {
     "@fastify/cors": "^11.3.0",
