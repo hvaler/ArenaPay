@@ -3,7 +3,7 @@ import { ENGINE_VERSION, PRODUCT_STATEMENT, TICKS, replaySchema, type LocalMatch
 import { initialState, runSimulation, verifyReplay } from '../../../packages/shared/src/simulation';
 import { GameBoard, getGamePresentation } from './games/presentations';
 import { matchApi } from './lib/api';
-import { operationalPublic, publicDemo } from './lib/runtime';
+import { basePath, operationalPublic, publicDemo, siteUrl } from './lib/runtime';
 import { Journey } from './components/Journey';
 import { TestnetPanel } from './components/TestnetPanel';
 // Evidencia del motor vigente (v2). El ensayo v1 se conserva en docs/evidencia/fixtures/testnet-replay.json
@@ -180,7 +180,7 @@ export default function App() {
   return <div className="app-shell">
     <a className="skip-link" href="#workspace">Saltar a la arena</a>
     <header className="site-header">
-      <a className="brand" href="./" aria-label="ArenaPay, inicio"><span className="brand-mark">A</span>ArenaPay<span className="brand-lab">Lab</span></a>
+      <a className="brand" href={basePath} aria-label="ArenaPay, inicio"><span className="brand-mark">A</span>ArenaPay<span className="brand-lab">Lab</span></a>
       <nav aria-label="Navegación principal"><a className={activeSection === 'arena' ? 'active' : ''} aria-current={activeSection === 'arena' ? 'location' : undefined} href="#arena" onClick={() => setActiveSection('arena')}>Arena</a><a className={activeSection === 'evidence' ? 'active' : ''} aria-current={activeSection === 'evidence' ? 'location' : undefined} href="#evidence" onClick={() => setActiveSection('evidence')}>Evidencia</a><a className={activeSection === 'roadmap' ? 'active' : ''} aria-current={activeSection === 'roadmap' ? 'location' : undefined} href="#roadmap" onClick={() => setActiveSection('roadmap')}>Proyecto</a></nav>
       <span className="mode-pill"><span />{match?.testnet || testnetMode ? 'Stellar Testnet' : publicDemo ? 'Demo sin wallet' : operationalPublic ? 'Stellar Testnet' : 'Desarrollo local'}</span>
     </header>
@@ -243,6 +243,6 @@ export default function App() {
 
       <section className="project-strip" id="roadmap"><div><h2>De la partida al premio verificable.</h2><p>{PRODUCT_STATEMENT}</p><p className="scope-note">Práctica local y operaciones firmadas en Stellar Testnet.</p></div><ol><li className="current"><span>01</span><strong>Motor y replay</strong><small>Operativo</small></li><li className="current"><span>02</span><strong>Escrow Soroban</strong><small>Operativo en Testnet</small></li><li className="current"><span>03</span><strong>Evidencia pública</strong><small>Demo y entrega publicadas</small></li></ol></section>
     </main>
-    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href="./runbook-pruebas-arenapay.html">Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.4.0</span></footer>
+    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href={siteUrl('runbook-pruebas-arenapay.html')}>Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.4.1</span></footer>
   </div>;
 }

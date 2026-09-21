@@ -11,6 +11,7 @@ playwright-report/
 *.log
 target/
 .tools/
+_hilo/
 src/contracts/**/test_snapshots/
 public-demo/
 public-operational/

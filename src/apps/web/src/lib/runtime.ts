@@ -8,3 +8,9 @@ export const publicDemo = import.meta.env.VITE_PUBLIC_DEMO === 'true';
 export const operationalPublic = import.meta.env.VITE_OPERATIONAL_PUBLIC === 'true';
 export const browserPractice = publicDemo || operationalPublic || Boolean(configuredApiBase);
 export const apiUrl = (path: string) => `${configuredApiBase}/api${path}`;
+
+// Vite fija BASE_URL por edición: '/' en las operativas (Vercel y Cloudflare, servidas en la raíz)
+// y './' en la demo de GitHub Pages, que vive en un subdirectorio. Los enlaces internos parten de
+// aquí porque uno relativo se resolvería contra /match/ al abrir el enlace de una partida.
+export const basePath = import.meta.env.BASE_URL;
+export const siteUrl = (file: string) => `${basePath}${file}`;
