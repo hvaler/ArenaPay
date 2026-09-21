@@ -74,6 +74,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Confirmación de entrega en Stellar Odyssey Perú 2026](evidencia/entrega-stellar-odyssey-2026-09-20.md)
 - [Publicación verificada del 14 de septiembre](evidencia/publicacion-2026-09-14.md)
 - [Publicación 0.3.0 y base multimotor del 21 de septiembre](evidencia/publicacion-0.3.0-2026-09-21.md)
+- [Publicación 0.4.0: selección de motores y protocolo de turnos](evidencia/publicacion-0.4.0-2026-09-21.md)
 - [Ensayo automatizado v2](evidencia/testnet-evidence-v2.json)
 - [Ensayo manual v2](evidencia/testnet-evidence-v2-manual.json)
 - [Persistencia del backend público](evidencia/public-backend-evidence.json)

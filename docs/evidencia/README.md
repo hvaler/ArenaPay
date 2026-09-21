@@ -6,6 +6,7 @@ Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RI
 
 | Evidencia | Versión | Registro / incorporación | Qué acredita |
 |---|---|---|---|
+| [Publicación 0.4.0 — 21-sep-2026](publicacion-0.4.0-2026-09-21.md) | Plataforma multimotor | `main` 26b8727 · `gh-pages` 1741776 | Selección de motores activos, preservación histórica y protocolo común de turnos |
 | [Ensayo manual Freighter v2](../guias/ensayo-manual-freighter-v2.md), [datos](testnet-evidence-v2-manual.json) y [replay](fixtures/testnet-replay-v2-manual.json) | resource-arena/2.0.0 | Código ejecutado ce198d7 | Dos cuentas Freighter, nonce, seis recibos, pago y comparación con cadena; una persona operó ambas cuentas |
 | [Ensayo automatizado v2](testnet-evidence-v2.json) y [replay](fixtures/testnet-replay-v2.json) | resource-arena/2.0.0 | d7d542b | Depósitos, premio, saldos y comprobaciones del script; no firmas manuales Freighter |
 | [Ensayo manual Freighter](../guias/ensayo-manual-freighter.md) | resource-arena/1.0.0 | eae261a | Un usuario operó dos cuentas, depositó, verificó y cobró; no son dos participantes humanos independientes |
