@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/apps/web/public/favicon.svg" width="104" alt="Logo de ArenaPay">
+  <img src="docs/assets/arenapay-logo-gallery.svg" width="104" alt="Logo de ArenaPay">
 </p>
 
 <h1 align="center">ArenaPay</h1>
