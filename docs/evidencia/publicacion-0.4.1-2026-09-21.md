@@ -12,6 +12,13 @@ Corrección compatible del enlace compartido de partidas. El activo operativo de
 - El replay conserva 60 ticks; a velocidad 1× dura aproximadamente 16,8 segundos y a 4× aproximadamente 4,2 segundos.
 - Se debe comprobar después del despliegue que una URL `/match/<id>` muestra la partida y no una pantalla vacía.
 
+## Preparación de la wallet Testnet
+
+- Freighter quedó configurado en **Stellar Testnet**.
+- La cuenta activa se financió con Friendbot desde Stellar Lab.
+- Freighter mostró **10.000 XLM de prueba**; el valor fiat `$0.00` es esperado en Testnet.
+- Se documentó la incidencia inicial de financiar una dirección distinta y la comprobación posterior de que la dirección de Freighter coincidía con la cuenta financiada.
+
 ## Despliegues
 
 La versión se publica en el repositorio privado y en el clon público siguiendo la guía [de flujo de desarrollo y publicación](../guias/flujo-desarrollo-y-publicacion.md). Vercel y Cloudflare usan la compilación operativa; GitHub Pages mantiene la compilación pública con base relativa.

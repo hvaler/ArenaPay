@@ -41,3 +41,44 @@ La documentación oficial distingue [enviar una transacción](https://developers
 Guardar fecha UTC, commit, versión, ID local y de cadena, contrato, cuenta pública, hash de transacción, endpoint sin credenciales, último ledger, estado esperado/observado, acción realizada y evidencia del cierre. Nunca pegar claves privadas, frases de recuperación ni datos privados de partidas aún no reveladas.
 
 Pendiente de ensayo integrado: restauración completa desde copia, archivado/restauración y pérdida controlada de una respuesta real de Testnet. La respuesta perdida ya está cubierta con un RPC simulado; eso no acredita todavía el ensayo de infraestructura.
+
+## Freighter no conecta en un navegador concreto
+
+Síntoma: «Conectar Freighter» no avanza, o avisa de que la extensión no responde, mientras en otro navegador el mismo recorrido sí funciona. Se ha observado en Edge y Brave con Chrome y Firefox funcionando.
+
+La biblioteca `@stellar/freighter-api` se comunica con la extensión por `postMessage`: la página envía `FREIGHTER_EXTERNAL_MSG_REQUEST` y el guion de contenido responde con `FREIGHTER_EXTERNAL_MSG_RESPONSE`. Ese guion solo se inyecta si la extensión tiene permiso para el sitio. En Edge y Brave el acceso por sitio suele quedar en «al hacer clic», y entonces nada responde aunque la extensión esté instalada.
+
+Para saber dónde se rompe, abre <https://arenapay.vercel.app/> en el navegador afectado, abre las herramientas de desarrollo con F12 y pega esto en la consola. Debe ejecutarse en esa pestaña: un guion de contenido solo existe en el sitio donde se inyecta.
+
+```js
+(async () => {
+  const preguntar = (type, ms) => new Promise(resolve => {
+    const messageId = Date.now() + Math.random();
+    const t0 = performance.now();
+    const escucha = e => {
+      const d = e.data || {};
+      if (e.source !== window || d.source !== 'FREIGHTER_EXTERNAL_MSG_RESPONSE' || d.messagedId !== messageId) return;
+      window.removeEventListener('message', escucha); clearTimeout(reloj);
+      resolve({ respondio: true, ms: Math.round(performance.now() - t0), datos: d });
+    };
+    const reloj = setTimeout(() => { window.removeEventListener('message', escucha); resolve({ respondio: false }); }, ms);
+    window.addEventListener('message', escucha, false);
+    window.postMessage({ source: 'FREIGHTER_EXTERNAL_MSG_REQUEST', messageId, type }, location.origin);
+  });
+  console.log('marca window.freighter:', window.freighter);
+  for (const tipo of ['REQUEST_CONNECTION_STATUS', 'REQUEST_NETWORK_DETAILS', 'REQUEST_ALLOWED_STATUS']) {
+    const r = await preguntar(tipo, 5000);
+    console.log(tipo, r.respondio ? `responde en ${r.ms} ms` : 'SIN RESPUESTA', r.datos ?? '');
+  }
+})();
+```
+
+Cómo leer el resultado:
+
+| Observación | Significado | Acción |
+|---|---|---|
+| Alguno responde | El guion de contenido está inyectado | El fallo está después: revisa que Freighter esté desbloqueada y en Testnet |
+| Nada responde y la marca es `undefined` | La extensión no está inyectada en este origen | Concede acceso al sitio desde el icono de extensiones: «En todos los sitios», no «Al hacer clic» |
+| Nada responde pero la marca existe | El guion se anunció y dejó de escuchar | Recarga la pestaña; si persiste, reinstala la extensión |
+
+En Brave, comprueba además que Shields no esté bloqueando scripts en este sitio. El aviso de ArenaPay no puede distinguir estos casos por sí solo: desde la página únicamente se observa que nadie responde.

@@ -8,32 +8,40 @@ export interface Wallet {
   network(): Promise<string>;
   sign(xdr: string, address: string): Promise<string>;
 }
-const explain = (error: unknown) => typeof error === 'string' ? error : 'La wallet rechazó la solicitud.';
+const explain = (error: unknown) => {
+  if (typeof error === 'string') return error;
+  const message = (error as { message?: string } | undefined)?.message;
+  return message ?? 'La wallet rechazó la solicitud.';
+};
 
-// Freighter marca window.freighter al inyectar su guion de contenido. Si se pregunta antes,
-// isConnected() cae en un sondeo al guion que se rinde a los dos segundos y responde que no está
-// instalada. Edge inyecta más tarde que Chrome, así que una sola consulta da un falso negativo con
-// la extensión puesta. Se sondea la marca durante unos segundos y solo entonces se pregunta a la
-// biblioteca, cuya respuesta sigue siendo la que decide.
-export const WALLET_DETECTION_MS = 3_000;
-const WALLET_POLL_MS = 150;
+export const WALLET_ABSENT = 'Freighter no responde en este navegador. Comprueba que la extensión esté instalada, desbloqueada y con permiso para este sitio: en Edge y Brave suele quedar limitada a «al hacer clic», y hay que concederle acceso desde el icono de extensiones.';
+
 const pause = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function walletInstalled(now = () => Date.now(), wait = pause): Promise<boolean> {
-  const deadline = now() + WALLET_DETECTION_MS;
-  while (now() < deadline) {
-    if ((globalThis as { freighter?: boolean }).freighter) return true;
-    await wait(WALLET_POLL_MS);
+// La biblioteca solo pone plazo a REQUEST_CONNECTION_STATUS y REQUEST_PUBLIC_KEY. El mensaje de
+// REQUEST_ACCESS que envía requestAccess() no lo lleva, así que si nadie responde su promesa no se
+// resuelve nunca. isConnected() sí usa uno de los tipos con plazo, de modo que sirve de sondeo.
+export async function walletAnswers(attempts = 3, wait = pause): Promise<boolean> {
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    if ((await freighter.isConnected()).isConnected) return true;
+    if (attempt + 1 < attempts) await wait(300);
   }
-  return (await freighter.isConnected()).isConnected;
+  return false;
 }
 
 export const wallet: Wallet = {
   async connect() {
-    if (!await walletInstalled()) throw new Error('Instala Freighter en Chrome o Edge y abre ArenaPay en ese navegador.');
-    const result = await freighter.requestAccess();
-    if (result.error || !result.address) throw new Error(explain(result.error));
-    if (await this.network() !== Networks.TESTNET) throw new Error('Selecciona Testnet en Freighter antes de conectar.');
+    // requestAccess() abre la ventana de Freighter y espera a que la persona decida, así que no
+    // puede llevar plazo propio. Se sondea en paralelo para poder avisar en lugar de dejar el
+    // botón colgado: quien gane la carrera decide, y la concesión sigue siendo la que manda.
+    const access = freighter.requestAccess();
+    void access.catch(() => undefined);
+    const answered = await Promise.race([access.then(() => true, () => true), walletAnswers()]);
+    if (!answered) throw new Error(WALLET_ABSENT);
+    const result = await access;
+    if (result.error) throw new Error(explain(result.error));
+    if (!result.address) throw new Error(WALLET_ABSENT);
+    if (await this.network() !== Networks.TESTNET) throw new Error('Freighter está en otra red. Abre su selector de red, el icono del globo, y cambia a Testnet antes de conectar.');
     return result.address;
   },
   async address() {

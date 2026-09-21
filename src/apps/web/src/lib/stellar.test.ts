@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Account, Keypair, Networks, TransactionBuilder, Contract } from '@stellar/stellar-sdk/base';
 import * as freighter from '@stellar/freighter-api';
-import { WALLET_DETECTION_MS, walletCall, walletInstalled, type Wallet } from './stellar';
+import { WALLET_ABSENT, wallet, walletAnswers, walletCall, type Wallet } from './stellar';
 
-// La extensión no existe fuera del navegador; se sustituye su sondeo para poder afirmar
-// que solo se consulta una vez y después de agotar la ventana de detección.
-vi.mock('@stellar/freighter-api', () => ({ isConnected: vi.fn(async () => ({ isConnected: false })) }));
+// La extensión no existe fuera del navegador; se sustituye para poder provocar cada respuesta
+// que da al conectar: cuenta concedida, nadie escuchando y rechazo explícito.
+vi.mock('@stellar/freighter-api', () => ({ requestAccess: vi.fn(), getNetworkDetails: vi.fn(), isConnected: vi.fn() }));
 import vector from '../../../../../docs/evidencia/fixtures/resolution-v2.json';
 const key = Keypair.random();
 const transaction = () => new TransactionBuilder(new Account(key.publicKey(), '0'), { networkPassphrase: Networks.TESTNET, fee: '100' })
@@ -38,28 +38,59 @@ describe('wallet transaction boundary', () => {
   });
 });
 
-describe('wallet detection across browsers', () => {
-  const clock = () => { let value = 0; return { now: () => value, wait: async (ms: number) => { value += ms; } }; };
-  afterEach(() => { delete (globalThis as { freighter?: boolean }).freighter; vi.clearAllMocks(); });
+describe('wallet connection across browsers', () => {
+  const freighterMock = freighter as unknown as {
+    requestAccess: ReturnType<typeof vi.fn>;
+    getNetworkDetails: ReturnType<typeof vi.fn>;
+    isConnected: ReturnType<typeof vi.fn>;
+  };
+  const address = Keypair.random().publicKey();
+  const nunca = () => new Promise<never>(() => {});
+  afterEach(() => { vi.clearAllMocks(); });
 
-  it('detects a wallet that injects late, as Edge does', async () => {
-    const { now, wait } = clock();
-    let elapsed = 0;
-    const injectAfter = async (ms: number) => { await wait(ms); elapsed += ms; if (elapsed >= 900) (globalThis as { freighter?: boolean }).freighter = true; };
-    await expect(walletInstalled(now, injectAfter)).resolves.toBe(true);
+  it('connects without consulting the window.freighter flag', async () => {
+    // Edge publica esa marca más tarde que Chrome: la conexión no debe depender de ella.
+    delete (globalThis as { freighter?: boolean }).freighter;
+    freighterMock.requestAccess.mockResolvedValue({ address });
+    freighterMock.isConnected.mockResolvedValue({ isConnected: false });
+    freighterMock.getNetworkDetails.mockResolvedValue({ networkPassphrase: Networks.TESTNET });
+    await expect(wallet.connect()).resolves.toBe(address);
   });
 
-  it('detects a wallet already present, without waiting', async () => {
-    (globalThis as { freighter?: boolean }).freighter = true;
+  it('gives up instead of hanging when the extension never answers', async () => {
+    // REQUEST_ACCESS no lleva plazo en la biblioteca: sin este corte el botón queda colgado.
+    freighterMock.requestAccess.mockImplementation(nunca);
+    freighterMock.isConnected.mockResolvedValue({ isConnected: false });
+    await expect(wallet.connect()).rejects.toThrow(WALLET_ABSENT);
+  });
+
+  it('waits for a slow approval when the wallet does answer the probe', async () => {
+    freighterMock.isConnected.mockResolvedValue({ isConnected: true });
+    freighterMock.requestAccess.mockReturnValue(new Promise(resolve => setTimeout(() => resolve({ address }), 40)));
+    freighterMock.getNetworkDetails.mockResolvedValue({ networkPassphrase: Networks.TESTNET });
+    await expect(wallet.connect()).resolves.toBe(address);
+  });
+
+  it('surfaces the reason the wallet gave instead of the install notice', async () => {
+    freighterMock.requestAccess.mockResolvedValue({ address: '', error: { code: -1, message: 'User declined access' } });
+    freighterMock.isConnected.mockResolvedValue({ isConnected: true });
+    await expect(wallet.connect()).rejects.toThrow('User declined access');
+  });
+
+  it('refuses a wallet that is not on Testnet', async () => {
+    freighterMock.requestAccess.mockResolvedValue({ address });
+    freighterMock.isConnected.mockResolvedValue({ isConnected: true });
+    freighterMock.getNetworkDetails.mockResolvedValue({ networkPassphrase: Networks.PUBLIC });
+    await expect(wallet.connect()).rejects.toThrow('Testnet');
+  });
+
+  it('retries the probe before declaring the wallet unreachable', async () => {
+    freighterMock.isConnected
+      .mockResolvedValueOnce({ isConnected: false })
+      .mockResolvedValueOnce({ isConnected: false })
+      .mockResolvedValueOnce({ isConnected: true });
     const wait = vi.fn(async () => {});
-    await expect(walletInstalled(() => 0, wait)).resolves.toBe(true);
-    expect(wait).not.toHaveBeenCalled();
-  });
-
-  it('reports a missing wallet only after the detection window closes', async () => {
-    const { now, wait } = clock();
-    await expect(walletInstalled(now, wait)).resolves.toBe(false);
-    expect(freighter.isConnected).toHaveBeenCalledOnce();
-    expect(now()).toBeGreaterThanOrEqual(WALLET_DETECTION_MS);
+    await expect(walletAnswers(3, wait)).resolves.toBe(true);
+    expect(freighterMock.isConnected).toHaveBeenCalledTimes(3);
   });
 });

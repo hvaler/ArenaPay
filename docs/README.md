@@ -41,6 +41,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Configuración local](guias/configuracion-local.md)
 - [Runbook de pruebas desde cero](guias/runbook-pruebas-arenapay.md) · [versión HTML](guias/runbook-pruebas-arenapay.html)
 - [Ensayo manual actual con Freighter](guias/ensayo-manual-freighter-v2.md)
+- [Fondear Freighter con XLM de prueba](guias/fondear-freighter-testnet.md)
 - [Ensayo manual histórico](guias/ensayo-manual-freighter.md)
 - [Validación guiada](guias/validacion-guiada.md)
 - [Operación y recuperación](guias/operacion-y-recuperacion.md)

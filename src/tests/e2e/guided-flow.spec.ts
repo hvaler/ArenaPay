@@ -27,6 +27,12 @@ test('requires confirmed funding and offers recovery guidance after expiry', asy
   await page.getByRole('button', { name: 'Reintentar consulta' }).click();
   await expect(page.getByText(/Plazo vencido. Conecta una cuenta participante/)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Ejecutar simulación' })).toHaveCount(0);
+
+  // Un plazo vencido sin ningún depósito no tiene nada que devolver: no debe pedir recuperarlos.
+  state.chain.fundedA = false; state.chain.fundedB = false;
+  await page.getByRole('button', { name: 'Actualizar estado' }).dispatchEvent('click');
+  await expect(page.getByText(/Plazo vencido sin ningún depósito/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cancelar y devolver depósitos' })).toHaveCount(0);
 });
 test('opens a documented payout without wallet or API and supports keyboard replay steps', async ({ page }) => {
   await page.route('**/api/**', route => route.abort());
@@ -69,4 +75,19 @@ test('opens a stable match URL and receives a replay completed in another browse
   await page.getByRole('button', { name: 'Actualizar estado' }).click();
   await expect(page.getByRole('button', { name: 'Verificar replay y firma' })).toBeEnabled();
   await expect(page.getByLabel('Tick del replay')).toBeEnabled();
+});
+
+// Un recorrido se atascó con Freighter en Mainnet y sin fondos de prueba. Ninguna de las dos cosas
+// se ve desde la página, así que la preparación debe estar delante antes de conectar.
+test('explains how to prepare the wallet before connecting', async ({ page }) => {
+  await page.route('**/api/**', route => route.abort());
+  await page.goto('/');
+  const ayuda = page.getByRole('group', { name: 'Antes de conectar: prepara Freighter' });
+  await expect(ayuda).toBeVisible();
+  await expect(ayuda).toContainText('cambia de Mainnet a Testnet');
+  await expect(ayuda).toContainText('Friendbot entrega 10.000 XLM');
+  await expect(ayuda.getByRole('link', { name: 'Stellar Lab · Fund account' }))
+    .toHaveAttribute('href', 'https://lab.stellar.org/account/fund');
+  await expect(ayuda.getByRole('link', { name: 'guía de preparación' }))
+    .toHaveAttribute('href', /guia-freighter-testnet\.html$/);
 });

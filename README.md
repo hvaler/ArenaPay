@@ -214,6 +214,8 @@ npm run dev
 
 Configura primero el servicio y el contrato según [CONTRIBUTING](CONTRIBUTING.md#compilar-y-desplegar-el-contrato). En Chrome o Edge, conecta dos cuentas con XLM de prueba: **crear partida → autorizar presupuesto y depositar 1 XLM desde cada cuenta → ejecutar → verificar replay y firma → cobrar → comprobar contra la cadena**. Cambiar de cuenta en la extensión exige reconectarla en la aplicación.
 
+Para preparar una cuenta nueva, sigue la [guía para financiar Freighter con Friendbot](docs/guias/fondear-freighter-testnet.md). Usa siempre la dirección pública de la cuenta activa en Freighter, selecciona Testnet y confirma que aparecen los XLM de prueba antes de conectar ArenaPay.
+
 El servidor reserva semilla y nonce hasta el replay. Cada depósito requiere firma; el presupuesto acumulativo no incluye comisiones ni se repone al devolver fondos. [Runbook desde cero, MD](docs/guias/runbook-pruebas-arenapay.md) · [HTML](docs/guias/runbook-pruebas-arenapay.html) · [Ensayo manual v2 con dos cuentas Freighter](docs/guias/ensayo-manual-freighter-v2.md). Una persona operó ambas cuentas; no fue una prueba con dos participantes humanos independientes.
 
 ## Verificar el proyecto
