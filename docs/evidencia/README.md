@@ -4,6 +4,12 @@ Fecha de revisión: 21 de septiembre de 2026. Este índice distingue evidencia g
 
 Contrato común Testnet: CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID.
 
+## Salto de 0.4.2 a 0.5.0 en las etiquetas públicas
+
+Las etiquetas del repositorio público pasan de `v0.4.2` a `v0.5.0`. Las versiones **0.4.3** y **0.4.4** existieron: se desplegaron en Vercel y Cloudflare el 21 de septiembre de 2026 y quedan registradas en [su nota de publicación](publicacion-0.4.3-2026-09-21.md) y [la siguiente](publicacion-0.4.4-2026-09-21.md). Fueron dos iteraciones sobre la conexión con Freighter, la segunda corrigiendo a la primera, y se superaron antes de llegar al repositorio público; su contenido se publicó dentro de 0.5.0.
+
+No se les asigna etiqueta pública porque ningún commit de ese repositorio declara esas versiones: una etiqueta apuntando al commit de 0.5.0 entregaría código distinto del que anuncia. El repositorio privado `ArenaPay-Dev` sí conserva `v0.4.3` y `v0.4.4` sobre los commits que realmente las contienen.
+
 | Evidencia | Versión | Registro / incorporación | Qué acredita |
 |---|---|---|---|
 | [Preparación de Freighter y Friendbot](../guias/fondear-freighter-testnet.md) y [ayuda en la aplicación](publicacion-0.5.0-2026-09-21.md) | 0.5.0 | Publicada 21-sep-2026 | Cuenta Testnet financiada con 10.000 XLM de prueba, comprobación de saldo y preparación explicada dentro del panel de Testnet |
