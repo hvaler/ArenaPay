@@ -20,6 +20,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Formato de evidencia y firmas](arquitectura/formato-evidencia.md)
 - [Motor actual `resource-arena/2.0.0`](arquitectura/motores/motor-v2.md)
 - [Motor histórico `resource-arena/1.0.0`](arquitectura/motores/motor-v1-reglas.md)
+- [Cómo crear y registrar un motor](guias/registrar-un-motor.md)
 
 ## Decisiones de arquitectura
 
@@ -29,6 +30,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [ADR-003: backend público en Cloudflare](adr/ADR-003-backend-publico-cloudflare.md)
 - [ADR-004: posicionamiento como plataforma](adr/ADR-004-posicionamiento-de-plataforma.md)
 - [ADR-005: estructura del repositorio](adr/ADR-005-estructura-src-y-docs.md)
+- [ADR-006: frontera y registro de motores](adr/ADR-006-frontera-y-registro-de-motores.md)
 
 ## Guías de uso y prueba
 
@@ -40,11 +42,13 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Validación guiada](guias/validacion-guiada.md)
 - [Operación y recuperación](guias/operacion-y-recuperacion.md)
 - [Desarrollo privado y publicación](guias/flujo-desarrollo-y-publicacion.md)
+- [Registrar un motor nuevo](guias/registrar-un-motor.md)
 - [Guion de la demostración](guias/demo-script.md)
 - [Guion de vídeo público](guias/guion-demo-publica.md)
 - [Grabación completa de la demo Testnet: checklist y narración](guias/grabacion-demo-testnet.md) · [versión para imprimir](guias/grabacion-demo-testnet.html)
 - [Locución en español para la demo Testnet](guias/locucion-demo-testnet.md) · [versión para imprimir](guias/locucion-demo-testnet.html)
 - [Montaje, publicación y metadatos del pitch](guias/montaje-pitch-youtube.md)
+- [Pitch v2: arquitectura, motores, juegos y hoja de ruta](guias/pitch-v2-arquitectura.md)
 
 ## Despliegue
 
@@ -64,6 +68,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 ## Evidencia
 
 - [Índice de evidencia](evidencia/README.md)
+- [Confirmación de entrega en Stellar Odyssey Perú 2026](evidencia/entrega-stellar-odyssey-2026-09-20.md)
 - [Publicación verificada del 14 de septiembre](evidencia/publicacion-2026-09-14.md)
 - [Ensayo automatizado v2](evidencia/testnet-evidence-v2.json)
 - [Ensayo manual v2](evidencia/testnet-evidence-v2-manual.json)
@@ -72,7 +77,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Capturas](evidencia/screenshots/)
 - [Archivo audiovisual y huellas SHA-256](evidencia/media/README.md)
 - [Demo final en YouTube](https://youtu.be/LECz_vXmFi0) · [copia MP4](evidencia/media/arenapay-demo-testnet-es.mp4) · [subtítulos](evidencia/media/arenapay-demo-testnet-es.srt)
-- [Pitch en YouTube](https://youtu.be/thcnJ7IS7fE) · [copia MP4](evidencia/media/arenapay-pitch-es.mp4) · [subtítulos](evidencia/media/arenapay-pitch-es.srt)
+- [Arquitectura y plataforma en YouTube](https://youtu.be/4uiet8NSKwo) · [copia MP4](evidencia/media/pitch-v2/arenapay-arquitectura-stellar-es.mp4) · [subtítulos](evidencia/media/pitch-v2/arenapay-pitch-v2-es.srt)
 - [Diagrama estable en PNG](assets/arenapay-flujo-verificable.png) · [FigJam editable](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86)
 - [Vídeo histórico](evidencia/media/arenapay-demo.webm)
 
@@ -88,6 +93,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 
 ## Auditorías y checklists
 
+- [Revisión integral posterior a la entrega](auditorias/revision-integral-2026-09-20.md)
 - [Revisión del README](auditorias/revision-readme-2026-09-13.md)
 - [Revisión profunda de documentación](auditorias/revision-documentacion-2026-09-14.md)
 - [Revisión de SonarCloud](auditorias/revision-sonarcloud.md)

@@ -48,7 +48,7 @@ juegos deterministas, y la arena es su demostración.** El juego es el enchufe, 
 
 ### Lo que se escribe por juego
 
-Las reglas (`src/packages/shared/src/simulation.ts`), los tipos de movimiento y entrada, el renderizador
+Las reglas (`src/packages/shared/src/engines/resource-arena-v2.ts`), los tipos de movimiento y entrada, el renderizador
 del tablero (`src/apps/web/src/components/Arena.tsx`) y las políticas. Es decir: el juego.
 
 ### Una propiedad que ya está resuelta
@@ -107,9 +107,10 @@ Hoy la verificabilidad se apoya en algo que no se suele enunciar: **el motor via
 que el jurado descarga**. Verifica con el código que tiene delante, y por eso la comprobación
 significa algo.
 
-En un servicio genérico la pregunta pasa a ser *«¿con qué código estoy verificando?»*. La respuesta
-actual es un `if/else` entre dos versiones conocidas (`simulation.ts:85-86`). Eso no escala, y peor:
-abre la puerta a verificar con un motor distinto del que produjo el resultado.
+En un servicio genérico la pregunta pasa a ser *«¿con qué código estoy verificando?»*. La aplicación
+resuelve ahora cada versión mediante el registro de `game-engine.ts`; v1 y v2 tienen adaptadores
+separados y `simulation.ts` es solo una fachada compatible. Esto elimina el antiguo `if/else`, pero
+el siguiente juego aún debe generalizar el esquema de evidencia, hoy específico de la arena.
 
 La salida honesta es **direccionar el motor por contenido**: usar como `engine_version` un SHA-256
 hexadecimal del paquete del motor, incluir el mismo valor en el replay y resolverlo desde un registro

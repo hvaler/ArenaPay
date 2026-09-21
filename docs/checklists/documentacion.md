@@ -79,10 +79,11 @@ esta entrega. El runbook MD/HTML ya existente conserva su publicación.
 - [x] Archivar la demo completa y sus subtítulos en `docs/evidencia/media/`.
 - [x] Publicar y enlazar la [demo completa](https://youtu.be/LECz_vXmFi0).
 - [x] Archivar el pitch, sus subtítulos y su miniatura.
-- [x] Publicar y enlazar el [pitch](https://youtu.be/thcnJ7IS7fE), con duración inferior a tres minutos.
+- [x] Publicar y enlazar la [presentación de arquitectura](https://youtu.be/4uiet8NSKwo), con duración inferior a tres minutos; conservar la primera versión como material histórico.
 - [x] Conservar el diagrama profesional como [PNG](../assets/arenapay-flujo-verificable.png), [documento de arquitectura](../arquitectura/flujo-checkpoint-stellar-odyssey.md) y [FigJam editable](https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86).
 - [x] Registrar las huellas SHA-256 y distinguir los entregables finales del vídeo histórico.
 - [x] Referenciar los entregables desde README, índices, guías, estado del MVP y registro de candidatura.
+- [x] Enviar el checkpoint y la entrega final de Stellar Odyssey Perú 2026, y archivar su [confirmación](../evidencia/entrega-stellar-odyssey-2026-09-20.md).
 
 ## Pendientes técnicos y de ensayo
 

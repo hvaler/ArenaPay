@@ -1,5 +1,5 @@
-import { ENGINE_VERSION, seedSchema, type LocalMatch } from '../../../../packages/shared/src/contracts';
-import { buildReplay, createNonce, seedCommitment } from '../../../../packages/shared/src/simulation';
+import { seedSchema, type LocalMatch } from '../../../../packages/shared/src/contracts';
+import { currentGameEngine } from '../../../../packages/shared/src/engines/resource-arena';
 
 // Explicit public-demo mode. These records never represent escrow or deposits.
 const records = new Map<string, LocalMatch>();
@@ -7,8 +7,9 @@ const nonces = new Map<string, string>();
 export const practiceApi = {
   async create(seed: number): Promise<LocalMatch> {
     seedSchema.parse(seed);
-    const nonce = createNonce();
-    const match: LocalMatch = { matchId: crypto.randomUUID(), mode: 'local', status: 'Ready', seed, seedHash: await seedCommitment(seed, nonce), engineVersion: ENGINE_VERSION, createdAt: new Date().toISOString() };
+    const nonce = currentGameEngine.createSecret();
+    if (!nonce) throw new Error('El motor actual no genera secretos.');
+    const match: LocalMatch = { matchId: crypto.randomUUID(), mode: 'local', status: 'Ready', seed, seedHash: await currentGameEngine.seedCommitment(seed, nonce), engineVersion: currentGameEngine.version, createdAt: new Date().toISOString() };
     nonces.set(match.matchId, nonce);
     records.set(match.matchId, match); return match;
   },
@@ -21,7 +22,7 @@ export const practiceApi = {
     if (testnet) throw new Error('La demo pública no realiza operaciones Testnet.');
     const match = await practiceApi.get(id);
     if (match.replay) return match;
-    const completed: LocalMatch = { ...match, status: 'Completed', replay: await buildReplay(id, match.seed!, nonces.get(id)!) };
+    const completed: LocalMatch = { ...match, status: 'Completed', replay: await currentGameEngine.buildReplay(id, match.seed!, nonces.get(id)) };
     records.set(id, completed); return completed;
   },
 };

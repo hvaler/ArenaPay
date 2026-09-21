@@ -14,4 +14,4 @@ Duración objetivo: 60–90 segundos. El vídeo de navegación es una captura de
 
 ## Resultado final
 
-Este guion breve se conserva como alternativa de navegación. La entrega final amplía el recorrido y está disponible como [demo completa en YouTube](https://youtu.be/LECz_vXmFi0), [copia MP4 y subtítulos](../evidencia/media/README.md). El [pitch de 2:44](https://youtu.be/thcnJ7IS7fE) presenta la propuesta de valor por separado.
+Este guion breve se conserva como alternativa de navegación. La entrega final amplía el recorrido y está disponible como [demo completa en YouTube](https://youtu.be/LECz_vXmFi0), [copia MP4 y subtítulos](../evidencia/media/README.md). La [presentación de arquitectura de 2:44](https://youtu.be/4uiet8NSKwo) explica por separado el problema, los motores, la evidencia y la hoja de ruta.

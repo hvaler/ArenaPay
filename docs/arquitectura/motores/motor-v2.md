@@ -1,9 +1,13 @@
 # Motor `resource-arena/2.0.0`
 
-Motor de simulación vigente. Todas las partidas nuevas lo usan. Vive en
-[`src/packages/shared/src/simulation.ts`](../../../src/packages/shared/src/simulation.ts) y se ejecuta sin cambios
+Motor de simulación vigente. Todas las partidas nuevas lo usan. Sus reglas viven en
+[`src/packages/shared/src/engines/resource-arena-v2.ts`](../../../src/packages/shared/src/engines/resource-arena-v2.ts) y se ejecutan sin cambios
 en Node y en el navegador, que es lo que permite al jurado reproducir una partida en su propia
 máquina y obtener el mismo hash.
+
+La interfaz común y el registro están en [`game-engine.ts`](../../../src/packages/shared/src/game-engine.ts);
+[`simulation.ts`](../../../src/packages/shared/src/simulation.ts) conserva la API anterior como
+fachada. La decisión se documenta en [ADR-006](../../adr/ADR-006-frontera-y-registro-de-motores.md).
 
 La v2 nació de [tres hallazgos de auditoría](../../seguridad/auditoria-correcciones-2026-09-12.md). No es una
 versión con funcionalidad nueva: **es la corrección de tres defectos** del motor anterior, que se
@@ -232,13 +236,13 @@ marcadores distintos de v1 para la misma semilla**. No es un fallo; son motores 
 
 ## Convivencia con v1
 
-v1 no se borró. Se eligió por versión declarada, no por configuración:
+v1 no se borró. El registro selecciona su adaptador por la versión declarada, no por configuración:
 
 ```ts
-export function runSimulation(seed: number, rawInputs: readonly Input[], engineVersion: string = ENGINE_VERSION) {
-  if (engineVersion === LEGACY_ENGINE_VERSION) return runLegacy(seed, rawInputs);
-  if (engineVersion !== ENGINE_VERSION) throw new Error('Versión de motor desconocida.');
-  // ...
+export function getGameEngine(version: string) {
+  const engine = engines.get(version);
+  if (!engine) throw new Error('Versión de motor desconocida.');
+  return engine;
 }
 ```
 
@@ -293,7 +297,8 @@ npm test    # incluye el barrido; el caso de 1 000 semillas tiene 60 s de timeou
 
 - [Auditoría y correcciones del 12-sep-2026](../../seguridad/auditoria-correcciones-2026-09-12.md) — los tres
   hallazgos, con la tabla cuantitativa del barrido de determinismo.
-- [`src/packages/shared/src/simulation.ts`](../../../src/packages/shared/src/simulation.ts) — motor v2.
+- [`src/packages/shared/src/engines/resource-arena-v2.ts`](../../../src/packages/shared/src/engines/resource-arena-v2.ts) — reglas del motor v2.
+- [`src/packages/shared/src/simulation.ts`](../../../src/packages/shared/src/simulation.ts) — fachada compatible.
 - [`src/packages/shared/src/simulation-v1.ts`](../../../src/packages/shared/src/simulation-v1.ts) — motor
   congelado.
 - [Análisis y decisiones](../analisis-y-decisiones.md) — las contradicciones detectadas en la propuesta

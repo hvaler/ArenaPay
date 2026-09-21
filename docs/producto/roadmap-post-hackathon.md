@@ -39,7 +39,7 @@ flowchart LR
     S --> W[Wallet ganadora]
 ```
 
-El registro de motores debe asociar una identidad inmutable con el esquema de entrada, ejecutor, verificador, representación visual y artefacto descargable. La opción recomendada es direccionar cada paquete por su hash criptográfico y conservar un nombre legible como metadato.
+El registro implementado asocia una identidad inmutable con el ejecutor, el compromiso y el verificador. La siguiente ampliación debe incorporar el esquema de entrada, la representación visual y el artefacto descargable. Para motores de terceros, la opción recomendada es direccionar cada paquete por su hash criptográfico y conservar un nombre legible como metadato. Consulta la [guía para registrar un motor](../guias/registrar-un-motor.md).
 
 ## Fases propuestas
 
@@ -51,10 +51,11 @@ Horizonte inicial: hasta la entrega y presentación.
 
 Objetivo: conservar una entrega estable y una evidencia fácil de evaluar.
 
-- [ ] Completar el ensayo público con Freighter.
+- [x] Completar el ensayo público con Freighter.
 - [ ] Probar el vencimiento y la devolución.
-- [ ] Grabar el recorrido final.
-- [ ] Congelar una versión etiquetada y su evidencia.
+- [x] Grabar el recorrido final.
+- [x] Congelar una versión etiquetada y su evidencia.
+- [x] Entregar el proyecto con repositorio, despliegue, demo, pitch y evidencia Testnet v2.
 - [ ] Recoger comentarios del jurado y usuarios de prueba.
 
 **Criterio de salida:** demo repetible, documentación coherente, transacciones contrastables y lista explícita de límites.

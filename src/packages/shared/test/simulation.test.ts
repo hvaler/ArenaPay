@@ -1,12 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { ENGINE_VERSION, TICKS, type Input } from '../src/contracts';
 import { buildReplay, initialState, runSimulation, seedCommitment, verifyReplay } from '../src/simulation';
+import { getGameEngine, registeredEngineVersions } from '../src/game-engine';
+import '../src/engines/resource-arena';
 import historicalReplay from '../../../../docs/evidencia/fixtures/testnet-replay.json';
 
 const id = '00000000-0000-4000-8000-000000000001';
 const nonce = '01'.repeat(32);
 const still: Input[] = Array.from({ length: TICKS }, (_, tick) => ([{ tick, player: 'A' as const, move: 'STAY' as const }, { tick, player: 'B' as const, move: 'STAY' as const }])).flat();
 describe('versioned deterministic arena', () => {
+  it('registers current and historical engines behind the common boundary', () => {
+    expect(registeredEngineVersions()).toEqual(['resource-arena/1.0.0', 'resource-arena/2.0.0']);
+    expect(getGameEngine(ENGINE_VERSION).requiresSecret).toBe(true);
+    expect(() => getGameEngine('chess/1.0.0')).toThrow('desconocida');
+  });
   it('reproduces the complete demo with the same seed', async () => {
     const one = await buildReplay(id, 2026, nonce);
     expect(await buildReplay(id, 2026, nonce)).toEqual(one);

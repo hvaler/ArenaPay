@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <a href="#verificar-el-proyecto"><img alt="83 pruebas" src="https://img.shields.io/badge/pruebas-67%20TS%20%2B%2016%20Rust-brightgreen"></a>
+  <a href="#verificar-el-proyecto"><img alt="84 pruebas" src="https://img.shields.io/badge/pruebas-68%20TS%20%2B%2016%20Rust-brightgreen"></a>
   <a href="https://github.com/hvaler/ArenaPay/issues"><img alt="Issues abiertos" src="https://img.shields.io/github/issues/hvaler/ArenaPay?logo=github"></a>
   <a href="https://github.com/hvaler/ArenaPay/commits/main"><img alt="Último commit" src="https://img.shields.io/github/last-commit/hvaler/ArenaPay?logo=git"></a>
   <a href="LICENSE"><img alt="Licencia AGPL 3.0" src="https://img.shields.io/badge/licencia-AGPL--3.0-blue"></a>
@@ -36,12 +36,18 @@
 
 <p align="center">
   <a href="https://youtu.be/LECz_vXmFi0"><strong>Demo completa</strong></a>
-  · <a href="https://youtu.be/thcnJ7IS7fE">Pitch</a>
+  · <a href="https://youtu.be/4uiet8NSKwo">Arquitectura y plataforma</a>
   · <a href="https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86">Diagrama FigJam</a>
   · <a href="docs/evidencia/media/README.md">Archivo audiovisual</a>
 </p>
 
 > **ArenaPay es una plataforma para competiciones verificables sobre Soroban. Su MVP enfrenta a Atlas y Nova, dos agentes deterministas.**
+
+| Vídeo | Qué muestra | Duración |
+|---|---|---:|
+| [Demo completa](https://youtu.be/LECz_vXmFi0) | El producto funcionando: crear, financiar, ejecutar, verificar y liquidar una partida en Testnet | 4:09 |
+| [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) | Problema, arquitectura, registro de motores, evidencia, futuros juegos y hoja de ruta | 2:44 |
+| [Presentación inicial de la entrega](https://youtu.be/thcnJ7IS7fE) | Resume el recorrido operativo y se conserva como material histórico | 2:44 |
 
 ## Resumen del proyecto
 
@@ -170,7 +176,7 @@ partida entera se queda fuera.
 
 ### Tres decisiones que conviene entender
 
-**El motor vive en el paquete compartido.** `src/packages/shared/src/simulation.ts` ejecuta exactamente las
+**El motor vive en el paquete compartido.** `src/packages/shared/src/engines/resource-arena-v2.ts` ejecuta exactamente las
 mismas reglas en Node y en el navegador, y el hash usa Web Crypto en ambos entornos. Por eso el jurado
 puede reejecutar la partida en su propia máquina y obtener el mismo hash: no hay una versión «del
 servidor» y otra «del cliente». El motor vigente es `resource-arena/2.0.0`; sus reglas, el compromiso
@@ -213,13 +219,13 @@ El servidor reserva semilla y nonce hasta el replay. Cada depósito requiere fir
 ## Verificar el proyecto
 
 ```sh
-npm test                     # 67 pruebas TypeScript; incluye 1.000 semillas
+npm test                     # 68 pruebas TypeScript; incluye 1.000 semillas
 npm run build                # tipos y compilación web
 npm run test:e2e              # 8 escenarios; Chrome instalado
 npm run test:contract          # 16 pruebas del contrato en Windows
 ```
 
-Validación: **67 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
+Validación: **68 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
 
 ## Seguridad: propiedades comprobables
 
@@ -240,7 +246,7 @@ No son promesas: cada propiedad dice dónde comprobarla, y las pruebas se citan 
 | La firma vincula red, contrato, partida, versión, compromiso, ganador y hash | [Formato XDR exacto](docs/arquitectura/formato-evidencia.md) y `prevents_signature_reuse_between_contracts` en [las pruebas del contrato](src/contracts/arena_escrow/src/test.rs) |
 | El contrato se niega a desplegarse fuera de Testnet | `refuses_deployment_on_other_networks`, en las mismas pruebas |
 | Rust y TypeScript producen el mismo digest | [Vector dorado compartido](docs/evidencia/fixtures/resolution-v2.json), verificado en los dos lenguajes |
-| El resultado se reproduce y puede contrastarse con el contrato | [Motor](src/packages/shared/src/simulation.ts) y [panel Testnet](src/apps/web/src/components/TestnetPanel.tsx) |
+| El resultado se reproduce y puede contrastarse con el contrato | [Motor](src/packages/shared/src/engines/resource-arena-v2.ts), [registro](src/packages/shared/src/game-engine.ts) y [panel Testnet](src/apps/web/src/components/TestnetPanel.tsx) |
 | Liquidación única y devolución tras vencer, también desde Funded | `refunds_exactly_the_received_deposits_after_timeout` en [las pruebas](src/contracts/arena_escrow/src/test.rs), sobre [el contrato](src/contracts/arena_escrow/src/lib.rs); `duplicateSettlementRejected` en [la evidencia del ensayo](docs/evidencia/testnet-evidence-v2.json) |
 | Las credenciales locales no se versionan | `git ls-files \| grep -i env` devuelve solo `.env.example`; véanse [.gitignore](.gitignore) y el [registro de revisión](docs/auditorias/revision-readme-2026-09-13.md) |
 
@@ -261,11 +267,11 @@ compromiso, un ganador y el hash final. Reglas, movimientos, replay, verificador
 implementan para cada juego.
 
 La evolución propuesta empieza por probar dos wallets desde dos dispositivos y añadir enlaces de
-partida compartibles. Después incorpora un segundo motor —Hex o Connect Four—, un registro de motores,
+partida compartibles. Después amplía el registro ya creado con un segundo motor —Hex o Connect Four—,
 agentes aportados por terceros dentro de un sandbox y, finalmente, jugadores humanos por turnos.
 Ajedrez es viable cuando estén resueltos salas, reloj, reconexión y tablas.
 
-[Guía de reutilización y catálogo de juegos](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) ·
+[Guía para registrar un motor](docs/guias/registrar-un-motor.md) · [Guía de reutilización y catálogo de juegos](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) ·
 [Hoja de ruta y estrategia de financiación](docs/producto/roadmap-post-hackathon.md). Estas líneas son visión
 posterior a la hackathon y no funcionalidad disponible en el MVP.
 
@@ -307,7 +313,7 @@ El servicio decide cuándo ejecutarlo y guarda sus resultados.
 
 [Índice completo de documentación](docs/README.md) · [Visión general](docs/arquitectura/vision-general.md) · [Glosario](docs/glosario/README.md) · [Decisiones de arquitectura](docs/adr/README.md) · [Modos de prueba](docs/guias/modos-de-prueba.md) · [Flujo de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md) · [Despliegues](docs/despliegue/README.md).
 
-[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Pitch](https://youtu.be/thcnJ7IS7fE) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
+[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
 
 ## Licencia
 

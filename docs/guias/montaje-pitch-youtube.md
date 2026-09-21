@@ -1,4 +1,8 @@
-# Montaje del video pitch de ArenaPay
+# Montaje del pitch publicado de ArenaPay (v1)
+
+> Revisión del 21 de septiembre de 2026: el vídeo publicado comparte casi toda su estructura con la
+> demo completa. Se conserva como primera entrega, pero el reemplazo recomendado es el
+> [pitch v2 centrado en arquitectura y plataforma](pitch-v2-arquitectura.md).
 
 ## Objetivo
 

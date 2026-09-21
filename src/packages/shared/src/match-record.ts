@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { ENGINE_VERSION, LEGACY_ENGINE_VERSION, seedSchema, type LocalMatch } from './contracts';
-import { buildReplay, createNonce, seedCommitment } from './simulation';
-import { buildReplay as buildLegacyReplay } from './simulation-v1';
+import { seedSchema, type LocalMatch } from './contracts';
+import { getGameEngine } from './game-engine';
+import { currentGameEngine, type ResourceArenaEngine } from './engines/resource-arena';
 import { onChainId } from './stellar';
 
 export type StoredMatch = LocalMatch & { seed: number; nonce?: string };
@@ -17,9 +17,9 @@ export function publicMatch(match: StoredMatch): LocalMatch {
 
 export async function createStoredMatch(seed: number, testnetContractId?: string): Promise<StoredMatch> {
   seedSchema.parse(seed);
-  const nonce = createNonce(), matchId = crypto.randomUUID();
+  const nonce = currentGameEngine.createSecret(), matchId = crypto.randomUUID();
   return { matchId, mode: 'local', status: 'Ready', seed, nonce,
-    seedHash: await seedCommitment(seed, nonce), engineVersion: ENGINE_VERSION, createdAt: new Date().toISOString(),
+    seedHash: await currentGameEngine.seedCommitment(seed, nonce), engineVersion: currentGameEngine.version, createdAt: new Date().toISOString(),
     ...(testnetContractId ? { testnet: { contractId: testnetContractId, chainId: onChainId(matchId) } } : {}) };
 }
 
@@ -28,8 +28,9 @@ export async function completeStoredMatch(match: StoredMatch, funding?: { contra
     throw new Error('Ejecuta esta partida desde el flujo Testnet tras confirmar ambos depósitos.');
   }
   if (match.status !== 'Ready') throw new Error('La partida ya tiene un replay.');
-  if (match.engineVersion !== LEGACY_ENGINE_VERSION && !match.nonce) throw new Error('Falta el nonce guardado. No se puede sustituir el compromiso.');
-  const replay = match.engineVersion === LEGACY_ENGINE_VERSION ? await buildLegacyReplay(match.matchId, match.seed) : await buildReplay(match.matchId, match.seed, match.nonce!);
+  const engine = getGameEngine(match.engineVersion) as ResourceArenaEngine;
+  if (engine.requiresSecret && !match.nonce) throw new Error('Falta el nonce guardado. No se puede sustituir el compromiso.');
+  const replay = await engine.buildReplay(match.matchId, match.seed, match.nonce);
   if (replay.seedHash !== match.seedHash || replay.engineVersion !== match.engineVersion) throw new Error('El replay no coincide con el compromiso guardado.');
   return { ...match, status: 'Completed', replay };
 }

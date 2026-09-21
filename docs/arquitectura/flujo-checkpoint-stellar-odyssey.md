@@ -76,4 +76,4 @@ flowchart TD
 
 ## Uso en el checkpoint
 
-El FigJam debe compartirse como **Cualquier persona con el enlace puede ver**. En el campo **Repositorio base** se utiliza `https://github.com/hvaler/ArenaPay`. Debe indicarse que el proyecto ya existía antes del evento, porque el repositorio y las primeras versiones de ArenaPay preceden a la participación actual.
+El FigJam debe compartirse como **Cualquier persona con el enlace puede ver**. En el campo **Repositorio base** se utiliza `https://github.com/hvaler/ArenaPay`. La casilla **Este proyecto ya existía antes del evento** debe dejarse sin marcar: ArenaPay nació como respuesta a esta hackatón, después de conocer la convocatoria. Que el desarrollo comenzara antes del registro o de la aceptación de la participación no lo convierte en un proyecto preexistente.

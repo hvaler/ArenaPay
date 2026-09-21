@@ -11,7 +11,7 @@ ArenaPay coordina una competición determinista entre Atlas y Nova, conserva una
 | Componente | Responsabilidad | Persistencia |
 |---|---|---|
 | Web React | Práctica, tablero, replay, Freighter y comparación | Navegador para práctica |
-| Paquete compartido | Reglas, esquemas, hashes, reproducción y adaptador RPC | Ninguna |
+| Paquete compartido | Registro de motores, reglas, esquemas, hashes, reproducción y adaptador RPC | Ninguna |
 | Motor Node local | API de desarrollo, partidas en archivos y árbitro | `data/matches/` |
 | Worker público | API operativa, límites, coordinación y árbitro | Durable Object SQLite |
 | Freighter | Firma del presupuesto, depósito, devolución o cobro | Wallet del participante |

@@ -323,7 +323,7 @@ Considera superado el recorrido de pago cuando se confirman las dos inscripcione
 
 ## 14 Preparar un vídeo entendible
 
-La demostración final grabada el 20 de septiembre de 2026 está disponible en [YouTube](https://youtu.be/LECz_vXmFi0) y en el [archivo audiovisual del repositorio](../evidencia/media/README.md). Es una presentación del recorrido operativo; no convierte retrospectivamente los ensayos históricos en pruebas con dos personas independientes.
+La demostración final grabada el 20 de septiembre de 2026 está disponible en [YouTube](https://youtu.be/LECz_vXmFi0) y en el [archivo audiovisual del repositorio](https://github.com/hvaler/ArenaPay/tree/main/docs/evidencia/media). Es una presentación del recorrido operativo; no convierte retrospectivamente los ensayos históricos en pruebas con dos personas independientes.
 
 Antes de grabar, importa las cuentas y oculta cualquier archivo privado. Mantén cerrados los menús ajenos a la demo. Comprueba Testnet, saldo y servicios. El plazo de una partida sigue avanzando mientras explicas: prepara el guion antes de crearla.
 

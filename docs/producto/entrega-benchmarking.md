@@ -24,7 +24,7 @@ Ambas publicaciones ejecutan prácticas en el navegador, permiten importar y des
 | Navegación del replay | Pasos anterior/siguiente, barra y velocidad; controles con nombres accesibles y foco visible. |
 | Móvil y teclado | Comprobados a 390 px; activación por teclado y ausencia de desbordamiento horizontal en los escenarios probados. |
 | Publicación | Demo estática en GitHub Pages y Vercel, con recorrido completo probado en ambas URLs. |
-| Vídeo | [Demo final](https://youtu.be/LECz_vXmFi0) y [pitch](https://youtu.be/thcnJ7IS7fE), con copias maestras y subtítulos en [docs/evidencia/media](../evidencia/media/README.md). La captura anterior se conserva como material histórico. |
+| Vídeo | [Demo final](https://youtu.be/LECz_vXmFi0) y [arquitectura y plataforma](https://youtu.be/4uiet8NSKwo), con copias maestras y subtítulos en [docs/evidencia/media](../evidencia/media/README.md). La presentación inicial se conserva como material histórico. |
 
 ## Validación realizada
 

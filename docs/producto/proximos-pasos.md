@@ -12,26 +12,27 @@ Este documento conserva el estado del proyecto después de publicar el backend p
 - [x] Contrato Soroban conservado sin cambios: `CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID`.
 - [x] Secretos de administración, árbitro y limitación de tráfico guardados fuera del repositorio.
 - [x] Persistencia comprobada creando una partida en Testnet y consultándola después de volver a desplegar el Worker.
-- [x] Validación técnica completada: 67 pruebas TypeScript, 8 escenarios locales, 1 escenario offline público, escenarios operativos en Vercel y Cloudflare, compilaciones y 16 pruebas Rust.
+- [x] Validación técnica completada: 68 pruebas TypeScript, 8 escenarios locales, 1 escenario offline público, escenarios operativos en Vercel y Cloudflare, compilaciones y 16 pruebas Rust.
+- [x] Proyecto entregado en Stellar Odyssey Perú 2026 con repositorio, despliegue, evidencia Testnet v2, demo y pitch públicos.
 - [x] Rama `main` limpia, confirmada y sincronizada con GitHub al cerrar esta entrega.
 
 La evidencia técnica del backend se encuentra en [public-backend-evidence.json](../evidencia/public-backend-evidence.json), la publicación más reciente en [publicacion-2026-09-14.md](../evidencia/publicacion-2026-09-14.md) y su arquitectura y operación están explicadas en [Cloudflare](../despliegue/cloudflare.md).
 
 ## Checklist pendiente, en orden recomendado
 
-### 1. Ensayo público completo con Freighter
+### 1. Ensayo público completo con Freighter — completado
 
-- [ ] Abrir <https://arenapay.vercel.app/> en Chrome con Freighter conectado a Testnet.
-- [ ] Crear una partida nueva con las direcciones públicas de Atlas y Nova.
-- [ ] Autorizar presupuesto y depositar 1 XLM de prueba con Atlas.
-- [ ] Cambiar a Nova y repetir autorización y depósito.
-- [ ] Ejecutar la simulación.
-- [ ] Verificar el replay y la firma del árbitro.
-- [ ] Cobrar el premio con la cuenta correspondiente.
-- [ ] Comparar el hash del replay con el resultado guardado en el contrato.
-- [ ] Guardar identificadores, enlaces de Stellar Expert, capturas y resultado final.
+- [x] Abrir <https://arenapay.vercel.app/> en Chrome con Freighter conectado a Testnet.
+- [x] Crear una partida nueva con las direcciones públicas de Atlas y Nova.
+- [x] Autorizar presupuesto y depositar 1 XLM de prueba con Atlas.
+- [x] Cambiar a Nova y repetir autorización y depósito.
+- [x] Ejecutar la simulación.
+- [x] Verificar el replay y la firma del árbitro.
+- [x] Cobrar el premio con la cuenta correspondiente.
+- [x] Comparar el hash del replay con el resultado guardado en el contrato.
+- [x] Guardar identificadores, enlaces de Stellar Expert, capturas y resultado final.
 
-**Qué demuestra:** que el recorrido público funciona de principio a fin con dos cuentas independientes controladas durante el ensayo, firmas reales de wallet, backend persistente y liquidación en Soroban Testnet.
+**Qué demuestra:** que el recorrido público funciona de principio a fin con dos cuentas distintas operadas por una persona, firmas reales de wallet, backend persistente y liquidación en Soroban Testnet. No sustituye una prueba posterior con dos participantes independientes.
 
 ### 2. Ensayo de vencimiento y devolución
 
@@ -52,7 +53,7 @@ La evidencia técnica del backend se encuentra en [public-backend-evidence.json]
 - [x] Mostrar el replay, el ganador, la liquidación y la transacción en Stellar Expert.
 - [x] Añadir narración y subtítulos en español.
 - [x] Publicar la [demo completa](https://youtu.be/LECz_vXmFi0) y archivarla en el [repositorio](../evidencia/media/README.md).
-- [x] Publicar un [pitch independiente](https://youtu.be/thcnJ7IS7fE) de menos de tres minutos.
+- [x] Publicar una [presentación independiente de arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) de menos de tres minutos.
 
 **Qué demuestra:** convierte la evidencia técnica en una demostración comprensible y revisable por terceros.
 
@@ -107,7 +108,7 @@ Estas tareas se documentan ahora para no perder la visión, pero no deben compet
 
 - [ ] Añadir enlaces compartibles para abrir una partida concreta desde dos dispositivos.
 - [ ] Ejecutar un ensayo con dos propietarios independientes, cada uno con su wallet y equipo.
-- [ ] Crear una interfaz común y un registro de motores.
+- [x] Crear una interfaz común y un registro de motores ([ADR-006](../adr/ADR-006-frontera-y-registro-de-motores.md)).
 - [ ] Implementar Hex o Connect Four como segundo juego.
 - [ ] Diseñar un SDK y un sandbox para agentes aportados por terceros.
 - [ ] Incorporar salas y movimientos de jugadores humanos por turnos.
