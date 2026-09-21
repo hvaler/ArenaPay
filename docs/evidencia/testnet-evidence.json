@@ -1,0 +1,26 @@
+{
+  "network": "testnet",
+  "contractId": "CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID",
+  "tokenId": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+  "localMatchId": "7e94d47e-ff79-47ee-9af5-c2266b7ba57e",
+  "chainMatchId": "611cad565282f7809eb301417d1c1c827e69b8620ec8d4b2970d6a4f9bf5f940",
+  "finalStateHash": "1f167557b9f13e95e9e5c2370bd10cc4e86cb8e079bc9374f28684c5edaf6161",
+  "winner": "GCRDRJWHKVV52JWTGZSEZ5O5UJ6HL67VRS67NTNMNOYLK3NL6X4L7533",
+  "payoutStroops": "20000000",
+  "winnerBalanceBefore": "99989942889",
+  "winnerBalanceAfter": "100009942889",
+  "escrowBalanceBefore": "20000000",
+  "escrowBalanceAfter": "0",
+  "budgetExceededRejected": true,
+  "duplicateSettlementRejected": true,
+  "receipts": {
+    "created": "299fc4f1f19540e77d6831fa49d88c8386bac64204b744f034cada501cc0cdac",
+    "depositA": "f6f62e338864be3b204ecb70004a2d875af21e44310ac1967d61a158e55989a8",
+    "depositB": "3a53e2cac5e53e0e11e71281079b6541ea7e677e19987224528f1916552283b8",
+    "settled": "743e702483496008c7cfbf19f3b319877fab4cd593459a7d7528e96dfceac318"
+  },
+  "verifiedAt": "2026-09-11T22:34:22.814Z",
+  "settlementEventCount": 1,
+  "settlementLedger": 4628495,
+  "settlementEventId": "0019879234654744576-0000000001"
+}

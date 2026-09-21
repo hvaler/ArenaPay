@@ -1,0 +1,49 @@
+1
+00:00:01,000 --> 00:00:14,000
+ArenaPay es una plataforma para competiciones verificables sobre Soroban.
+En esta demostración, Atlas y Nova compiten por recursos y el resultado puede reproducirse y comprobarse.
+
+2
+00:00:17,000 --> 00:00:31,000
+Creo una partida nueva en la red de pruebas de Stellar.
+El servidor elige una semilla secreta y publica su compromiso, evitando que los participantes conozcan el resultado antes de financiarla.
+
+3
+00:00:35,000 --> 00:00:48,000
+Conecto Freighter configurado en Testnet.
+Todo el recorrido utiliza XLM de prueba y cada operación que mueve fondos debe confirmarse en la wallet.
+
+4
+00:00:53,000 --> 00:01:09,500
+Los dos participantes autorizan sus presupuestos y depositan un XLM de prueba por persona.
+El contrato bloquea ambos depósitos como garantía, y la competición solo comienza cuando la financiación está completa.
+
+5
+00:01:30,000 --> 00:01:41,000
+Con los dos depósitos confirmados, ejecuto la competición.
+Atlas prioriza los recursos cercanos y Nova combina el valor de cada recurso con la distancia.
+
+6
+00:01:50,000 --> 00:02:07,000
+La simulación registra los movimientos de ambos agentes durante sesenta ticks.
+Las reglas y las políticas son deterministas: la misma semilla y las mismas entradas producen exactamente el mismo replay y el mismo resultado.
+
+7
+00:02:36,000 --> 00:02:48,000
+Nova consigue diecinueve puntos y Atlas consigue dieciséis.
+Antes del pago, el navegador vuelve a ejecutar el juego, verifica su hash y comprueba la firma del árbitro.
+
+8
+00:03:06,000 --> 00:03:19,000
+El contrato valida la firma y paga el premio a Nova.
+Quien solicita el pago no puede elegir al ganador. El contrato utiliza el ganador indicado en la resolución verificada.
+
+9
+00:03:35,000 --> 00:03:49,000
+Finalmente, comparo el replay con el contrato.
+El ganador y el hash coinciden al cien por cien, y la transacción de liquidación queda disponible en el explorador de Stellar Testnet.
+
+10
+00:03:55,000 --> 00:04:09,000
+También puedo importar el replay, verificarlo de nuevo en el navegador y descargarlo como un archivo de datos JSON.
+Así, cualquier persona puede conservar la evidencia y volver a calcular el resultado.

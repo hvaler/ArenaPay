@@ -1,0 +1,614 @@
+{
+  "matchId": "7e94d47e-ff79-47ee-9af5-c2266b7ba57e",
+  "engineVersion": "resource-arena/1.0.0",
+  "seed": 2026,
+  "seedHash": "1e2ca4b90f76698cf5cd6c526d2a18eb6f3fd79d93acc9b3e676aa6ffefc42ae",
+  "policies": {
+    "A": "collector-v1",
+    "B": "tactician-v1"
+  },
+  "inputs": [
+    {
+      "tick": 0,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 0,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 1,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 1,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 2,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 2,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 3,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 3,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 4,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 4,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 5,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 5,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 6,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 6,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 7,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 7,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 8,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 8,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 9,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 9,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 10,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 10,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 11,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 11,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 12,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 12,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 13,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 13,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 14,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 14,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 15,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 15,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 16,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 16,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 17,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 17,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 18,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 18,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 19,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 19,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 20,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 20,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 21,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 21,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 22,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 22,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 23,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 23,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 24,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 24,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 25,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 25,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 26,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 26,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 27,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 27,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 28,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 28,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 29,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 29,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 30,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 30,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 31,
+      "player": "A",
+      "move": "LEFT"
+    },
+    {
+      "tick": 31,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 32,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 32,
+      "player": "B",
+      "move": "LEFT"
+    },
+    {
+      "tick": 33,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 33,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 34,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 34,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 35,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 35,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 36,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 36,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 37,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 37,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 38,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 38,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 39,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 39,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 40,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 40,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 41,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 41,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 42,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 42,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 43,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 43,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 44,
+      "player": "A",
+      "move": "STAY"
+    },
+    {
+      "tick": 44,
+      "player": "B",
+      "move": "STAY"
+    },
+    {
+      "tick": 45,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 45,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 46,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 46,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 47,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 47,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 48,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 48,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 49,
+      "player": "A",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 49,
+      "player": "B",
+      "move": "RIGHT"
+    },
+    {
+      "tick": 50,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 50,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 51,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 51,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 52,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 52,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 53,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 53,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 54,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 54,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 55,
+      "player": "A",
+      "move": "DOWN"
+    },
+    {
+      "tick": 55,
+      "player": "B",
+      "move": "DOWN"
+    },
+    {
+      "tick": 56,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 56,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 57,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 57,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 58,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 58,
+      "player": "B",
+      "move": "UP"
+    },
+    {
+      "tick": 59,
+      "player": "A",
+      "move": "UP"
+    },
+    {
+      "tick": 59,
+      "player": "B",
+      "move": "UP"
+    }
+  ],
+  "finalStateHash": "1f167557b9f13e95e9e5c2370bd10cc4e86cb8e079bc9374f28684c5edaf6161",
+  "winner": "B"
+}

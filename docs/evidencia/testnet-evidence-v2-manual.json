@@ -1,0 +1,64 @@
+{
+  "network": "testnet",
+  "evidenceType": "manual-freighter-single-operator-two-accounts",
+  "sourceCommit": "ce198d7a88dedbdf95a7c6272f5c69a9aa9e954c",
+  "contractId": "CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID",
+  "tokenId": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+  "localMatchId": "68db5dd9-bcef-470e-b1d0-63ff201e8fcc",
+  "chainMatchId": "2f60d5b602d3f56ed2b66369f4d9e2fd9ae1fada7404e56ceb6ae903636ba3ba",
+  "engineVersion": "resource-arena/2.0.0",
+  "seed": 2280878112,
+  "nonce": "3aa657be6f84d4fd028a1028cf4cdd1973f698a052e79ab1894a38abee372d0d",
+  "seedHash": "ba05d52f6a36dfc1718fb8abeb4edbdd733fb041323b00107f12c8b52ba5b99e",
+  "playerA": "GAARLVPR7GF6J72HMGII7Y6PKFOK35HPKZ7WRBJBPWASLSBTSUXSHIQZ",
+  "playerB": "GBJGSL3A65PK6W3UC5SQQCRC3EPSHODI7QWW4UY5CW7M4VR2ITRGY2N7",
+  "winner": "GBJGSL3A65PK6W3UC5SQQCRC3EPSHODI7QWW4UY5CW7M4VR2ITRGY2N7",
+  "scores": {
+    "atlas": 18,
+    "nova": 27
+  },
+  "finalStateHash": "15264d98af8c124dd5f1ef889f579a0e36fff2325e7b3f9951d97dd368e67317",
+  "buyInStroops": "10000000",
+  "payoutStroops": "20000000",
+  "receipts": {
+    "created": "799b31774668717a814e23d11e0842c59adf3a2c6db95e06a2ca3d8b2328aa81",
+    "authorizeA": "be861b95d5bac32c9fc722c23b7150a5fe1d6cef3e30c073c0ee759f55016388",
+    "depositA": "0c9d833da6fbe8888f87edda92a19c903654d4e32132cd73d96e4a88696d268c",
+    "authorizeB": "ee0adbb850b53ed56ba7f9260cbccf1f388f903c130a4234af24c15cc758c03e",
+    "depositB": "d0c247ec00a11efba1e5e6ab335334aa15bcc1fc011ce9dc1bf7b50668c05772",
+    "settled": "b8f1d444402c4bcb976126b8e144eabde40b6e5dc8fb173f0a63ed178e43b448"
+  },
+  "ledgers": {
+    "created": 4655876,
+    "authorizeA": 4655887,
+    "depositA": 4655889,
+    "authorizeB": 4655902,
+    "depositB": 4655904,
+    "settled": 4655945,
+    "timeout": 4656594
+  },
+  "feesChargedStroops": {
+    "created": "68508",
+    "authorizeA": "8305",
+    "depositA": "29401",
+    "authorizeB": "8305",
+    "depositB": "22559",
+    "settled": "25691"
+  },
+  "settlementEventId": "0019997131506991104-0000000001",
+  "transferEventId": "0019997131506991104-0000000000",
+  "verifiedAt": "2026-09-13T12:42:54Z",
+  "checks": {
+    "allTransactionsSuccessful": true,
+    "bothDepositsConfirmed": true,
+    "replayValid": true,
+    "refereeSignatureValid": true,
+    "winnerAndHashMatchContract": true,
+    "transferToWinnerStroops": "20000000"
+  },
+  "limitations": {
+    "independentHumanParticipants": false,
+    "balancesBeforeAndAfterCaptured": false,
+    "videoRecorded": false
+  }
+}

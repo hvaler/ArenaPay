@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-09-13T17:19:57.005Z",
+  "frontendUrl": "https://arenapay.vercel.app/",
+  "workerUrl": "https://arenapay.arenapay.workers.dev/",
+  "workerVersion": "8503ba01-17e0-42ed-a277-9447639b925a",
+  "contractId": "CDHPEYP7KEYYO3D6G44PK22MUNKF4ZBFHLOM6DUL2NOUKXNNTO4R4RID",
+  "persistence": "durable-object",
+  "smokeMatch": {
+    "matchId": "5e449ed2-4b18-429a-bad0-ddf776473ace",
+    "chainId": "f93463a97f1b4b97e142c3476c82c8d4d5ce335d62e92f0c4366662a73c3af9a",
+    "createTx": "a0a18ba400da6880e8d5abc919e7ac1c7962d52099ad340f4f4034555688ebb8",
+    "chainStatus": "Created",
+    "ledgerAfterRedeploy": 4659280
+  },
+  "checks": {
+    "healthPublic": true,
+    "configReady": true,
+    "practiceRoutesBlocked": true,
+    "corsAllowedOrigin": true,
+    "corsBlockedOrigin": true,
+    "seedHiddenBeforeReplay": true,
+    "nonceHiddenBeforeReplay": true,
+    "survivedWorkerRedeploy": true,
+    "operationalBrowserTest": true
+  }
+}
