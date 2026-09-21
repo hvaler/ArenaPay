@@ -1,4 +1,0 @@
-interface:
-  display_name: "ArenaPay Release"
-  short_description: "Sincroniza ArenaPay-Dev con la edición pública"
-  default_prompt: "Usa $arenapay-release para preparar la próxima versión de ArenaPay."
