@@ -176,11 +176,13 @@ La variante de dos jugadores encaja. La modalidad habitual con más participante
 
 1. **Probar dos navegadores o equipos con Atlas y Nova.** Valida coordinación pública y wallets separadas sin cambiar el juego.
 2. **Añadir enlaces de partida compartibles.** Evita depender de “la partida más reciente”.
-3. **Crear un segundo motor sencillo.** Hex es el mejor ejercicio técnico porque tiene dos jugadores, información pública y un único ganador. Connect Four es otra opción muy comprensible.
-4. **Ampliar el registro de motores ya creado.** La frontera selecciona ejecutor y verificador por versión; el segundo juego debe añadir su esquema y renderizador.
-5. **Añadir agentes aportados por usuarios dentro de un sandbox.** Este paso convierte ArenaPay en una plataforma real de torneos de agentes.
-6. **Construir un modo humano por turnos.** Empezar por Hex, Connect Four o damas y añadir salas, reloj y reconexión.
-7. **Evaluar ajedrez.** Hacerlo después del modo por turnos y definir primero cómo se resuelven las tablas.
+3. **Crear Hex como segundo motor.** Tiene dos jugadores, información pública, un único ganador y permite validar el registro con pocas excepciones.
+4. **Añadir Connect Four.** Reutiliza el modo por turnos y obliga a representar empates y devoluciones de forma explícita.
+5. **Añadir Damas chinas para dos.** Valida rutas de saltos, replays mayores y límites de partida.
+6. **Añadir Ajedrez.** Se aborda cuando salas, reloj, abandono y tablas ya funcionan en los motores anteriores.
+7. **Añadir agentes aportados por usuarios dentro de un sandbox.** Este paso convierte ArenaPay en una plataforma real de torneos de agentes.
+
+El alcance y los criterios de salida de los cuatro juegos están en el [plan de motores](../producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md).
 
 ## Conclusión de arquitectura
 

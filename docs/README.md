@@ -86,6 +86,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Estado y límites del MVP](producto/estado-y-limites.md)
 - [Próximos pasos](producto/proximos-pasos.md)
 - [Roadmap posterior a la hackathon y financiación](producto/roadmap-post-hackathon.md)
+- [Plan de motores: Hex, Connect Four, Damas chinas y Ajedrez](producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md)
 - [Registro en Stellar Odyssey](producto/registro-stellar-odyssey.md)
 - [Benchmarking](producto/benchmarking-arenapay-2026-09-12.md)
 - [Entrega de benchmarking](producto/entrega-benchmarking.md)

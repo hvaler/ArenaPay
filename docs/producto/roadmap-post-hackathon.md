@@ -83,13 +83,13 @@ Objetivo: demostrar que ArenaPay es reutilizable y no una aplicación ligada a l
 - [ ] Definir la interfaz común de un motor.
 - [ ] Crear el registro de versiones y artefactos.
 - [ ] Separar los esquemas de replay por motor.
-- [ ] Implementar Hex o Connect Four como segundo juego.
+- [ ] Implementar Hex como segundo juego y Connect Four como tercero.
 - [ ] Añadir pruebas deterministas, vectores históricos y un barrido de partidas.
 - [ ] Comparar contrato compartido frente a un despliegue por juego.
 
 **Criterio de salida:** dos juegos distintos crean, reproducen y liquidan partidas mediante la misma capa de plataforma.
 
-Hex es el primer candidato técnico porque tiene dos jugadores, información pública y un único ganador. Connect Four ofrece una demostración más familiar, pero necesita definir el tratamiento del empate.
+Hex es el primer candidato técnico porque tiene dos jugadores, información pública y un único ganador. Connect Four será el siguiente y validará el tratamiento explícito del empate.
 
 ### Fase 3 — Agentes aportados por terceros
 
@@ -149,10 +149,10 @@ Objetivo: obtener uso real controlado y reunir la evidencia necesaria antes de c
 |---|---|---|
 | 1 | Hex | Dos jugadores, información pública y sin empate |
 | 2 | Connect Four | Familiar, visual y pequeño; requiere regla de desempate |
-| 3 | Damas | Buen paso hacia turnos humanos; requiere reglas de tablas |
-| 4 | Othello/Reversi | Estado compacto y verificación clara |
-| 5 | Ajedrez | Gran reconocimiento, pero reglas, reloj y tablas elevan el coste |
-| 6 | Damas chinas para dos | Compatible con el contrato actual |
+| 3 | Damas chinas para dos | Saltos compuestos, información pública y contrato de dos participantes |
+| 4 | Ajedrez | Gran reconocimiento; reutiliza turnos, reloj y tratamiento de tablas |
+| 5 | Damas | Buen paso adicional para turnos humanos; requiere reglas de tablas |
+| 6 | Othello/Reversi | Estado compacto y verificación clara |
 | 7 | Carreras, laberintos o robot sumo | Muy adecuados para agentes programados |
 
 La lista ampliada, con juegos de azar, información oculta y multijugador, está en [Reutilizar ArenaPay en otros juegos y con jugadores humanos](../arquitectura/reutilizacion-juegos-y-jugadores.md).
@@ -286,13 +286,15 @@ Al terminar la hackathon:
 
 1. Registrar resultado, comentarios y material presentado.
 2. Reordenar esta hoja de ruta según lo aprendido.
-3. Elegir entre Hex y Connect Four como segundo motor.
+3. Ejecutar el [plan de motores](plan-motores-hex-connect-four-damas-chinas-ajedrez.md) en el orden
+   acordado: Hex, Connect Four, Damas chinas para dos y Ajedrez.
 4. Definir el piloto más pequeño que pueda validar interés externo.
 5. Investigar convocatorias de financiación abiertas en ese momento.
 6. Preparar un presupuesto por hitos, no una cifra aislada.
 
 ## Documentos relacionados
 
+- [Plan de Hex, Connect Four, Damas chinas y Ajedrez](plan-motores-hex-connect-four-damas-chinas-ajedrez.md)
 - [Reutilización, dispositivos, agentes y catálogo de juegos](../arquitectura/reutilizacion-juegos-y-jugadores.md)
 - [Análisis de ArenaPay como plataforma](../arquitectura/plataforma-y-reutilizacion.md)
 - [Próximos pasos del MVP](proximos-pasos.md)
