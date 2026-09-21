@@ -91,3 +91,20 @@ test('explains how to prepare the wallet before connecting', async ({ page }) =>
   await expect(ayuda.getByRole('link', { name: 'guía de preparación' }))
     .toHaveAttribute('href', /guia-freighter-testnet\.html$/);
 });
+
+// Abrir «Nueva partida en Testnet» desde /match/<id> no mostraba nada: el formulario de creación
+// solo aparece sin partida cargada. Debe soltar la partida en curso y limpiar la ruta.
+test('starts a new Testnet match while viewing an existing one', async ({ page }) => {
+  const local = { matchId: example.matchId, mode: 'local', status: 'Ready', seedHash: example.seedHash, engineVersion: example.engineVersion, createdAt: '2026-09-12', testnet: { contractId: 'CDEMO', chainId: '0'.repeat(64) } };
+  const state = { local, ledger: 50, budgetA: null, budgetB: null, chain: { playerA: 'A', playerB: 'B', buyIn: '10000000', seedHash: example.seedHash, engineVersion: example.engineVersion, timeoutLedger: 100, fundedA: true, fundedB: true, status: 'Funded' } };
+  await page.route('**/api/testnet/config', route => route.fulfill({ json: { ready: true, network: 'testnet', contractId: 'CDEMO', rpcUrl: 'https://soroban-testnet.stellar.org', latestMatchId: example.matchId } }));
+  await page.route(`**/api/testnet/matches/${example.matchId}`, route => route.fulfill({ json: state }));
+  await page.goto(`/match/${example.matchId}`);
+  await expect(page.getByText('Estado confirmado: Funded')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Nueva partida en Testnet' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByLabel('Dirección de Atlas')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Crear partida en Testnet' })).toBeVisible();
+  await expect(page.getByText('Estado confirmado: Funded')).toHaveCount(0);
+});

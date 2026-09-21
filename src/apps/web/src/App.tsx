@@ -137,6 +137,17 @@ export default function App() {
     finally { setBusy(false); }
   }
 
+  // El formulario de creación solo aparece sin partida cargada, así que abrir «Nueva partida en
+  // Testnet» desde /match/<id> no mostraba nada. Se suelta la partida en curso y se limpia la ruta:
+  // la anterior sigue en el contrato y su enlace continúa abriéndola.
+  function startTestnetMatch() {
+    setTestnetMode(true); replaceMatchPath();
+    setMatch(undefined); setChain(undefined); setReplay(undefined);
+    setHistorical(false); setImported(false); setProofReady(false);
+    setFrames([initialState(Number(seed) || 2026)]); setTick(0); setPlaying(false);
+    setVerification('idle'); setError('');
+  }
+
   async function runMatch() {
     if (!match) return;
     setBusy(true); setError('');
@@ -193,7 +204,7 @@ export default function App() {
 
       <div className="entry-actions">
         <button className="button secondary" onClick={() => { setTestnetMode(false); document.getElementById('seed')?.focus(); }}>Probar la arena</button>
-        {!publicDemo && <button className="button primary" onClick={() => setTestnetMode(true)}>Nueva partida en Testnet</button>}
+        {!publicDemo && <button className="button primary" disabled={inFlight} onClick={startTestnetMatch}>Nueva partida en Testnet</button>}
         <button className={`button ${publicDemo ? 'primary' : 'secondary'}`} disabled={inFlight} onClick={() => { loadReplay(replaySchema.parse(exampleReplay)); setMatch(undefined); setChain(undefined); setImported(true); setHistorical(true); setTestnetMode(false); setPlaying(false); setProofReady(false); setTick(TICKS); }}>Ver una partida pagada en Testnet</button>
       </div>
       {historical && <section className="recorded-proof" aria-label="Ensayo documentado">
@@ -243,6 +254,6 @@ export default function App() {
 
       <section className="project-strip" id="roadmap"><div><h2>De la partida al premio verificable.</h2><p>{PRODUCT_STATEMENT}</p><p className="scope-note">Práctica local y operaciones firmadas en Stellar Testnet.</p></div><ol><li className="current"><span>01</span><strong>Motor y replay</strong><small>Operativo</small></li><li className="current"><span>02</span><strong>Escrow Soroban</strong><small>Operativo en Testnet</small></li><li className="current"><span>03</span><strong>Evidencia pública</strong><small>Demo y entrega publicadas</small></li></ol></section>
     </main>
-    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href={siteUrl('runbook-pruebas-arenapay.html')}>Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.6.1</span></footer>
+    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href={siteUrl('runbook-pruebas-arenapay.html')}>Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.6.2</span></footer>
   </div>;
 }
