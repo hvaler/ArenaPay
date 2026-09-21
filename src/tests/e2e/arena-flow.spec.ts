@@ -14,7 +14,7 @@ test('navigates between the public sections and reports the published milestone'
   await expect(page).toHaveURL(/#roadmap$/);
   await expect(navigation.getByRole('link', { name: 'Proyecto' })).toHaveAttribute('aria-current', 'location');
   await expect(page.locator('#roadmap')).toContainText('Demo y entrega publicadas');
-  await expect(page.locator('footer')).toContainText('ArenaPay 0.4.1');
+  await expect(page.locator('footer')).toContainText('ArenaPay 0.4.2');
 });
 
 test('creates, runs, scrubs, verifies and downloads the same persisted replay', async ({ page }) => {

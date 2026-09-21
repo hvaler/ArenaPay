@@ -1,6 +1,11 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Account, Keypair, Networks, TransactionBuilder, Contract } from '@stellar/stellar-sdk/base';
-import { walletCall, type Wallet } from './stellar';
+import * as freighter from '@stellar/freighter-api';
+import { WALLET_DETECTION_MS, walletCall, walletInstalled, type Wallet } from './stellar';
+
+// La extensión no existe fuera del navegador; se sustituye su sondeo para poder afirmar
+// que solo se consulta una vez y después de agotar la ventana de detección.
+vi.mock('@stellar/freighter-api', () => ({ isConnected: vi.fn(async () => ({ isConnected: false })) }));
 import vector from '../../../../../docs/evidencia/fixtures/resolution-v2.json';
 const key = Keypair.random();
 const transaction = () => new TransactionBuilder(new Account(key.publicKey(), '0'), { networkPassphrase: Networks.TESTNET, fee: '100' })
@@ -30,5 +35,31 @@ describe('wallet transaction boundary', () => {
     const port = { prepare: vi.fn(async () => original), submit: vi.fn() };
     await expect(walletCall(port, { ...signer(), sign: async () => changed.toXDR() }, key.publicKey(), vector.contractId, 'get_config', [])).rejects.toThrow('diferente');
     expect(port.submit).not.toHaveBeenCalled();
+  });
+});
+
+describe('wallet detection across browsers', () => {
+  const clock = () => { let value = 0; return { now: () => value, wait: async (ms: number) => { value += ms; } }; };
+  afterEach(() => { delete (globalThis as { freighter?: boolean }).freighter; vi.clearAllMocks(); });
+
+  it('detects a wallet that injects late, as Edge does', async () => {
+    const { now, wait } = clock();
+    let elapsed = 0;
+    const injectAfter = async (ms: number) => { await wait(ms); elapsed += ms; if (elapsed >= 900) (globalThis as { freighter?: boolean }).freighter = true; };
+    await expect(walletInstalled(now, injectAfter)).resolves.toBe(true);
+  });
+
+  it('detects a wallet already present, without waiting', async () => {
+    (globalThis as { freighter?: boolean }).freighter = true;
+    const wait = vi.fn(async () => {});
+    await expect(walletInstalled(() => 0, wait)).resolves.toBe(true);
+    expect(wait).not.toHaveBeenCalled();
+  });
+
+  it('reports a missing wallet only after the detection window closes', async () => {
+    const { now, wait } = clock();
+    await expect(walletInstalled(now, wait)).resolves.toBe(false);
+    expect(freighter.isConnected).toHaveBeenCalledOnce();
+    expect(now()).toBeGreaterThanOrEqual(WALLET_DETECTION_MS);
   });
 });

@@ -9,11 +9,16 @@ export function matchPathFor(id: string): string {
   return `/match/${id.toLowerCase()}`;
 }
 
-export function replaceMatchPath(id?: string): void {
-  const target = id ? matchPathFor(id) : '/';
-  if (window.location.pathname !== target) window.history.replaceState({ matchId: id }, '', target);
+// La demo de GitHub Pages cuelga de un subdirectorio, así que la raíz de la aplicación no es '/'.
+// Resolver contra la base del build evita que limpiar la ruta saque al visitante fuera de la demo.
+const appRoot = (href: string) => new URL(import.meta.env.BASE_URL, href);
+
+export function replaceMatchPath(id?: string, href = window.location.href): void {
+  const root = appRoot(href);
+  const target = id ? new URL(matchPathFor(id).slice(1), root) : root;
+  if (new URL(href).pathname !== target.pathname) window.history.replaceState({ matchId: id }, '', target.pathname);
 }
 
-export function absoluteMatchUrl(id: string): string {
-  return new URL(matchPathFor(id), window.location.origin).toString();
+export function absoluteMatchUrl(id: string, href = window.location.href): string {
+  return new URL(matchPathFor(id).slice(1), appRoot(href)).toString();
 }

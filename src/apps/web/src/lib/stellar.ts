@@ -9,10 +9,28 @@ export interface Wallet {
   sign(xdr: string, address: string): Promise<string>;
 }
 const explain = (error: unknown) => typeof error === 'string' ? error : 'La wallet rechazó la solicitud.';
+
+// Freighter marca window.freighter al inyectar su guion de contenido. Si se pregunta antes,
+// isConnected() cae en un sondeo al guion que se rinde a los dos segundos y responde que no está
+// instalada. Edge inyecta más tarde que Chrome, así que una sola consulta da un falso negativo con
+// la extensión puesta. Se sondea la marca durante unos segundos y solo entonces se pregunta a la
+// biblioteca, cuya respuesta sigue siendo la que decide.
+export const WALLET_DETECTION_MS = 3_000;
+const WALLET_POLL_MS = 150;
+const pause = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export async function walletInstalled(now = () => Date.now(), wait = pause): Promise<boolean> {
+  const deadline = now() + WALLET_DETECTION_MS;
+  while (now() < deadline) {
+    if ((globalThis as { freighter?: boolean }).freighter) return true;
+    await wait(WALLET_POLL_MS);
+  }
+  return (await freighter.isConnected()).isConnected;
+}
+
 export const wallet: Wallet = {
   async connect() {
-    const installed = await freighter.isConnected();
-    if (!installed.isConnected) throw new Error('Instala Freighter en Chrome o Edge y abre ArenaPay en ese navegador.');
+    if (!await walletInstalled()) throw new Error('Instala Freighter en Chrome o Edge y abre ArenaPay en ese navegador.');
     const result = await freighter.requestAccess();
     if (result.error || !result.address) throw new Error(explain(result.error));
     if (await this.network() !== Networks.TESTNET) throw new Error('Selecciona Testnet en Freighter antes de conectar.');
