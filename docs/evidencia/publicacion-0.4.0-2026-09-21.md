@@ -13,7 +13,7 @@ No incorpora todavía Hex ni representa una nueva partida pagada en Stellar Test
 | Repositorio privado | `hvaler/ArenaPay-Dev` · `1478951` |
 | Repositorio público | `hvaler/ArenaPay` · `26b8727` |
 | Etiqueta y release | [`v0.4.0`](https://github.com/hvaler/ArenaPay/releases/tag/v0.4.0) |
-| GitHub Pages | `gh-pages` · `87f7b12` · [ejecución 35619639936](https://github.com/hvaler/ArenaPay/actions/runs/35619639936) |
+| GitHub Pages | `gh-pages` · `87f7b12` · publicación mediante `deploy-pages.yml` |
 | Cloudflare Worker | `e03bc322-7d8d-4e04-abb5-4e6ad584bd58` |
 | Vercel | `arenapay.vercel.app` · activo `index-2_wCmz2f.js` comprobado |
 

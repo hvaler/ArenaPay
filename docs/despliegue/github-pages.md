@@ -1,6 +1,7 @@
 # Configurar y publicar la demo en GitHub Pages
 
-Estado actual: demo offline en <https://hvaler.github.io/ArenaPay/> mediante la rama `gh-pages`.
+Estado actual: demo offline en <https://hvaler.github.io/ArenaPay/>. La rama `gh-pages` conserva el
+artefacto estático y GitHub Actions lo publica mediante `.github/workflows/deploy-pages.yml`.
 
 ## Alcance
 
@@ -9,9 +10,9 @@ GitHub Pages solo sirve archivos estáticos. Esta edición permite práctica loc
 ## Configuración inicial del repositorio
 
 1. Abre **Settings → Pages** en GitHub.
-2. Selecciona **Deploy from a branch**.
-3. Elige la rama `gh-pages` y la carpeta `/ (root)`.
-4. Guarda y espera a que GitHub publique la URL.
+2. Selecciona **GitHub Actions** como origen.
+3. Conserva el entorno `github-pages` creado por GitHub.
+4. Ejecuta manualmente **Deploy GitHub Pages** una primera vez o envía un cambio a `main`.
 5. Conserva `.nojekyll` en la raíz de la rama para servir los activos compilados sin procesamiento Jekyll.
 
 ## Preparar un worktree de publicación
@@ -47,7 +48,9 @@ El resultado queda en `public-demo/`. Antes de copiarlo, confirma que no contien
    git -C .publish/arenapay push origin gh-pages
    ```
 
-3. Espera a que GitHub Pages termine la publicación.
+3. La siguiente actualización de `main` ejecuta el workflow. Si `main` no va a cambiar, abre
+   **Actions → Deploy GitHub Pages → Run workflow**.
+4. Espera a que el trabajo `deploy` termine correctamente y comprueba el hash del activo servido.
 
 No copies la carpeta `.git` ni la elimines. Si el worktree ya existe, no vuelvas a ejecutar `git worktree add`.
 
@@ -70,4 +73,3 @@ Además, comprueba manualmente:
 ## Recuperación
 
 La rama `gh-pages` conserva su historial. Si una publicación falla, revierte el commit de despliegue en esa rama y vuelve a enviarla. Esta acción solo cambia la demo estática; no afecta al backend, Vercel o Stellar.
-
