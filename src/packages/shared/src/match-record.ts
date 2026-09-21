@@ -3,6 +3,7 @@ import { seedSchema, type LocalMatch } from './contracts';
 import { getGameEngine } from './game-engine';
 import { currentGameEngine, type ResourceArenaEngine } from './engines/resource-arena';
 import { onChainId } from './stellar';
+import { replayOutcome } from './replay-envelope';
 
 export type StoredMatch = LocalMatch & { seed: number; nonce?: string };
 
@@ -18,8 +19,10 @@ export function publicMatch(match: StoredMatch): LocalMatch {
 export async function createStoredMatch(seed: number, testnetContractId?: string): Promise<StoredMatch> {
   seedSchema.parse(seed);
   const nonce = currentGameEngine.createSecret(), matchId = crypto.randomUUID();
+  const createdAt = new Date().toISOString();
   return { matchId, mode: 'local', status: 'Ready', seed, nonce,
-    seedHash: await currentGameEngine.seedCommitment(seed, nonce), engineVersion: currentGameEngine.version, createdAt: new Date().toISOString(),
+    seedHash: await currentGameEngine.seedCommitment(seed, nonce), engineVersion: currentGameEngine.version, createdAt,
+    revision: 0, updatedAt: createdAt,
     ...(testnetContractId ? { testnet: { contractId: testnetContractId, chainId: onChainId(matchId) } } : {}) };
 }
 
@@ -32,5 +35,6 @@ export async function completeStoredMatch(match: StoredMatch, funding?: { contra
   if (engine.requiresSecret && !match.nonce) throw new Error('Falta el nonce guardado. No se puede sustituir el compromiso.');
   const replay = await engine.buildReplay(match.matchId, match.seed, match.nonce);
   if (replay.seedHash !== match.seedHash || replay.engineVersion !== match.engineVersion) throw new Error('El replay no coincide con el compromiso guardado.');
-  return { ...match, status: 'Completed', replay };
+  return { ...match, status: 'Completed', replay, outcome: replayOutcome(replay) as StoredMatch['outcome'],
+    revision: (match.revision ?? 0) + 1, updatedAt: new Date().toISOString() };
 }

@@ -6,6 +6,7 @@ import { MatchError, MatchService } from './match-service';
 import { TestnetService } from './testnet-service';
 import { addressSchema } from '../../../packages/shared/src/stellar';
 import { RpcReadError } from '../../../packages/shared/src/stellar-rpc';
+import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
 export interface ArenaPayAppOptions {
   publicMode?: boolean;
@@ -74,6 +75,7 @@ export function buildApp(service = new MatchService(), options: ArenaPayAppOptio
     return reply.code(500).send({ message: 'No se pudo completar la operación. Comprueba el servicio, su almacenamiento y la conexión con Testnet.' });
   });
   app.get('/api/health', async () => ({ status: 'ok', mode: publicMode ? 'public' : 'local', persistence: 'filesystem', engineVersion: ENGINE_VERSION }));
+  app.get('/api/games', async () => ({ engines: registeredEngineDescriptors() }));
   app.get('/api/testnet/config', () => testnet.configuration());
   app.get('/api/testnet/latest', async () => {
     const config = await testnet.configuration();

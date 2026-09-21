@@ -10,6 +10,11 @@ export type ResourceArenaEngine = GameEngine<Replay, ArenaState, Input, Player>;
 
 export const resourceArenaV2: ResourceArenaEngine = {
   version: ENGINE_VERSION,
+  descriptor: {
+    gameId: 'resource-arena', displayName: 'Arena de recursos', rendererId: 'resource-arena',
+    replayFormat: 'resource-arena-replay/2',
+    capabilities: { agents: true, humans: false, turns: false, draws: false, cancellation: true },
+  },
   requiresSecret: true,
   initialState: current.initialState,
   run: current.runSimulation,
@@ -27,6 +32,11 @@ export const resourceArenaV2: ResourceArenaEngine = {
 
 export const resourceArenaV1: ResourceArenaEngine = {
   version: LEGACY_ENGINE_VERSION,
+  descriptor: {
+    gameId: 'resource-arena', displayName: 'Arena de recursos', rendererId: 'resource-arena',
+    replayFormat: 'resource-arena-replay/1',
+    capabilities: { agents: true, humans: false, turns: false, draws: false, cancellation: true },
+  },
   requiresSecret: false,
   initialState: legacy.initialState,
   run: legacy.runSimulation,

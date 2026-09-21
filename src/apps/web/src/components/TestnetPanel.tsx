@@ -19,7 +19,7 @@ async function api<T>(path: string, body?: unknown): Promise<T> {
 const short = (address: string) => `${address.slice(0, 6)}…${address.slice(-5)}`;
 const xlm = (stroops: string) => (Number(stroops) / 1e7).toLocaleString('es', { maximumFractionDigits: 7 });
 
-export function TestnetPanel({ match, onMatch, onChain, onProof, onRun, running, expanded }: { match?: LocalMatch; onMatch: (match: LocalMatch) => void; onChain: (chain?: ChainMatch) => void; onProof: (ready: boolean) => void; onRun: () => Promise<void>; running: boolean; expanded: boolean }) {
+export function TestnetPanel({ match, onMatch, onSync, onChain, onProof, onRun, running, expanded, shareUrl }: { match?: LocalMatch; onMatch: (match: LocalMatch) => void; onSync: (match: LocalMatch) => void; onChain: (chain?: ChainMatch) => void; onProof: (ready: boolean) => void; onRun: () => Promise<void>; running: boolean; expanded: boolean; shareUrl?: string }) {
   const [config, setConfig] = useState<TestnetConfig>();
   const [snapshot, setSnapshot] = useState<Snapshot>();
   const [connected, setConnected] = useState('');
@@ -29,6 +29,7 @@ export function TestnetPanel({ match, onMatch, onChain, onProof, onRun, running,
   const [resolution, setResolution] = useState<Resolution>();
   const [updated, setUpdated] = useState('');
   const activeId = useRef(match?.matchId); activeId.current = match?.matchId;
+  const onSyncRef = useRef(onSync); onSyncRef.current = onSync;
   const requestSequence = useRef(0);
   const refresh = useCallback(async () => {
     if (publicDemo) return;
@@ -39,14 +40,16 @@ export function TestnetPanel({ match, onMatch, onChain, onProof, onRun, running,
     try { state = match?.testnet ? await api<Snapshot>(`/matches/${id}`) : undefined; }
     catch (error) { if (activeId.current === id && sequence === requestSequence.current) { setSnapshot(undefined); onChain(undefined); } throw error; }
     if (activeId.current !== id || sequence !== requestSequence.current) return;
-    setError(''); setConfig(current); setSnapshot(state); onChain(state?.chain); setUpdated(new Date().toLocaleTimeString('es'));
+    setError(''); setConfig(current); setSnapshot(state); onChain(state?.chain); if (state) onSyncRef.current(state.local); setUpdated(new Date().toLocaleTimeString('es'));
   }, [match?.matchId, onChain]);
   useEffect(() => {
     let active = true;
     const update = () => { void refresh().catch(e => { if (active) setError((e as Error).message); }); };
     update();
-    const timer = window.setInterval(() => { if (!document.hidden && !busy && match?.testnet) update(); }, 15000);
-    return () => { active = false; ++requestSequence.current; window.clearInterval(timer); };
+    const timer = window.setInterval(() => { if (!document.hidden && !busy && match?.testnet) update(); }, 5000);
+    const visible = () => { if (!document.hidden && !busy && match?.testnet) update(); };
+    document.addEventListener('visibilitychange', visible);
+    return () => { active = false; ++requestSequence.current; window.clearInterval(timer); document.removeEventListener('visibilitychange', visible); };
   }, [refresh, busy]);
   useEffect(() => { setVerified(false); setResolution(undefined); setTransaction(''); setSnapshot(undefined); onProof(false); }, [match?.matchId, onProof]);
   async function action(name: string, run: () => Promise<void>) {
@@ -84,8 +87,9 @@ export function TestnetPanel({ match, onMatch, onChain, onProof, onRun, running,
         const created = await api<LocalMatch>('/matches', { playerA, playerB, buyIn: '10000000' });
         onMatch(created); setTransaction(created.testnet?.createTx ?? '');
       }); }}><p>El servidor elige la semilla y la reserva hasta ejecutar la partida financiada. La semilla de práctica no se utiliza aquí.</p><label>Dirección de Atlas<input value={playerA} onChange={e => setPlayerA(e.target.value.trim())} required placeholder="G…" disabled={!!busy} /></label><label>Dirección de Nova<input value={playerB} onChange={e => setPlayerB(e.target.value.trim())} required placeholder="G…" disabled={!!busy} /></label><button type="submit" className="button primary" disabled={!!busy || !connected}>Crear partida en Testnet</button></form>}
+      {shareUrl && <div className="share-match"><div><strong>Enlace de la partida</strong><p>Ábrelo en otro navegador o equipo para consultar el mismo estado persistente.</p></div><button className="button secondary" disabled={!!busy} onClick={() => void action('Copiando enlace', async () => { await navigator.clipboard.writeText(shareUrl); })}>Copiar enlace</button></div>}
       {chain && <p className="next-action" role="status">{chain.status === 'Cancelled' ? 'Cancelación confirmada: se han devuelto los depósitos recibidos.' : chain.status === 'Settled' ? 'Pago confirmado. Comprueba ahora el replay contra el contrato.' : expired ? 'Plazo vencido. Conecta una cuenta participante para recuperar los depósitos.' : chain.status === 'Created' ? 'Siguiente: cada participante autoriza su presupuesto y deposita 1 XLM de prueba.' : !match?.replay ? 'Financiación completa. Ejecuta la competición.' : resolution ? 'Replay y firma comprobados. Ya puedes solicitar el pago.' : 'Comprueba el replay y la firma antes de solicitar el pago.'}</p>}
-      {chain && <div className="testnet-state"><div><strong>Estado confirmado: {chain.status}</strong><p>Atlas: {chain.fundedA ? 'depósito confirmado' : 'pendiente'} · Nova: {chain.fundedB ? 'depósito confirmado' : 'pendiente'}</p><p>Última consulta: {updated}. Actualización cada 15 segundos.</p><p>Vencimiento: ledger {chain.timeoutLedger} · Actual: {snapshot!.ledger}</p>{budget && <p>Tu presupuesto: {xlm(budget.maximum)} XLM · Utilizado: {xlm(budget.spent)} XLM · Vigencia: ledger {budget.expiresLedger}</p>}<details className="budget-details" open><summary>Presupuestos de los participantes</summary>{[['Atlas', snapshot!.budgetA], ['Nova', snapshot!.budgetB]].map(([name, value]) => { const b = value as ChainBudget | null; const available = b ? BigInt(b.maximum) - BigInt(b.spent) : 0n; return <p key={String(name)}><strong>{String(name)}</strong>: {b ? `${xlm(b.spent)} XLM utilizados · ${b.expiresLedger <= snapshot!.ledger ? 'autorización vencida' : `${xlm(String(available > 0n ? available : 0n))} XLM disponibles`}` : 'sin autorización'}</p>; })}</details><p>Solo XLM de prueba en este contrato. Cada depósito requiere firma. Las comisiones no están incluidas; una devolución no restablece el presupuesto gastado.</p></div>
+      {chain && <div className="testnet-state"><div><strong>Estado confirmado: {chain.status}</strong><p>Atlas: {chain.fundedA ? 'depósito confirmado' : 'pendiente'} · Nova: {chain.fundedB ? 'depósito confirmado' : 'pendiente'}</p><p>Última consulta: {updated}. Sincronización cada 5 segundos.</p><p>Vencimiento: ledger {chain.timeoutLedger} · Actual: {snapshot!.ledger}</p>{budget && <p>Tu presupuesto: {xlm(budget.maximum)} XLM · Utilizado: {xlm(budget.spent)} XLM · Vigencia: ledger {budget.expiresLedger}</p>}<details className="budget-details" open><summary>Presupuestos de los participantes</summary>{[['Atlas', snapshot!.budgetA], ['Nova', snapshot!.budgetB]].map(([name, value]) => { const b = value as ChainBudget | null; const available = b ? BigInt(b.maximum) - BigInt(b.spent) : 0n; return <p key={String(name)}><strong>{String(name)}</strong>: {b ? `${xlm(b.spent)} XLM utilizados · ${b.expiresLedger <= snapshot!.ledger ? 'autorización vencida' : `${xlm(String(available > 0n ? available : 0n))} XLM disponibles`}` : 'sin autorización'}</p>; })}</details><p>Solo XLM de prueba en este contrato. Cada depósito requiere firma. Las comisiones no están incluidas; una devolución no restablece el presupuesto gastado.</p></div>
         <div className="testnet-actions"><button className="button secondary" disabled={!!busy} onClick={() => void action('Consultando', refresh)}>Actualizar estado</button>
           {(isA || isB) && !expired && chain.status === 'Created' && !deposited && <><button className="button secondary" disabled={!!busy} onClick={() => void action('Autorizando presupuesto', () => call('authorize_budget', [sc.address(connected), sc.amount(BigInt(budget?.spent ?? '0') + 30_000_000n), sc.u32(chain.timeoutLedger)]))}>Autorizar hasta 3 XLM adicionales</button><button className="button primary" disabled={!!busy || !budgetEnough} onClick={() => void action('Confirmando depósito', () => call('deposit', [sc.bytes(match!.testnet!.chainId), sc.address(connected)]))}>Depositar 1 XLM de prueba</button></>}
           {chain.status === 'Funded' && !expired && !match?.replay && <button className="button primary" disabled={!!busy || running} onClick={() => void onRun()}>Ejecutar simulación</button>}

@@ -1,6 +1,6 @@
 # API local y pública
 
-Revisión: 14 de septiembre de 2026. ArenaPay ofrece el mismo flujo Testnet mediante dos implementaciones: un servidor Node para desarrollo y un Cloudflare Worker para la web pública.
+Revisión: 21 de septiembre de 2026. ArenaPay ofrece el mismo flujo Testnet mediante dos implementaciones: un servidor Node para desarrollo y un Cloudflare Worker para la web pública.
 
 ## Perfiles
 
@@ -10,6 +10,9 @@ Revisión: 14 de septiembre de 2026. ArenaPay ofrece el mismo flujo Testnet medi
 | Cloudflare público | Desplegado mediante Wrangler | Durable Object SQLite | No; la práctica vive en el navegador |
 
 `GET /api/health` identifica el perfil. El Worker responde con `mode: public` y `persistence: durable-object`; Node responde con `persistence: filesystem` y modo `local` o `public` según su configuración.
+
+`GET /api/games` devuelve el catálogo de motores registrado en ambos perfiles. Cada entrada incluye
+la versión inmutable, identidad del juego, renderizador, formato de replay y capacidades declaradas.
 
 ## Práctica local
 
@@ -48,6 +51,15 @@ La escritura local utiliza un archivo temporal y un renombrado antes de responde
 `buyIn` se expresa en stroops: `10000000` equivale a 1 XLM. El máximo aceptado por el MVP es 10 XLM. Las direcciones deben ser cuentas Stellar distintas. El cuerpo no admite `seed`: el servidor genera semilla y nonce y solo publica el compromiso.
 
 La respuesta pública puede contener ID local, ID de cadena, contrato, versión, compromiso, estado y recibo de creación. No contiene semilla ni nonce hasta que existe el replay.
+
+Los registros nuevos incluyen `revision` y `updatedAt`. La revisión aumenta cuando cambia el estado
+persistido y permite que dos navegadores detecten una ejecución remota sin comparar el replay
+completo. `outcome` aparece al terminar y utiliza `win`, `draw` o `cancelled`; el motor histórico
+produce actualmente `win`.
+
+La interfaz expone la ruta pública `/match/{id}`. No es una ruta adicional de la API: Vercel o el
+Worker sirven la aplicación y esta consulta `GET /api/testnet/matches/:id`. Mientras la pestaña está
+visible vuelve a consultar cada cinco segundos y al recuperar el foco.
 
 ### Ejecutar y solicitar resolución
 

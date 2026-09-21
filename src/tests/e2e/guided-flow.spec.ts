@@ -53,3 +53,19 @@ test('guided preparation and documented evidence fit a narrow screen', async ({ 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/arenapay-guided-mobile.png', fullPage: true });
 });
+
+test('opens a stable match URL and receives a replay completed in another browser', async ({ page }) => {
+  const local = { matchId: example.matchId, mode: 'local', status: 'Ready', seedHash: example.seedHash, engineVersion: example.engineVersion, createdAt: '2026-09-12', updatedAt: '2026-09-12', revision: 0, testnet: { contractId: 'CDEMO', chainId: '0'.repeat(64) } };
+  const state: { local: Record<string, unknown>; ledger: number; budgetA: null; budgetB: null; chain: Record<string, unknown> } = { local, ledger: 50, budgetA: null, budgetB: null, chain: { playerA: 'A', playerB: 'B', buyIn: '10000000', seedHash: example.seedHash, engineVersion: example.engineVersion, timeoutLedger: 100, fundedA: true, fundedB: true, status: 'Funded' } };
+  await page.route('**/api/testnet/config', route => route.fulfill({ json: { ready: true, network: 'testnet', contractId: 'CDEMO', rpcUrl: 'https://soroban-testnet.stellar.org', latestMatchId: example.matchId } }));
+  await page.route(`**/api/testnet/matches/${example.matchId}`, route => route.fulfill({ json: state }));
+  await page.goto(`/match/${example.matchId}`);
+  await expect(page).toHaveURL(new RegExp(`/match/${example.matchId}$`));
+  await expect(page.getByText('Enlace de la partida')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Copiar enlace' })).toBeVisible();
+
+  state.local = { ...local, status: 'Completed', updatedAt: '2026-09-12T00:01:00.000Z', revision: 1, seed: example.seed, replay: example, outcome: { type: 'win', winner: example.winner, reason: 'rules' } };
+  await page.getByRole('button', { name: 'Actualizar estado' }).click();
+  await expect(page.getByRole('button', { name: 'Verificar replay y firma' })).toBeEnabled();
+  await expect(page.getByLabel('Tick del replay')).toBeEnabled();
+});

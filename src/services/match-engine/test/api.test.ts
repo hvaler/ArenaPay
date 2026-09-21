@@ -20,14 +20,26 @@ describe('local match API and persistence', () => {
     expect(response.statusCode).toBe(201);
     const created = response.json();
     expect(created.status).toBe('Ready'); expect(created.replay).toBeUndefined();
+    expect(created.revision).toBe(0);
     const run = await app.inject({ method: 'POST', url: `/api/matches/${created.matchId}/run` });
     expect(run.statusCode).toBe(200);
-    expect((await verifyReplay(run.json().replay, created.seedHash)).valid).toBe(true);
+    const completed = run.json();
+    expect((await verifyReplay(completed.replay, created.seedHash)).valid).toBe(true);
+    expect(completed.revision).toBe(1);
+    expect(completed.outcome).toEqual({ type: 'win', winner: completed.replay.winner, reason: 'rules' });
     const restarted = new MatchService(directory);
     expect(await restarted.get(created.matchId)).toEqual(run.json());
     const download = await app.inject(`/api/matches/${created.matchId}/replay`);
     expect(download.json()).toEqual(run.json().replay);
     expect(download.headers['content-disposition']).toContain('attachment');
+  });
+  it('publishes the engine catalog without coupling rules to a renderer version', async () => {
+    const response = await app.inject('/api/games');
+    expect(response.statusCode).toBe(200);
+    expect(response.json().engines).toEqual(expect.arrayContaining([
+      expect.objectContaining({ engineVersion: 'resource-arena/1.0.0', gameId: 'resource-arena', rendererId: 'resource-arena' }),
+      expect.objectContaining({ engineVersion: 'resource-arena/2.0.0', gameId: 'resource-arena', rendererId: 'resource-arena' }),
+    ]));
   });
   it('rejects duplicate and concurrent runs', async () => {
     const created = (await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 1 } })).json();

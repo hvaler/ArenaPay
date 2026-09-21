@@ -5,6 +5,20 @@ export interface VersionedReplay {
   seedHash: string;
 }
 
+export interface GameEngineDescriptor {
+  readonly gameId: string;
+  readonly displayName: string;
+  readonly rendererId: string;
+  readonly replayFormat: string;
+  readonly capabilities: Readonly<{
+    agents: boolean;
+    humans: boolean;
+    turns: boolean;
+    draws: boolean;
+    cancellation: boolean;
+  }>;
+}
+
 export interface EngineRun<TState, TWinner> {
   state: TState;
   frames: TState[];
@@ -19,6 +33,7 @@ export interface EngineVerification<TState, TWinner> extends EngineRun<TState, T
 /** Boundary between the reusable platform and one deterministic game. */
 export interface GameEngine<TReplay extends VersionedReplay, TState, TInput, TWinner> {
   readonly version: TReplay['engineVersion'];
+  readonly descriptor: GameEngineDescriptor;
   readonly requiresSecret: boolean;
   initialState(seed: number): TState;
   run(seed: number, inputs: readonly TInput[]): EngineRun<TState, TWinner>;
@@ -54,4 +69,8 @@ export function replayEngineVersion(raw: unknown): string {
 
 export function registeredEngineVersions(): readonly string[] {
   return [...engines.keys()];
+}
+
+export function registeredEngineDescriptors(): readonly (GameEngineDescriptor & { engineVersion: string })[] {
+  return [...engines.values()].map(engine => ({ engineVersion: engine.version, ...engine.descriptor }));
 }

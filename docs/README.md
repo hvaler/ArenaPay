@@ -15,6 +15,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Flujo visual del checkpoint y FigJam](arquitectura/flujo-checkpoint-stellar-odyssey.md)
 - [Análisis y decisiones](arquitectura/analisis-y-decisiones.md)
 - [ArenaPay como plataforma](arquitectura/plataforma-y-reutilizacion.md)
+- [Etapa común de la plataforma multimotor](arquitectura/plataforma-multimotor-etapa-comun.md)
 - [Reutilización con juegos y jugadores](arquitectura/reutilizacion-juegos-y-jugadores.md)
 - [Protocolo y versionado](arquitectura/protocolo-y-versionado.md)
 - [Formato de evidencia y firmas](arquitectura/formato-evidencia.md)
@@ -31,6 +32,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [ADR-004: posicionamiento como plataforma](adr/ADR-004-posicionamiento-de-plataforma.md)
 - [ADR-005: estructura del repositorio](adr/ADR-005-estructura-src-y-docs.md)
 - [ADR-006: frontera y registro de motores](adr/ADR-006-frontera-y-registro-de-motores.md)
+- [ADR-007: evidencia, resultados y compatibilidad](adr/ADR-007-evidencia-resultados-y-compatibilidad.md)
 
 ## Guías de uso y prueba
 

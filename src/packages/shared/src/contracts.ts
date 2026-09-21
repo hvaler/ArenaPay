@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { MatchOutcome } from './replay-envelope';
 
 export const LEGACY_ENGINE_VERSION = 'resource-arena/1.0.0';
 export const ENGINE_VERSION = 'resource-arena/2.0.0';
@@ -41,6 +42,7 @@ export interface MatchRecord {
 export interface LocalMatch {
   matchId: string; mode: 'local'; status: 'Ready' | 'Completed'; seed?: number;
   seedHash: string; engineVersion: string; createdAt: string; replay?: Replay;
+  revision?: number; updatedAt?: string; outcome?: MatchOutcome<Player>;
   testnet?: { contractId: string; chainId: string; createTx?: string };
 }
 export const PRODUCT_STATEMENT = 'ArenaPay es una plataforma para competiciones verificables sobre Soroban: registra un replay reproducible, protege las inscripciones en escrow y liquida el premio mediante una resolución firmada. Su MVP enfrenta a Atlas y Nova, dos agentes deterministas.';

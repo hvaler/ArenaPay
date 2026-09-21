@@ -15,6 +15,8 @@ La plataforma separa tres piezas:
 | Contrato común | `src/packages/shared/src/game-engine.ts` | Define las operaciones que debe ofrecer un motor y mantiene el registro por versión |
 | Adaptador de la arena | `src/packages/shared/src/engines/resource-arena.ts` | Registra `resource-arena/1.0.0` y `resource-arena/2.0.0` |
 | Reglas vigentes | `src/packages/shared/src/engines/resource-arena-v2.ts` | Ejecuta la rejilla, genera movimientos y verifica su replay |
+| Sobre común | `src/packages/shared/src/replay-envelope.ts` | Valida evidencia y resultados de motores nuevos |
+| Presentaciones | `src/apps/web/src/games/presentations.tsx` | Asocia versiones y renderizadores sin importar reglas en React |
 
 `src/packages/shared/src/simulation.ts` es una fachada de compatibilidad para la web y los
 consumidores existentes. No deben añadirse reglas nuevas allí.
@@ -30,9 +32,8 @@ congelados para reproducir evidencia histórica.
 ### Juego diferente
 
 Debe usar una identidad propia, por ejemplo `hex/1.0.0`. Además del adaptador necesita nuevos tipos,
-esquema de replay, representación visual y pruebas. El sobre de evidencia actual está tipado para la
-arena; por tanto, el primer juego nuevo debe generalizar ese sobre en `contracts.ts` sin modificar
-los formatos v1 y v2 existentes.
+acciones, representación visual y pruebas. Debe usar el sobre `arenapay-evidence/1.0.0`; los formatos
+v1 y v2 existentes no se modifican.
 
 ## Contrato que debe implementar
 
@@ -41,6 +42,7 @@ Cada adaptador implementa `GameEngine`:
 ```ts
 export interface GameEngine<TReplay, TState, TInput, TWinner> {
   readonly version: string;
+  readonly descriptor: GameEngineDescriptor;
   readonly requiresSecret: boolean;
   initialState(seed: number): TState;
   run(seed: number, inputs: readonly TInput[]): EngineRun<TState, TWinner>;
@@ -72,6 +74,11 @@ Ejemplo mínimo de registro:
 ```ts
 export const hexV1: GameEngine<HexReplay, HexState, HexMove, HexPlayer> = {
   version: 'hex/1.0.0',
+  descriptor: {
+    gameId: 'hex', displayName: 'Hex', rendererId: 'hex',
+    replayFormat: 'arenapay-evidence/1.0.0',
+    capabilities: { agents: true, humans: true, turns: true, draws: false, cancellation: true },
+  },
   requiresSecret: true,
   initialState,
   run,

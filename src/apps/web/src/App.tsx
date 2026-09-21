@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ENGINE_VERSION, PRODUCT_STATEMENT, TICKS, replaySchema, type LocalMatch, type Replay } from '../../../packages/shared/src/contracts';
 import { initialState, runSimulation, verifyReplay } from '../../../packages/shared/src/simulation';
-import { Arena } from './components/Arena';
+import { GameBoard, getGamePresentation } from './games/presentations';
 import { matchApi } from './lib/api';
 import { operationalPublic, publicDemo } from './lib/runtime';
 import { Journey } from './components/Journey';
@@ -12,6 +12,7 @@ import { TestnetPanel } from './components/TestnetPanel';
 import evidence from '../../../../docs/evidencia/testnet-evidence-v2.json';
 import exampleReplay from '../../../../docs/evidencia/fixtures/testnet-replay-v2.json';
 import type { ChainMatch } from '../../../packages/shared/src/stellar';
+import { absoluteMatchUrl, matchIdFromPath, replaceMatchPath } from './lib/match-url';
 
 type Verification = 'idle' | 'checking' | 'valid' | 'invalid';
 const agentName = (player: 'A' | 'B') => player === 'A' ? 'Atlas' : 'Nova';
@@ -33,15 +34,49 @@ export default function App() {
   const [testnetMode, setTestnetMode] = useState(false);
   const [chain, setChain] = useState<ChainMatch>();
   const fileInput = useRef<HTMLInputElement>(null);
+  const matchRef = useRef(match); matchRef.current = match;
   const state = frames[Math.min(tick, frames.length - 1)];
+  const engineVersion = replay?.engineVersion ?? match?.engineVersion ?? ENGINE_VERSION;
+  const presentation = getGamePresentation(engineVersion);
   const finished = Boolean(replay) && tick === TICKS;
   const inFlight = busy || verification === 'checking';
 
-  function loadReplay(value: Replay) {
+  const loadReplay = useCallback((value: Replay) => {
     const parsed = replaySchema.parse(value);
     const result = runSimulation(parsed.seed, parsed.inputs, parsed.engineVersion);
     setReplay(parsed); setFrames(result.frames); setTick(0); setVerification('idle');
-  }
+  }, []);
+
+  const acceptTestnetMatch = useCallback((created: LocalMatch) => {
+    setChain(undefined); setHistorical(false); setTestnetMode(true); setProofReady(false); setMatch(created);
+    replaceMatchPath(created.matchId);
+    if (created.seed !== undefined) setSeed(String(created.seed));
+    if (created.replay) loadReplay(created.replay);
+    else { setReplay(undefined); const preview = initialState(created.seed ?? 2026); if (created.seed === undefined) preview.resources = []; setFrames([preview]); }
+    setTick(0); setPlaying(false); setVerification('idle'); setImported(false);
+  }, [loadReplay]);
+
+  const syncTestnetMatch = useCallback((updated: LocalMatch) => {
+    const current = matchRef.current;
+    if (current?.matchId !== updated.matchId) return;
+    const changed = (updated.revision ?? 0) > (current.revision ?? 0)
+      || updated.status !== current.status || Boolean(updated.replay) !== Boolean(current.replay);
+    if (!changed) return;
+    matchRef.current = updated; setMatch(updated);
+    if (updated.replay && !current.replay) { loadReplay(updated.replay); setPlaying(false); }
+  }, [loadReplay]);
+
+  useEffect(() => {
+    if (publicDemo) return;
+    const id = matchIdFromPath(window.location.pathname);
+    if (!id) return;
+    let active = true;
+    setBusy(true); setError('');
+    void matchApi.get(id, true).then(value => { if (active) acceptTestnetMatch(value); })
+      .catch(error => { if (active) setError(`No se pudo abrir la partida compartida: ${(error as Error).message}`); })
+      .finally(() => { if (active) setBusy(false); });
+    return () => { active = false; };
+  }, [acceptTestnetMatch]);
 
   useEffect(() => {
     if (!playing || !replay) return;
@@ -67,7 +102,7 @@ export default function App() {
     }
     setBusy(true); setError(''); setPlaying(false);
     try {
-      const created = await matchApi.create(Number(seed));
+      const created = await matchApi.create(Number(seed)); replaceMatchPath();
       setChain(undefined); setHistorical(false); setTestnetMode(false); setProofReady(false); setMatch(created); setReplay(undefined); setImported(false); setFrames([initialState(created.seed ?? 2026)]); setTick(0); setVerification('idle');
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
@@ -140,7 +175,7 @@ export default function App() {
       {(testnetMode || match?.testnet) && <Journey chain={chain} hasReplay={!!match?.replay} verified={proofReady} />}
       <div className="workspace" id="workspace">
         <section className="match-panel" aria-labelledby="match-heading">
-          <div className="panel-heading"><div><span className="section-kicker">Recolección de recursos</span><h2 id="match-heading">{match?.testnet ? 'Arena en Testnet' : historical ? 'Replay del ensayo' : 'Arena de práctica'} <span className="small-tag">8 × 8</span></h2></div><span className={`match-status ${playing ? 'live' : ''}`}><i />{playing ? 'Reproduciendo' : finished ? 'Replay completo' : replay ? 'Replay listo' : match ? 'Lista para ejecutar' : 'Vista previa'}</span></div>
+          <div className="panel-heading"><div><span className="section-kicker">{presentation.kicker}</span><h2 id="match-heading">{match?.testnet ? `${presentation.title} en Testnet` : historical ? 'Replay del ensayo' : presentation.title} <span className="small-tag">{presentation.sizeLabel}</span></h2></div><span className={`match-status ${playing ? 'live' : ''}`}><i />{playing ? 'Reproduciendo' : finished ? 'Replay completo' : replay ? 'Replay listo' : match ? 'Lista para ejecutar' : 'Vista previa'}</span></div>
 
           <div className="scoreboard">
             <div className="agent"><span className="agent-avatar atlas">A</span><div><h3>Atlas</h3><p>Recolector · Cercanía primero</p></div><strong aria-label={`Atlas: ${state.agents.A.score} puntos`}>{state.agents.A.score}<small>pts</small></strong></div>
@@ -148,14 +183,14 @@ export default function App() {
             <div className="agent"><span className="agent-avatar nova">B</span><div><h3>Nova</h3><p>Táctico · Valor y distancia</p></div><strong aria-label={`Nova: ${state.agents.B.score} puntos`}>{state.agents.B.score}<small>pts</small></strong></div>
           </div>
 
-          <div className="field-wrap"><div className="field-coordinates" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={i}>{i + 1}</span>)}</div><Arena state={state} /><div className="field-legend"><span><i className="resource-dot" />Recurso de 1–3 puntos</span><span>60 ticks · Reglas fijas</span></div></div>
+          <div className="field-wrap"><div className="field-coordinates" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={i}>{i + 1}</span>)}</div><GameBoard engineVersion={engineVersion} state={state} /><div className="field-legend"><span><i className="resource-dot" />Recurso de 1–3 puntos</span><span>60 ticks · Reglas fijas</span></div></div>
 
           <div className="replay-controls"><button className="play-button" aria-label="Tick anterior" disabled={!replay || inFlight || tick === 0} onClick={() => { setPlaying(false); setTick(t => Math.max(0, t - 1)); }}>‹</button><button className="play-button" aria-label={playing ? 'Pausar replay' : 'Reproducir replay'} disabled={!replay || inFlight} onClick={() => { if (tick >= TICKS) setTick(0); setPlaying(!playing); }}>{playing ? 'Ⅱ' : '▶'}</button><div className="timeline"><label htmlFor="timeline">Replay <span>Tick <b>{String(tick).padStart(2, '0')}</b> / {TICKS}</span></label><input id="timeline" aria-label="Tick del replay" type="range" min="0" max={TICKS} value={tick} disabled={!replay || inFlight} onChange={e => { setPlaying(false); setTick(Number(e.target.value)); }} /></div><select aria-label="Velocidad del replay" value={speed} onChange={e => setSpeed(Number(e.target.value))}><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select><button className="play-button" aria-label="Tick siguiente" disabled={!replay || inFlight || tick === TICKS} onClick={() => { setPlaying(false); setTick(t => Math.min(TICKS, t + 1)); }}>›</button></div>
           {finished && <p className="simulation-result">{verification === 'invalid' ? 'Evidencia inconsistente: revisa el archivo importado.' : `Simulación terminada: ${agentName(runSimulation(replay!.seed, replay!.inputs, replay!.engineVersion).winner)} obtiene el primer puesto.`} <span>{match?.testnet && chain?.status === 'Settled' ? 'Premio confirmado en Testnet.' : historical ? 'Pago documentado en el recibo del ensayo.' : 'Sin premio liquidado.'}</span></p>}
         </section>
 
         <aside className={`side-panel ${testnetMode || match?.testnet ? 'testnet-active' : historical ? 'history-active' : 'practice-active'}`}>
-          <TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={created => { setChain(undefined); setHistorical(false); setTestnetMode(true); setProofReady(false); setMatch(created); if (created.seed !== undefined) setSeed(String(created.seed)); if (created.replay) loadReplay(created.replay); else { setReplay(undefined); const preview = initialState(created.seed ?? 2026); if (created.seed === undefined) preview.resources = []; setFrames([preview]); } setTick(0); setPlaying(false); setVerification('idle'); setImported(false); }} />
+          <TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={acceptTestnetMatch} onSync={syncTestnetMatch} shareUrl={match?.testnet ? absoluteMatchUrl(match.matchId) : undefined} />
           <section className="setup" aria-labelledby="setup-heading"><h2 id="setup-heading">Tu próxima partida</h2><p>Cambia la semilla para explorar otra arena. Las estrategias se mantienen.</p>
             <form onSubmit={event => { event.preventDefault(); void createMatch(); }}><label htmlFor="seed">Semilla de la arena</label><div className="seed-control"><span aria-hidden="true">#</span><input id="seed" inputMode="numeric" value={seed} maxLength={10} disabled={inFlight} onChange={event => setSeed(event.target.value)} /><button type="button" aria-label="Generar otra semilla" disabled={inFlight} onClick={() => setSeed(String(crypto.getRandomValues(new Uint32Array(1))[0]))}>⤨</button></div>
               <button className={match && !replay ? 'button secondary full' : 'button primary full'} type="submit" disabled={inFlight}>{busy ? 'Preparando…' : match || replay ? 'Crear nueva partida de práctica' : 'Crear partida de práctica'}<span aria-hidden="true">＋</span></button>

@@ -7,6 +7,7 @@ import { completeStoredMatch, createStoredMatch, publicMatch, type StoredMatch }
 import { addressSchema, decodeMatch, hex, sc, type ChainBudget, type TestnetConfig } from '../../../packages/shared/src/stellar';
 import { RpcReadError, StellarRpc } from '../../../packages/shared/src/stellar-rpc';
 import { signResult } from '../../match-engine/src/referee';
+import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
 interface Env {
   ARENA: DurableObjectNamespace<ArenaCoordinator>;
@@ -191,6 +192,7 @@ export class ArenaCoordinator extends DurableObject<Env> {
       await this.rateLimit(request, 'global', 120, 60_000);
       const { pathname } = new URL(request.url);
       if (request.method === 'GET' && pathname === '/api/health') return json({ status: 'ok', mode: 'public', persistence: 'durable-object', engineVersion: ENGINE_VERSION }, 200, corsHeaders);
+      if (request.method === 'GET' && pathname === '/api/games') return json({ engines: registeredEngineDescriptors() }, 200, corsHeaders);
       if (request.method === 'GET' && pathname === '/api/testnet/config') return json(await this.configuration(), 200, corsHeaders);
       if (request.method === 'GET' && pathname === '/api/testnet/latest') {
         const id = await this.matches.latestId();
@@ -223,6 +225,10 @@ export default {
   fetch(request: Request, env: Env) {
     const pathname = new URL(request.url).pathname;
     if (pathname.startsWith('/api/')) return env.ARENA.getByName('primary').fetch(request);
+    if (/^\/match\/[0-9a-f-]+\/?$/i.test(pathname)) {
+      const target = new URL(request.url); target.pathname = '/';
+      return env.ASSETS.fetch(new Request(target, request));
+    }
     return env.ASSETS.fetch(request);
   },
 } satisfies ExportedHandler<Env>;

@@ -1,6 +1,6 @@
 # Plan de desarrollo de motores: Hex, Connect Four, Damas chinas y Ajedrez
 
-Fecha: 21 de septiembre de 2026. Estado: **plan posterior a la hackathon; no implementado**.
+Fecha: 21 de septiembre de 2026. Estado: **etapa común en desarrollo; juegos todavía no implementados**.
 
 Este plan convierte ArenaPay en una plataforma multimotor mediante cuatro juegos, en este orden:
 
@@ -101,14 +101,18 @@ Testnet; el contrato actual y sus recibos permanecen disponibles.
 
 ### Entregables
 
-- Sobre genérico de evidencia y compatibilidad con replays v1/v2.
-- Catálogo de motores con metadatos y carga de renderizadores.
+- [x] Sobre genérico de evidencia y compatibilidad con replays v1/v2.
+- [x] Catálogo de motores con metadatos y carga de renderizadores.
 - Selección de juego al crear una partida.
-- URL estable por partida y lectura por identificador.
+- [x] URL estable por partida, lectura por identificador y sincronización de dos navegadores.
 - Estado por turnos con control de concurrencia.
-- Especificación de resultado `win | draw | cancelled`.
-- ADR para resultados, devolución y compatibilidad contractual.
-- Plantilla de pruebas y documentación para un motor nuevo.
+- [x] Especificación de resultado `win | draw | cancelled`.
+- [x] ADR para resultados, devolución y compatibilidad contractual.
+- [x] Plantilla de pruebas y documentación para un motor nuevo.
+
+La base implementada se describe en [Plataforma multimotor: etapa común](../arquitectura/plataforma-multimotor-etapa-comun.md).
+Quedan la selección de juego y el protocolo interactivo de turnos antes de considerar cerrada la
+Etapa 0 completa.
 
 ### Criterio de salida
 
