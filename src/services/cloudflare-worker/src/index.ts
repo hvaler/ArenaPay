@@ -9,6 +9,8 @@ import { RpcReadError, StellarRpc } from '../../../packages/shared/src/stellar-r
 import { signResult } from '../../match-engine/src/referee';
 import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
+const engineVersionSchema = z.string().regex(/^[a-z0-9][a-z0-9-]*\/\d+\.\d+\.\d+$/);
+
 interface Env {
   ARENA: DurableObjectNamespace<ArenaCoordinator>;
   ASSETS: Fetcher;
@@ -45,9 +47,11 @@ class DurableMatchStore {
     return match;
   }
   async get(id: string) { return publicMatch(await this.load(id)); }
-  async createTestnet(contractId: string) {
+  async createTestnet(contractId: string, engineVersion?: string) {
     const seed = crypto.getRandomValues(new Uint32Array(1))[0];
-    const match = await createStoredMatch(seed, contractId);
+    let match: StoredMatch;
+    try { match = await createStoredMatch(seed, contractId, engineVersion); }
+    catch (error) { throw new ApiError(400, (error as Error).message); }
     await this.storage.put(this.key(match.matchId), match);
     return publicMatch(match);
   }
@@ -104,16 +108,16 @@ export class ArenaCoordinator extends DurableObject<Env> {
       || hex(Keypair.fromSecret(this.env.ARENAPAY_REFEREE_SECRET).rawPublicKey()) !== config.refereePublicKey) throw new ApiError(503, 'La configuración no coincide con el contrato.');
     return { config, rpc, contractId: config.contractId, source: config.adminPublicKey };
   }
-  private async create(playerA: string, playerB: string, buyIn: string) {
+  private async create(playerA: string, playerB: string, buyIn: string, engineVersion?: string) {
     if (this.creating) throw new ApiError(409, 'Hay una creación en curso. Espera su confirmación.');
     if (playerA === playerB) throw new ApiError(400, 'Los participantes deben ser diferentes.');
     this.creating = true;
     try {
       const { rpc, contractId } = await this.context();
-      const local = await this.matches.createTestnet(contractId);
+      const local = await this.matches.createTestnet(contractId, engineVersion);
       const ledger = await rpc.latestLedger();
       const operation = new Contract(contractId).call('create_match', sc.bytes(local.testnet!.chainId), sc.address(playerA), sc.address(playerB),
-        sc.amount(buyIn), sc.text(ENGINE_VERSION), sc.bytes(local.seedHash), sc.u32(ledger.sequence + 720));
+        sc.amount(buyIn), sc.text(local.engineVersion), sc.bytes(local.seedHash), sc.u32(ledger.sequence + 720));
       const key = Keypair.fromSecret(this.env.ARENAPAY_ADMIN_SECRET);
       const tx = await rpc.prepare(key.publicKey(), operation); tx.sign(key);
       const sent = await rpc.submit(tx);
@@ -202,9 +206,10 @@ export class ArenaCoordinator extends DurableObject<Env> {
       if (request.method === 'POST' && pathname === '/api/testnet/matches') {
         await this.rateLimit(request, 'create', 3, 3_600_000);
         const value = z.object({ playerA: addressSchema, playerB: addressSchema,
-          buyIn: z.string().regex(/^[1-9][0-9]*$/).refine(amount => BigInt(amount) <= 100_000_000n) }).strict().parse(requestBody);
+          buyIn: z.string().regex(/^[1-9][0-9]*$/).refine(amount => BigInt(amount) <= 100_000_000n),
+          engineVersion: engineVersionSchema.optional() }).strict().parse(requestBody);
         await this.dailyQuota();
-        return json(await this.create(value.playerA, value.playerB, value.buyIn), 201, corsHeaders);
+        return json(await this.create(value.playerA, value.playerB, value.buyIn, value.engineVersion), 201, corsHeaders);
       }
       const match = pathname.match(/^\/api\/testnet\/matches\/([0-9a-f-]+)(?:\/(run|resolution))?$/i);
       if (match && request.method === 'GET' && !match[2]) return json(await this.state(match[1]), 200, corsHeaders);

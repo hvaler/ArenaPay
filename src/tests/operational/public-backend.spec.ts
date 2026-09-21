@@ -11,6 +11,7 @@ test('public operation uses the persistent API while practice stays in the brows
   await expect(page.getByRole('button', { name: 'Nueva partida en Testnet', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Nueva partida en Testnet', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Escrow en Stellar Testnet' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Escrow en Stellar Testnet' }).getByLabel('Juego')).toHaveValue('resource-arena/2.0.0');
   await expect(page.getByText('Solo Testnet · Firmas en tu wallet')).toBeVisible({ timeout: 30_000 });
   expect(requests.some(url => new URL(url).pathname === '/api/testnet/config')).toBe(true);
 

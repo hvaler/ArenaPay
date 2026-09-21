@@ -13,9 +13,11 @@ import evidence from '../../../../docs/evidencia/testnet-evidence-v2.json';
 import exampleReplay from '../../../../docs/evidencia/fixtures/testnet-replay-v2.json';
 import type { ChainMatch } from '../../../packages/shared/src/stellar';
 import { absoluteMatchUrl, matchIdFromPath, replaceMatchPath } from './lib/match-url';
+import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
 type Verification = 'idle' | 'checking' | 'valid' | 'invalid';
 const agentName = (player: 'A' | 'B') => player === 'A' ? 'Atlas' : 'Nova';
+const activeGames = registeredEngineDescriptors().filter(engine => engine.lifecycle === 'active');
 
 export default function App() {
   const [seed, setSeed] = useState('2026');
@@ -33,10 +35,11 @@ export default function App() {
   const [proofReady, setProofReady] = useState(false);
   const [testnetMode, setTestnetMode] = useState(false);
   const [chain, setChain] = useState<ChainMatch>();
+  const [selectedEngineVersion, setSelectedEngineVersion] = useState(ENGINE_VERSION);
   const fileInput = useRef<HTMLInputElement>(null);
   const matchRef = useRef(match); matchRef.current = match;
   const state = frames[Math.min(tick, frames.length - 1)];
-  const engineVersion = replay?.engineVersion ?? match?.engineVersion ?? ENGINE_VERSION;
+  const engineVersion = replay?.engineVersion ?? match?.engineVersion ?? selectedEngineVersion;
   const presentation = getGamePresentation(engineVersion);
   const finished = Boolean(replay) && tick === TICKS;
   const inFlight = busy || verification === 'checking';
@@ -49,6 +52,7 @@ export default function App() {
 
   const acceptTestnetMatch = useCallback((created: LocalMatch) => {
     setChain(undefined); setHistorical(false); setTestnetMode(true); setProofReady(false); setMatch(created);
+    setSelectedEngineVersion(created.engineVersion);
     replaceMatchPath(created.matchId);
     if (created.seed !== undefined) setSeed(String(created.seed));
     if (created.replay) loadReplay(created.replay);
@@ -102,7 +106,7 @@ export default function App() {
     }
     setBusy(true); setError(''); setPlaying(false);
     try {
-      const created = await matchApi.create(Number(seed)); replaceMatchPath();
+      const created = await matchApi.create(Number(seed), selectedEngineVersion); replaceMatchPath();
       setChain(undefined); setHistorical(false); setTestnetMode(false); setProofReady(false); setMatch(created); setReplay(undefined); setImported(false); setFrames([initialState(created.seed ?? 2026)]); setTick(0); setVerification('idle');
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
@@ -190,9 +194,9 @@ export default function App() {
         </section>
 
         <aside className={`side-panel ${testnetMode || match?.testnet ? 'testnet-active' : historical ? 'history-active' : 'practice-active'}`}>
-          <TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={acceptTestnetMatch} onSync={syncTestnetMatch} shareUrl={match?.testnet ? absoluteMatchUrl(match.matchId) : undefined} />
+          <TestnetPanel match={match} onChain={setChain} onProof={setProofReady} onRun={runMatch} running={inFlight} expanded={testnetMode} onMatch={acceptTestnetMatch} onSync={syncTestnetMatch} shareUrl={match?.testnet ? absoluteMatchUrl(match.matchId) : undefined} engineVersion={selectedEngineVersion} onEngineVersion={setSelectedEngineVersion} gameOptions={activeGames} />
           <section className="setup" aria-labelledby="setup-heading"><h2 id="setup-heading">Tu próxima partida</h2><p>Cambia la semilla para explorar otra arena. Las estrategias se mantienen.</p>
-            <form onSubmit={event => { event.preventDefault(); void createMatch(); }}><label htmlFor="seed">Semilla de la arena</label><div className="seed-control"><span aria-hidden="true">#</span><input id="seed" inputMode="numeric" value={seed} maxLength={10} disabled={inFlight} onChange={event => setSeed(event.target.value)} /><button type="button" aria-label="Generar otra semilla" disabled={inFlight} onClick={() => setSeed(String(crypto.getRandomValues(new Uint32Array(1))[0]))}>⤨</button></div>
+            <form onSubmit={event => { event.preventDefault(); void createMatch(); }}><label htmlFor="practice-game">Juego</label><select id="practice-game" value={selectedEngineVersion} disabled={inFlight} onChange={event => setSelectedEngineVersion(event.target.value)}>{activeGames.map(engine => <option key={engine.engineVersion} value={engine.engineVersion}>{engine.displayName} · {engine.engineVersion}</option>)}</select><label htmlFor="seed">Semilla de la arena</label><div className="seed-control"><span aria-hidden="true">#</span><input id="seed" inputMode="numeric" value={seed} maxLength={10} disabled={inFlight} onChange={event => setSeed(event.target.value)} /><button type="button" aria-label="Generar otra semilla" disabled={inFlight} onClick={() => setSeed(String(crypto.getRandomValues(new Uint32Array(1))[0]))}>⤨</button></div>
               <button className={match && !replay ? 'button secondary full' : 'button primary full'} type="submit" disabled={inFlight}>{busy ? 'Preparando…' : match || replay ? 'Crear nueva partida de práctica' : 'Crear partida de práctica'}<span aria-hidden="true">＋</span></button>
             </form>
             {match && !match.testnet && !replay && <button className="button primary full run-button" disabled={inFlight || (!!match.testnet && chain?.status !== 'Funded')} onClick={() => void runMatch()}>Ejecutar simulación <span aria-hidden="true">▶</span></button>}

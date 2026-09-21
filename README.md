@@ -271,7 +271,7 @@ partida compartibles. Después amplía el registro ya creado con un segundo moto
 agentes aportados por terceros dentro de un sandbox y, finalmente, jugadores humanos por turnos.
 Ajedrez es viable cuando estén resueltos salas, reloj, reconexión y tablas.
 
-[Guía para registrar un motor](docs/guias/registrar-un-motor.md) · [Guía de reutilización y catálogo de juegos](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) ·
+[Guía para registrar un motor](docs/guias/registrar-un-motor.md) · [Selección y protocolo de turnos](docs/arquitectura/seleccion-y-protocolo-de-turnos.md) · [Guía de reutilización y catálogo de juegos](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) ·
 [Hoja de ruta y estrategia de financiación](docs/producto/roadmap-post-hackathon.md). Estas líneas son visión
 posterior a la hackathon y no funcionalidad disponible en el MVP.
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { seedSchema, type LocalMatch } from './contracts';
-import { getGameEngine } from './game-engine';
+import { getActiveGameEngine, getGameEngine } from './game-engine';
 import { currentGameEngine, type ResourceArenaEngine } from './engines/resource-arena';
 import { onChainId } from './stellar';
 import { replayOutcome } from './replay-envelope';
@@ -16,12 +16,13 @@ export function publicMatch(match: StoredMatch): LocalMatch {
   return match.testnet && !match.replay ? visible : { ...visible, seed };
 }
 
-export async function createStoredMatch(seed: number, testnetContractId?: string): Promise<StoredMatch> {
+export async function createStoredMatch(seed: number, testnetContractId?: string, engineVersion: string = currentGameEngine.version): Promise<StoredMatch> {
   seedSchema.parse(seed);
-  const nonce = currentGameEngine.createSecret(), matchId = crypto.randomUUID();
+  const engine = getActiveGameEngine(engineVersion) as ResourceArenaEngine;
+  const nonce = engine.createSecret(), matchId = crypto.randomUUID();
   const createdAt = new Date().toISOString();
   return { matchId, mode: 'local', status: 'Ready', seed, nonce,
-    seedHash: await currentGameEngine.seedCommitment(seed, nonce), engineVersion: currentGameEngine.version, createdAt,
+    seedHash: await engine.seedCommitment(seed, nonce), engineVersion: engine.version, createdAt,
     revision: 0, updatedAt: createdAt,
     ...(testnetContractId ? { testnet: { contractId: testnetContractId, chainId: onChainId(matchId) } } : {}) };
 }

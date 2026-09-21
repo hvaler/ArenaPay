@@ -30,16 +30,18 @@ export class MatchService {
     }
   }
 
-  async create(seed: number): Promise<LocalMatch> {
-    return this.createStored(seed);
+  async create(seed: number, engineVersion?: string): Promise<LocalMatch> {
+    return this.createStored(seed, undefined, engineVersion);
   }
 
-  async createTestnet(contractId: string): Promise<LocalMatch> {
-    return this.createStored(randomInt(0x100000000), contractId);
+  async createTestnet(contractId: string, engineVersion?: string): Promise<LocalMatch> {
+    return this.createStored(randomInt(0x100000000), contractId, engineVersion);
   }
 
-  private async createStored(seed: number, testnetContractId?: string): Promise<LocalMatch> {
-    const match = await createStoredMatch(seed, testnetContractId);
+  private async createStored(seed: number, testnetContractId?: string, engineVersion?: string): Promise<LocalMatch> {
+    let match: StoredMatch;
+    try { match = await createStoredMatch(seed, testnetContractId, engineVersion); }
+    catch (error) { throw new MatchError(400, (error as Error).message); }
     await this.save(match);
     return publicMatch(match);
   }

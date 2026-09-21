@@ -1,6 +1,6 @@
 # Plataforma multimotor: etapa común antes de Hex
 
-Fecha: 21 de septiembre de 2026. Estado: **publicada en ArenaPay 0.3.0**.
+Fecha: 21 de septiembre de 2026. Estado: **base publicada en 0.3.0; selección y protocolo de turnos incorporados en 0.4.0**.
 
 Esta etapa prepara ArenaPay para incorporar Hex sin alterar los motores ni los replays publicados de
 la arena de recursos. Separa las responsabilidades del juego, la presentación, la coordinación y la
@@ -17,6 +17,8 @@ evidencia, y permite consultar una misma partida desde dos navegadores mediante 
 | URL de partida | `/match/{UUID}` | Un enlace abre directamente la partida persistida |
 | Sincronización | Revisión creciente y consulta cada 5 segundos | Otra pestaña, navegador u ordenador recibe cambios y el replay terminado |
 | Resultado común | `win | draw | cancelled` | Victoria, empate y cancelación se representan con causas explícitas |
+| Selección de motor | `lifecycle` y `engineVersion` | Los formularios crean partidas solo con motores activos; los históricos siguen verificando replays |
+| Turnos comunes | `turn-session.ts` y `GameEngine.turnProtocol` | Secuencia, turno, idempotencia y conflictos quedan separados de las reglas de cada juego |
 
 ## Formato de evidencia
 
@@ -68,11 +70,11 @@ sus recibos.
 
 ## Trabajo que queda para Hex
 
-Esta etapa no implementa todavía selección de juego, acciones firmadas por turno ni reglas de Hex.
-Esas capacidades forman el siguiente incremento. El enlace compartido sincroniza el estado actual
-de una partida ejecutada por el coordinador; los movimientos humanos interactivos requerirán número
-de secuencia, control de turno y rechazo de acciones antiguas.
+La selección de juego y el protocolo común ya están implementados. Hex será el primer motor que declare
+reglas interactivas, persista una sesión y exponga acciones firmadas a dos navegadores. El enlace actual
+sincroniza una partida ejecutada por el coordinador; todavía no representa movimientos humanos.
 
 Consulta también el [plan de motores](../producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md),
 la [guía de registro](../guias/registrar-un-motor.md) y el
+[protocolo común de turnos](seleccion-y-protocolo-de-turnos.md), además del
 [ADR-007](../adr/ADR-007-evidencia-resultados-y-compatibilidad.md).

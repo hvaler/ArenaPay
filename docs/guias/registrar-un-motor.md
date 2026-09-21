@@ -17,6 +17,7 @@ La plataforma separa tres piezas:
 | Reglas vigentes | `src/packages/shared/src/engines/resource-arena-v2.ts` | Ejecuta la rejilla, genera movimientos y verifica su replay |
 | Sobre común | `src/packages/shared/src/replay-envelope.ts` | Valida evidencia y resultados de motores nuevos |
 | Presentaciones | `src/apps/web/src/games/presentations.tsx` | Asocia versiones y renderizadores sin importar reglas en React |
+| Sesiones por turnos | `src/packages/shared/src/turn-session.ts` | Controla orden, idempotencia, participantes y conflictos |
 
 `src/packages/shared/src/simulation.ts` es una fachada de compatibilidad para la web y los
 consumidores existentes. No deben añadirse reglas nuevas allí.
@@ -44,6 +45,7 @@ export interface GameEngine<TReplay, TState, TInput, TWinner> {
   readonly version: string;
   readonly descriptor: GameEngineDescriptor;
   readonly requiresSecret: boolean;
+  readonly turnProtocol?: EngineTurnProtocol<TState, TInput>;
   initialState(seed: number): TState;
   run(seed: number, inputs: readonly TInput[]): EngineRun<TState, TWinner>;
   createSecret(): string | undefined;
@@ -62,12 +64,14 @@ intenta interpretar movimientos de un juego concreto.
 2. **Definir estado, entradas y replay.** Usar esquemas estrictos y conservar los esquemas históricos sin cambios.
 3. **Implementar reglas deterministas.** Usar enteros y un orden explícito. No usar `Math.random`, reloj, configuración regional ni red.
 4. **Implementar el adaptador.** Crear el archivo en `src/packages/shared/src/engines/` y cumplir `GameEngine`.
-5. **Registrar una sola vez.** Importar `registerGameEngine` y registrar el adaptador junto con su versión.
-6. **Integrar persistencia y API.** Permitir que la partida conserve la versión seleccionada; nunca inferirla del contenido del replay.
-7. **Añadir el renderizador.** La web debe elegir tablero, controles y longitud de reproducción mediante la identidad del juego.
-8. **Crear vectores de regresión.** Guardar al menos un replay estable con compromiso, ganador y hash final conocidos.
-9. **Probar versiones incompatibles.** Rechazar versiones desconocidas, campos extra, entradas incompletas y replays modificados.
-10. **Documentar las reglas.** Añadir el motor a `docs/arquitectura/motores/`, a este índice y a la matriz de juegos.
+5. **Declarar su ciclo de vida.** Usar `lifecycle: 'active'` para partidas nuevas y cambiarlo a `historical` cuando solo deba reproducir evidencia.
+6. **Añadir turnos cuando corresponda.** Implementar `turnProtocol` con creación, validación y aplicación deterministas; no repetir concurrencia en el motor.
+7. **Registrar una sola vez.** Importar `registerGameEngine` y registrar el adaptador junto con su versión.
+8. **Integrar persistencia y API.** Permitir que la partida conserve la versión seleccionada; nunca inferirla del contenido del replay.
+9. **Añadir el renderizador.** La web debe elegir tablero, controles y longitud de reproducción mediante la identidad del juego.
+10. **Crear vectores de regresión.** Guardar al menos un replay estable con compromiso, ganador y hash final conocidos.
+11. **Probar versiones incompatibles.** Rechazar versiones desconocidas, campos extra, entradas incompletas y replays modificados.
+12. **Documentar las reglas.** Añadir el motor a `docs/arquitectura/motores/`, a este índice y a la matriz de juegos.
 
 Ejemplo mínimo de registro:
 
@@ -75,11 +79,12 @@ Ejemplo mínimo de registro:
 export const hexV1: GameEngine<HexReplay, HexState, HexMove, HexPlayer> = {
   version: 'hex/1.0.0',
   descriptor: {
-    gameId: 'hex', displayName: 'Hex', rendererId: 'hex',
+    gameId: 'hex', displayName: 'Hex', lifecycle: 'active', rendererId: 'hex',
     replayFormat: 'arenapay-evidence/1.0.0',
     capabilities: { agents: true, humans: true, turns: true, draws: false, cancellation: true },
   },
   requiresSecret: true,
+  turnProtocol: { createState, parseAction, applyAction },
   initialState,
   run,
   createSecret,

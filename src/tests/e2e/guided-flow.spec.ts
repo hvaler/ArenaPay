@@ -46,6 +46,7 @@ test('guided preparation and documented evidence fit a narrow screen', async ({ 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.getByRole('button', { name: 'Nueva partida en Testnet', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Escrow en Stellar Testnet' }).getByLabel('Juego')).toHaveValue('resource-arena/2.0.0');
   await expect(page.getByRole('navigation', { name: 'Progreso de la partida Testnet' })).toBeVisible();
   await expect(page.locator('[aria-current="step"]')).toContainText('Preparar');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

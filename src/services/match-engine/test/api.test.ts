@@ -37,9 +37,17 @@ describe('local match API and persistence', () => {
     const response = await app.inject('/api/games');
     expect(response.statusCode).toBe(200);
     expect(response.json().engines).toEqual(expect.arrayContaining([
-      expect.objectContaining({ engineVersion: 'resource-arena/1.0.0', gameId: 'resource-arena', rendererId: 'resource-arena' }),
-      expect.objectContaining({ engineVersion: 'resource-arena/2.0.0', gameId: 'resource-arena', rendererId: 'resource-arena' }),
+      expect.objectContaining({ engineVersion: 'resource-arena/1.0.0', gameId: 'resource-arena', lifecycle: 'historical', rendererId: 'resource-arena' }),
+      expect.objectContaining({ engineVersion: 'resource-arena/2.0.0', gameId: 'resource-arena', lifecycle: 'active', rendererId: 'resource-arena' }),
     ]));
+  });
+  it('selects an active engine explicitly and refuses historical engines for new matches', async () => {
+    const selected = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: 'resource-arena/2.0.0' } });
+    expect(selected.statusCode).toBe(201);
+    expect(selected.json().engineVersion).toBe('resource-arena/2.0.0');
+    const historical = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: 'resource-arena/1.0.0' } });
+    expect(historical.statusCode).toBe(400);
+    expect(historical.json().message).toContain('histórico');
   });
   it('rejects duplicate and concurrent runs', async () => {
     const created = (await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 1 } })).json();

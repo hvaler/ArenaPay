@@ -8,6 +8,7 @@ export interface VersionedReplay {
 export interface GameEngineDescriptor {
   readonly gameId: string;
   readonly displayName: string;
+  readonly lifecycle: 'active' | 'historical';
   readonly rendererId: string;
   readonly replayFormat: string;
   readonly capabilities: Readonly<{
@@ -30,11 +31,25 @@ export interface EngineVerification<TState, TWinner> extends EngineRun<TState, T
   actualHash: string;
 }
 
+export interface EngineTurnTransition<TState> {
+  state: TState;
+  nextPlayer?: string;
+  outcome?: import('./replay-envelope').MatchOutcome;
+}
+
+/** Optional rules adapter used by interactive, turn-based engines such as Hex. */
+export interface EngineTurnProtocol<TState, TAction> {
+  createState(configuration: Readonly<Record<string, unknown>>): TState;
+  parseAction(raw: unknown): TAction;
+  applyAction(state: TState, action: TAction, player: string): EngineTurnTransition<TState>;
+}
+
 /** Boundary between the reusable platform and one deterministic game. */
 export interface GameEngine<TReplay extends VersionedReplay, TState, TInput, TWinner> {
   readonly version: TReplay['engineVersion'];
   readonly descriptor: GameEngineDescriptor;
   readonly requiresSecret: boolean;
+  readonly turnProtocol?: EngineTurnProtocol<TState, TInput>;
   initialState(seed: number): TState;
   run(seed: number, inputs: readonly TInput[]): EngineRun<TState, TWinner>;
   createSecret(): string | undefined;
@@ -73,4 +88,10 @@ export function registeredEngineVersions(): readonly string[] {
 
 export function registeredEngineDescriptors(): readonly (GameEngineDescriptor & { engineVersion: string })[] {
   return [...engines.values()].map(engine => ({ engineVersion: engine.version, ...engine.descriptor }));
+}
+
+export function getActiveGameEngine(version: string): RegisteredEngine {
+  const engine = getGameEngine(version);
+  if (engine.descriptor.lifecycle !== 'active') throw new Error('Este motor es histórico y no admite partidas nuevas.');
+  return engine;
 }

@@ -13,7 +13,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 interface TestnetSnapshot { local: LocalMatch }
 export const matchApi = {
-  create: (seed: number) => browserPractice ? practiceApi.create(seed) : request<LocalMatch>('/matches', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seed }) }),
+  create: (seed: number, engineVersion: string) => browserPractice ? practiceApi.create(seed, engineVersion) : request<LocalMatch>('/matches', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seed, engineVersion }) }),
   get: async (id: string, testnet = false) => testnet ? (await request<TestnetSnapshot>(`/testnet/matches/${encodeURIComponent(id)}`)).local : browserPractice ? practiceApi.get(id) : request<LocalMatch>(`/matches/${encodeURIComponent(id)}`),
   run: (id: string, testnet = false) => testnet ? request<LocalMatch>(`/testnet/matches/${encodeURIComponent(id)}/run`, { method: 'POST' }) : browserPractice ? practiceApi.run(id) : request<LocalMatch>(`/matches/${encodeURIComponent(id)}/run`, { method: 'POST' }),
 };

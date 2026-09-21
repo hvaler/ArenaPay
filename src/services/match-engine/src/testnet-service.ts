@@ -2,7 +2,6 @@ import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
 import { Contract, Keypair, scValToNative } from '@stellar/stellar-sdk/base';
-import { ENGINE_VERSION } from '../../../packages/shared/src/contracts';
 import { decodeMatch, hex, onChainId, sc, TESTNET_RPC, type ChainBudget, type TestnetConfig } from '../../../packages/shared/src/stellar';
 import { StellarRpc } from '../../../packages/shared/src/stellar-rpc';
 import { MatchError, MatchService } from './match-service';
@@ -34,19 +33,19 @@ export class TestnetService {
       || hex(Keypair.fromSecret(process.env.ARENAPAY_REFEREE_SECRET!).rawPublicKey()) !== config.refereePublicKey) throw new MatchError(503, 'La configuración no coincide con el contrato.');
     return { config, rpc, contractId: config.contractId, source: config.adminPublicKey };
   }
-  async create(playerA: string, playerB: string, buyIn: string) {
+  async create(playerA: string, playerB: string, buyIn: string, engineVersion?: string) {
     if (this.creating) throw new MatchError(409, 'Hay una creación en curso. Espera su confirmación.');
     if (playerA === playerB) throw new MatchError(400, 'Los participantes deben ser diferentes.');
     this.creating = true;
     try {
       const { rpc, contractId } = await this.context();
-      const local = await this.matches.createTestnet(contractId);
+      const local = await this.matches.createTestnet(contractId, engineVersion);
       const chainId = onChainId(local.matchId);
       // Binding is persisted before the transaction: the local run endpoint cannot bypass funding.
       const bound = local;
       const ledger = await rpc.latestLedger();
       const operation = new Contract(contractId).call('create_match', sc.bytes(chainId), sc.address(playerA), sc.address(playerB),
-        sc.amount(buyIn), sc.text(ENGINE_VERSION), sc.bytes(local.seedHash), sc.u32(ledger.sequence + 720));
+        sc.amount(buyIn), sc.text(local.engineVersion), sc.bytes(local.seedHash), sc.u32(ledger.sequence + 720));
       const key = Keypair.fromSecret(process.env.ARENAPAY_ADMIN_SECRET!);
       const tx = await rpc.prepare(key.publicKey(), operation); tx.sign(key);
       const sent = await rpc.submit(tx);

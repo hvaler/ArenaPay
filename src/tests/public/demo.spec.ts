@@ -13,6 +13,7 @@ test('public demo: documented payout, independent replay and practice without a 
   await page.getByRole('button', { name: 'Verificar reproducibilidad' }).click();
   await expect(page.getByText('Replay verificado localmente.')).toBeVisible();
   await page.getByRole('button', { name: 'Probar la arena', exact: true }).click();
+  await expect(page.locator('#practice-game')).toHaveValue('resource-arena/2.0.0');
   await page.getByLabel('Semilla de la arena').fill('2026');
   await page.getByRole('button', { name: 'Crear nueva partida', exact: false }).click();
   await page.getByRole('button', { name: 'Ejecutar simulación' }).click();

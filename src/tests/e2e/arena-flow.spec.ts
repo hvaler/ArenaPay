@@ -6,6 +6,8 @@ test('creates, runs, scrubs, verifies and downloads the same persisted replay', 
   page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.goto('/');
+  await expect(page.locator('#practice-game')).toHaveValue('resource-arena/2.0.0');
+  await expect(page.locator('#practice-game option')).toHaveText(['Arena de recursos · resource-arena/2.0.0']);
   await expect(page.getByRole('button', { name: 'Verificar reproducibilidad' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Ejecutar simulación' })).toHaveCount(0);
   await page.getByLabel('Semilla de la arena').fill('2026');

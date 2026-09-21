@@ -12,7 +12,8 @@ Revisión: 21 de septiembre de 2026. ArenaPay ofrece el mismo flujo Testnet medi
 `GET /api/health` identifica el perfil. El Worker responde con `mode: public` y `persistence: durable-object`; Node responde con `persistence: filesystem` y modo `local` o `public` según su configuración.
 
 `GET /api/games` devuelve el catálogo de motores registrado en ambos perfiles. Cada entrada incluye
-la versión inmutable, identidad del juego, renderizador, formato de replay y capacidades declaradas.
+la versión inmutable, identidad del juego, ciclo `active | historical`, renderizador, formato de replay
+y capacidades declaradas. Solo los motores activos admiten partidas nuevas.
 
 ## Práctica local
 
@@ -20,7 +21,7 @@ Estas rutas solo existen en el perfil Node no público.
 
 | Método | Ruta | Resultado |
 |---|---|---|
-| `POST` | `/api/matches` | Crea una práctica con `{ "seed": 2026 }`; responde 201 |
+| `POST` | `/api/matches` | Crea una práctica con `{ "seed": 2026, "engineVersion": "resource-arena/2.0.0" }`; responde 201 |
 | `GET` | `/api/matches/:id` | Devuelve la partida y el replay cuando existe |
 | `POST` | `/api/matches/:id/run` | Ejecuta una sola vez |
 | `GET` | `/api/matches/:id/replay` | Descarga el JSON; responde 409 antes de ejecutar |
@@ -44,11 +45,12 @@ La escritura local utiliza un archivo temporal y un renombrado antes de responde
 {
   "playerA": "G...",
   "playerB": "G...",
-  "buyIn": "10000000"
+  "buyIn": "10000000",
+  "engineVersion": "resource-arena/2.0.0"
 }
 ```
 
-`buyIn` se expresa en stroops: `10000000` equivale a 1 XLM. El máximo aceptado por el MVP es 10 XLM. Las direcciones deben ser cuentas Stellar distintas. El cuerpo no admite `seed`: el servidor genera semilla y nonce y solo publica el compromiso.
+`buyIn` se expresa en stroops: `10000000` equivale a 1 XLM. El máximo aceptado por el MVP es 10 XLM. Las direcciones deben ser cuentas Stellar distintas. `engineVersion` es opcional para clientes anteriores y, cuando falta, usa el motor activo predeterminado. El cuerpo no admite `seed`: el servidor genera semilla y nonce y solo publica el compromiso.
 
 La respuesta pública puede contener ID local, ID de cadena, contrato, versión, compromiso, estado y recibo de creación. No contiene semilla ni nonce hasta que existe el replay.
 

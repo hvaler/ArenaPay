@@ -8,6 +8,8 @@ import { addressSchema } from '../../../packages/shared/src/stellar';
 import { RpcReadError } from '../../../packages/shared/src/stellar-rpc';
 import { registeredEngineDescriptors } from '../../../packages/shared/src/game-engine';
 
+const engineVersionSchema = z.string().regex(/^[a-z0-9][a-z0-9-]*\/\d+\.\d+\.\d+$/);
+
 export interface ArenaPayAppOptions {
   publicMode?: boolean;
   allowedOrigins?: string[];
@@ -84,17 +86,18 @@ export function buildApp(service = new MatchService(), options: ArenaPayAppOptio
   });
   app.post('/api/testnet/matches', async (request, reply) => {
     const value = z.object({ playerA: addressSchema, playerB: addressSchema,
-      buyIn: z.string().regex(/^[1-9][0-9]*$/).refine(amount => BigInt(amount) <= 100_000_000n) }).strict().parse(request.body);
+      buyIn: z.string().regex(/^[1-9][0-9]*$/).refine(amount => BigInt(amount) <= 100_000_000n),
+      engineVersion: engineVersionSchema.optional() }).strict().parse(request.body);
     if (publicMode) dailyQuota.consume();
-    return reply.code(201).send(await testnet.create(value.playerA, value.playerB, value.buyIn));
+    return reply.code(201).send(await testnet.create(value.playerA, value.playerB, value.buyIn, value.engineVersion));
   });
   app.get<{ Params: { id: string } }>('/api/testnet/matches/:id', request => testnet.state(request.params.id));
   app.post<{ Params: { id: string } }>('/api/testnet/matches/:id/run', request => testnet.run(request.params.id));
   app.post<{ Params: { id: string } }>('/api/testnet/matches/:id/resolution', request => testnet.resolution(request.params.id));
   if (!publicMode) {
     app.post('/api/matches', async (request, reply) => {
-      const { seed } = z.object({ seed: seedSchema }).strict().parse(request.body);
-      return reply.code(201).send(await service.create(seed));
+      const { seed, engineVersion } = z.object({ seed: seedSchema, engineVersion: engineVersionSchema.optional() }).strict().parse(request.body);
+      return reply.code(201).send(await service.create(seed, engineVersion));
     });
     app.get<{ Params: { id: string } }>('/api/matches/:id', request => service.get(request.params.id));
     app.post<{ Params: { id: string } }>('/api/matches/:id/run', async request => {

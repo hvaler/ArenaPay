@@ -16,6 +16,7 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Análisis y decisiones](arquitectura/analisis-y-decisiones.md)
 - [ArenaPay como plataforma](arquitectura/plataforma-y-reutilizacion.md)
 - [Etapa común de la plataforma multimotor](arquitectura/plataforma-multimotor-etapa-comun.md)
+- [Selección de motores y protocolo común de turnos](arquitectura/seleccion-y-protocolo-de-turnos.md)
 - [Reutilización con juegos y jugadores](arquitectura/reutilizacion-juegos-y-jugadores.md)
 - [Protocolo y versionado](arquitectura/protocolo-y-versionado.md)
 - [Formato de evidencia y firmas](arquitectura/formato-evidencia.md)
