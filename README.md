@@ -86,7 +86,7 @@ ningún premio se liquida sin una evidencia de resultado firmada.
 | Liquidación | [`deaa8c4292c7c9f55ab9d07b0ab5ec6abbde16af9e142aacb1cd169fd115989a`](https://stellar.expert/explorer/testnet/tx/deaa8c4292c7c9f55ab9d07b0ab5ec6abbde16af9e142aacb1cd169fd115989a) |
 | Premio y registro | Nova: **2 XLM de prueba** · ledger **4643946** · verificado **12-sep-2026, 20:01 UTC** |
 | Hash del estado final | `d5fe79f1fe86973bce11ca65d8448896497a9255be7159eb4798392ffa2fbd9b` |
-| Versión del motor | `resource-arena/2.0.0` |
+| Versión del motor | `resource-arena/2.0.0`, retirado el 21-sep · [por qué](docs/arquitectura/motores/motor-v3.md) |
 | WASM desplegado | `1f87a3db0c44078864130bdcadc05ff36c78c41a964a6570edd57597ecc91141` |
 | Despliegue del contrato | [`d4d1ce70c5436ffe1c27d75ca876775b4c55640d6951783a3b0b90cbd77c1cff`](https://stellar.expert/explorer/testnet/tx/d4d1ce70c5436ffe1c27d75ca876775b4c55640d6951783a3b0b90cbd77c1cff) |
 
@@ -176,12 +176,21 @@ partida entera se queda fuera.
 
 ### Tres decisiones que conviene entender
 
-**El motor vive en el paquete compartido.** `src/packages/shared/src/engines/resource-arena-v2.ts` ejecuta exactamente las
+**El motor vive en el paquete compartido.** `src/packages/shared/src/engines/resource-arena-v3.ts` ejecuta exactamente las
 mismas reglas en Node y en el navegador, y el hash usa Web Crypto en ambos entornos. Por eso el jurado
 puede reejecutar la partida en su propia máquina y obtener el mismo hash: no hay una versión «del
-servidor» y otra «del cliente». El motor vigente es `resource-arena/2.0.0`; sus reglas, el compromiso
-de semilla con nonce y las tres correcciones que lo separan de v1 están en
-[`docs/arquitectura/motores/motor-v2.md`](docs/arquitectura/motores/motor-v2.md).
+servidor» y otra «del cliente». El motor vigente es `resource-arena/3.0.0`; sus reglas, el compromiso
+de semilla con nonce y el desempate de casilla que lo separa de v2 están en
+[`docs/arquitectura/motores/motor-v3.md`](docs/arquitectura/motores/motor-v3.md).
+
+**Por qué hay un motor 3.0.0.** En `resource-arena/2.0.0`, si los dos agentes pedían la misma casilla
+no se movía ninguno. Como las políticas son deterministas y solo leen el estado anterior al tick, al
+tick siguiente repetían la decisión y la partida se detenía para siempre: en un barrido de 200
+semillas, **109 quedaban congeladas**. Una partida real de Testnet se detuvo en el tick 6 de 60 y
+terminó 6–3 con los doce recursos sobre el tablero. En 3.0.0 el empate lo resuelve la prioridad
+alternante por paridad del tick, la misma que ya ordenaba la recogida: ninguna de esas 200 semillas
+se congela. Las partidas anteriores **siguen siendo válidas y verificables**: 2.0.0 queda registrado
+como histórico con sus reglas intactas, porque la evidencia publicada se comprueba contra ellas.
 
 **El árbitro no necesita una cuenta financiada en Stellar.** El contrato conserva su clave pública
 Ed25519; el árbitro firma la resolución, pero no firma ni envía la transacción y no paga sus
@@ -248,7 +257,7 @@ No son promesas: cada propiedad dice dónde comprobarla, y las pruebas se citan 
 | La firma vincula red, contrato, partida, versión, compromiso, ganador y hash | [Formato XDR exacto](docs/arquitectura/formato-evidencia.md) y `prevents_signature_reuse_between_contracts` en [las pruebas del contrato](src/contracts/arena_escrow/src/test.rs) |
 | El contrato se niega a desplegarse fuera de Testnet | `refuses_deployment_on_other_networks`, en las mismas pruebas |
 | Rust y TypeScript producen el mismo digest | [Vector dorado compartido](docs/evidencia/fixtures/resolution-v2.json), verificado en los dos lenguajes |
-| El resultado se reproduce y puede contrastarse con el contrato | [Motor](src/packages/shared/src/engines/resource-arena-v2.ts), [registro](src/packages/shared/src/game-engine.ts) y [panel Testnet](src/apps/web/src/components/TestnetPanel.tsx) |
+| El resultado se reproduce y puede contrastarse con el contrato | [Motor](src/packages/shared/src/engines/resource-arena-v3.ts), [registro](src/packages/shared/src/game-engine.ts) y [panel Testnet](src/apps/web/src/components/TestnetPanel.tsx) |
 | Liquidación única y devolución tras vencer, también desde Funded | `refunds_exactly_the_received_deposits_after_timeout` en [las pruebas](src/contracts/arena_escrow/src/test.rs), sobre [el contrato](src/contracts/arena_escrow/src/lib.rs); `duplicateSettlementRejected` en [la evidencia del ensayo](docs/evidencia/testnet-evidence-v2.json) |
 | Las credenciales locales no se versionan | `git ls-files \| grep -i env` devuelve solo `.env.example`; véanse [.gitignore](.gitignore) y el [registro de revisión](docs/auditorias/revision-readme-2026-09-13.md) |
 
@@ -315,7 +324,7 @@ El servicio decide cuándo ejecutarlo y guarda sus resultados.
 
 [Índice completo de documentación](docs/README.md) · [Visión general](docs/arquitectura/vision-general.md) · [Glosario](docs/glosario/README.md) · [Decisiones de arquitectura](docs/adr/README.md) · [Modos de prueba](docs/guias/modos-de-prueba.md) · [Flujo de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md) · [Despliegues](docs/despliegue/README.md).
 
-[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Etapa común multimotor](docs/arquitectura/plataforma-multimotor-etapa-comun.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Plan de Hex, Connect Four, Damas chinas y Ajedrez](docs/producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
+[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Etapa común multimotor](docs/arquitectura/plataforma-multimotor-etapa-comun.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Plan de Hex, Connect Four, Damas chinas y Ajedrez](docs/producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v3](docs/arquitectura/motores/motor-v3.md) · [Motor histórico v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
 
 ## Licencia
 

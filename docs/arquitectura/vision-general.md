@@ -99,7 +99,8 @@ Las lecturas pueden probar respaldos configurados y enumeran los endpoints inten
 ## Lecturas siguientes
 
 - [Protocolo y versionado](protocolo-y-versionado.md)
-- [Motor `resource-arena/2.0.0`](motores/motor-v2.md)
+- [Motor `resource-arena/3.0.0`](motores/motor-v3.md)
+- [Motor histórico `resource-arena/2.0.0`](motores/motor-v2.md)
 - [Formato de evidencia y firmas](formato-evidencia.md)
 - [API](../referencia/api.md)
 - [Despliegue público](../despliegue/README.md)

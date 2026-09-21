@@ -257,6 +257,6 @@ republicarse. La primera línea del guion del vídeo también se actualizó ante
 - [`src/contracts/arena_escrow/src/lib.rs`](../../src/contracts/arena_escrow/src/lib.rs) — el contrato agnóstico
 - [`src/packages/shared/src/stellar.ts`](../../src/packages/shared/src/stellar.ts) — la preimagen que ata red,
   contrato y versión de motor
-- [Motor `resource-arena/2.0.0`](motores/motor-v2.md) — qué simula el juego actual y por qué es determinista
+- [Motor `resource-arena/3.0.0`](motores/motor-v3.md) — qué simula el juego actual, por qué es determinista y qué empate corrigió
 - [Formato de evidencia y firmas](formato-evidencia.md) — el vector XDR exacto
 - [Despliegue público](../despliegue/README.md) — cómo llegar a una URL operativa

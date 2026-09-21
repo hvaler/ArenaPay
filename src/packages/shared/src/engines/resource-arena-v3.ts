@@ -1,4 +1,4 @@
-import { ARENA_V2_ENGINE_VERSION as ENGINE_VERSION, GRID_SIZE, POLICIES, TICKS, inputSchema, replaySchema, seedSchema, nonceSchema, type ArenaState, type Input, type Move, type Player, type Position, type Replay } from '../contracts';
+import { ENGINE_VERSION, GRID_SIZE, POLICIES, TICKS, inputSchema, replaySchema, seedSchema, nonceSchema, type ArenaState, type Input, type Move, type Player, type Position, type Replay } from '../contracts';
 import { canonicalJson, sha256Hex } from '../hash';
 
 const moves: Move[] = ['UP', 'LEFT', 'DOWN', 'RIGHT', 'STAY'];
@@ -65,13 +65,18 @@ export function chooseMove(state: ArenaState, player: Player): Move {
 function step(state: ArenaState, inputs: readonly Input[]): void {
   const next = { A: { ...state.agents.A }, B: { ...state.agents.B } };
   for (const input of inputs) Object.assign(next[input.player], destination(state.agents[input.player], input.move));
-  // Resolve both proposals atomically. If they target one cell, both stay;
-  // allowing just one to move could put it on the blocked player's old cell.
-  // Swaps between two distinct cells are allowed.
-  if (!sameCell(next.A, next.B)) {
-    Object.assign(state.agents.A, next.A); Object.assign(state.agents.B, next.B);
-  }
   const order: Player[] = state.tick % 2 === 0 ? ['A', 'B'] : ['B', 'A'];
+  // Ambos proponen a la vez y no pueden compartir casilla. En 2.0.0, pedir la misma dejaba
+  // quietos a los dos; como las políticas son deterministas y solo leen el estado actual, al
+  // tick siguiente decidían igual y la partida se detenía para siempre. Aquí decide la misma
+  // prioridad alternante que ya ordena la recogida: entra quien tiene el turno y el otro cede.
+  // Si el que cede se quedaba donde está, el que entra tampoco avanza: nadie se solapa.
+  if (sameCell(next.A, next.B)) {
+    const [entra, cede] = order;
+    next[cede] = { ...state.agents[cede] };
+    if (sameCell(next[entra], next[cede])) next[entra] = { ...state.agents[entra] };
+  }
+  Object.assign(state.agents.A, next.A); Object.assign(state.agents.B, next.B);
   for (const player of order) {
     const index = state.resources.findIndex(r => sameCell(r, state.agents[player]));
     if (index >= 0) state.agents[player].score += state.resources.splice(index, 1)[0].value;

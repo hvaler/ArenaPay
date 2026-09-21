@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { ENGINE_VERSION, TICKS, type Input } from '../src/contracts';
+import { ARENA_V2_ENGINE_VERSION, ENGINE_VERSION, TICKS, type Input } from '../src/contracts';
 import { buildReplay, initialState, runSimulation, seedCommitment, verifyReplay } from '../src/simulation';
 import { getGameEngine, registeredEngineVersions } from '../src/game-engine';
 import '../src/engines/resource-arena';
 import historicalReplay from '../../../../docs/evidencia/fixtures/testnet-replay.json';
+import arenaV2Replay from '../../../../docs/evidencia/fixtures/testnet-replay-v2-manual.json';
 
 const id = '00000000-0000-4000-8000-000000000001';
 const nonce = '01'.repeat(32);
 const still: Input[] = Array.from({ length: TICKS }, (_, tick) => ([{ tick, player: 'A' as const, move: 'STAY' as const }, { tick, player: 'B' as const, move: 'STAY' as const }])).flat();
 describe('versioned deterministic arena', () => {
   it('registers current and historical engines behind the common boundary', () => {
-    expect(registeredEngineVersions()).toEqual(['resource-arena/1.0.0', 'resource-arena/2.0.0']);
+    expect(registeredEngineVersions()).toEqual(['resource-arena/1.0.0', 'resource-arena/2.0.0', 'resource-arena/3.0.0']);
     expect(getGameEngine(ENGINE_VERSION).requiresSecret).toBe(true);
     expect(() => getGameEngine('chess/1.0.0')).toThrow('desconocida');
   });
@@ -94,11 +95,18 @@ describe('versioned deterministic arena', () => {
     expect(initialState(0).resources).not.toEqual(initialState(0x9e3779b9).resources);
     for (const seed of [0, 0x7fffffff, 0x80000000, 0xffffffff]) expect(initialState(seed).seed).toBe(seed);
   });
-  it('blocks conflicting destinations atomically, including a stationary occupant', () => {
+  it('resolves a contested cell by turn priority and never overlaps the agents', () => {
+    // A avanza hacia (7,0) y B sube hacia la misma casilla; chocan al entrar en el tick 6.
     const inputs = still.map(input => ({ ...input, move: input.tick < 7 ? input.player === 'A' ? 'RIGHT' as const : 'UP' as const : 'STAY' as const }));
+    // El tick 6 es par, así que la prioridad es de A: entra en la casilla y B cede.
     const result = runSimulation(0, inputs);
-    expect(result.frames[7].agents.A).toMatchObject({ x: 6, y: 0 });
+    expect(result.frames[7].agents.A).toMatchObject({ x: 7, y: 0 });
     expect(result.frames[7].agents.B).toMatchObject({ x: 7, y: 1 });
+    // 2.0.0 dejaba quietos a los dos, y ese comportamiento se conserva para su evidencia.
+    const retired = runSimulation(0, inputs, ARENA_V2_ENGINE_VERSION);
+    expect(retired.frames[7].agents.A).toMatchObject({ x: 6, y: 0 });
+    expect(retired.frames[7].agents.B).toMatchObject({ x: 7, y: 1 });
+    // Quien cede conserva su casilla, así que un ocupante inmóvil sigue bloqueando el paso.
     const stationary = still.map(input => ({ ...input, move: input.player === 'B' ? 'STAY' as const : input.tick < 7 ? 'RIGHT' as const : 'DOWN' as const }));
     for (const frame of runSimulation(1, stationary).frames) {
       expect([frame.agents.A.x, frame.agents.A.y]).not.toEqual([frame.agents.B.x, frame.agents.B.y]);
@@ -125,4 +133,46 @@ describe('versioned deterministic arena', () => {
     }
     expect(hashes.size).toBe(1000); expect(wins.A).toBeGreaterThan(0); expect(wins.B).toBeGreaterThan(0);
   }, 60_000);
+});
+
+// 2.0.0 dejaba quietos a los dos agentes cuando pedían la misma casilla. Con políticas
+// deterministas que solo leen el estado actual, el tick siguiente repetía la decisión y la
+// competición se detenía: más de la mitad de las semillas acababan congeladas.
+describe('a contested cell no longer stops the competition', () => {
+  const posiciones = (frame: { agents: { A: { x: number; y: number }; B: { x: number; y: number } } }) =>
+    `${frame.agents.A.x},${frame.agents.A.y}|${frame.agents.B.x},${frame.agents.B.y}`;
+
+  const ticksCongeladosAlFinal = async (version: string, seed: number) => {
+    const engine = getGameEngine(version);
+    const replay = await engine.buildReplay(id, seed, engine.createSecret());
+    const { frames } = engine.run(seed, replay.inputs);
+    let ultimoMovimiento = 0;
+    for (let tick = 1; tick < frames.length; tick++) {
+      if (posiciones(frames[tick - 1]) !== posiciones(frames[tick])) ultimoMovimiento = tick;
+    }
+    return frames.length - 1 - ultimoMovimiento;
+  };
+
+  it('keeps the agents moving on a seed that froze the previous engine', async () => {
+    // Semilla observada en una partida real de Testnet, detenida en el tick 6 de 60.
+    expect(await ticksCongeladosAlFinal(ARENA_V2_ENGINE_VERSION, 4214622373)).toBeGreaterThan(40);
+    expect(await ticksCongeladosAlFinal(ENGINE_VERSION, 4214622373)).toBeLessThan(10);
+  });
+
+  it('never freezes a run across a spread of seeds', async () => {
+    for (const seed of [1, 2026, 7919, 135153545, 4214622373]) {
+      expect(await ticksCongeladosAlFinal(ENGINE_VERSION, seed)).toBeLessThan(10);
+    }
+  });
+
+  it('still verifies the evidence recorded with the previous engine', async () => {
+    expect(arenaV2Replay.engineVersion).toBe(ARENA_V2_ENGINE_VERSION);
+    const checked = await verifyReplay(arenaV2Replay, arenaV2Replay.seedHash);
+    expect(checked.valid).toBe(true);
+  });
+
+  it('refuses a new match on the retired engine', () => {
+    expect(getGameEngine(ARENA_V2_ENGINE_VERSION).descriptor.lifecycle).toBe('historical');
+    expect(getGameEngine(ENGINE_VERSION).descriptor.lifecycle).toBe('active');
+  });
 });

@@ -4,13 +4,13 @@ El contrato y el motor tienen ciclos de versión distintos. Un cambio del juego 
 
 ## Contrato de compatibilidad
 
-| Elemento | v1 histórica | v2 actual |
-|---|---|---|
-| engineVersion | resource-arena/1.0.0 | resource-arena/2.0.0 |
-| Compromiso | SHA-256 de JSON canónico con versión y seed | Añade nonce secreto de 32 bytes |
-| Replay | Sin nonce | Nonce obligatorio, 64 caracteres hexadecimales minúsculos |
-| Reproducción | Motor v1 congelado | PRNG y resolución de movimientos corregidos |
-| Uso | Leer y comprobar evidencia histórica | Crear partidas nuevas |
+| Elemento | v1 histórica | v2 histórica | v3 actual |
+|---|---|---|---|
+| engineVersion | resource-arena/1.0.0 | resource-arena/2.0.0 | resource-arena/3.0.0 |
+| Compromiso | SHA-256 de JSON canónico con versión y seed | Añade nonce secreto de 32 bytes | Igual que v2 |
+| Replay | Sin nonce | Nonce obligatorio, 64 caracteres hexadecimales minúsculos | Igual que v2 |
+| Reproducción | Motor v1 congelado | PRNG y resolución de movimientos corregidos | Añade desempate de casilla disputada |
+| Uso | Leer y comprobar evidencia histórica | Leer y comprobar evidencia hasta el 21-sep-2026 | Crear partidas nuevas |
 
 La semilla sigue siendo un entero sin signo de 32 bits. El nonce se guarda antes de publicar el compromiso y se revela con el replay. El servicio no debe regenerarlo al reiniciarse. [Servicio](../../src/services/match-engine/src/match-service.ts).
 

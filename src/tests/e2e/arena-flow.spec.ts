@@ -14,7 +14,7 @@ test('navigates between the public sections and reports the published milestone'
   await expect(page).toHaveURL(/#roadmap$/);
   await expect(navigation.getByRole('link', { name: 'Proyecto' })).toHaveAttribute('aria-current', 'location');
   await expect(page.locator('#roadmap')).toContainText('Demo y entrega publicadas');
-  await expect(page.locator('footer')).toContainText('ArenaPay 0.5.0');
+  await expect(page.locator('footer')).toContainText('ArenaPay 0.6.0');
 });
 
 test('creates, runs, scrubs, verifies and downloads the same persisted replay', async ({ page }) => {
@@ -22,8 +22,9 @@ test('creates, runs, scrubs, verifies and downloads the same persisted replay', 
   page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.goto('/');
-  await expect(page.locator('#practice-game')).toHaveValue('resource-arena/2.0.0');
-  await expect(page.locator('#practice-game option')).toHaveText(['Arena de recursos · resource-arena/2.0.0']);
+  await expect(page.locator('#practice-game')).toHaveValue('resource-arena/3.0.0');
+  // Solo el motor vigente admite partidas nuevas; 1.0.0 y 2.0.0 quedan para leer evidencia.
+  await expect(page.locator('#practice-game option')).toHaveText(['Arena de recursos · resource-arena/3.0.0']);
   await expect(page.getByRole('button', { name: 'Verificar reproducibilidad' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Ejecutar simulación' })).toHaveCount(0);
   await page.getByLabel('Semilla de la arena').fill('2026');
@@ -41,7 +42,7 @@ test('creates, runs, scrubs, verifies and downloads the same persisted replay', 
   const download = await downloadEvent;
   const replay = JSON.parse(await readFile((await download.path())!, 'utf8'));
   expect(replay.seed).toBe(2026); expect(replay.inputs).toHaveLength(120);
-  expect(replay.engineVersion).toBe('resource-arena/2.0.0');
+  expect(replay.engineVersion).toBe('resource-arena/3.0.0');
   expect(replay.nonce).toMatch(/^[a-f0-9]{64}$/);
   const privateFile = await page.request.get(`/@fs/${process.cwd().replaceAll('\\', '/')}/data/matches/${replay.matchId}.json`);
   expect(privateFile.status()).toBe(403);

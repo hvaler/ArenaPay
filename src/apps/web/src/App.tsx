@@ -243,6 +243,6 @@ export default function App() {
 
       <section className="project-strip" id="roadmap"><div><h2>De la partida al premio verificable.</h2><p>{PRODUCT_STATEMENT}</p><p className="scope-note">Práctica local y operaciones firmadas en Stellar Testnet.</p></div><ol><li className="current"><span>01</span><strong>Motor y replay</strong><small>Operativo</small></li><li className="current"><span>02</span><strong>Escrow Soroban</strong><small>Operativo en Testnet</small></li><li className="current"><span>03</span><strong>Evidencia pública</strong><small>Demo y entrega publicadas</small></li></ol></section>
     </main>
-    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href={siteUrl('runbook-pruebas-arenapay.html')}>Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.5.0</span></footer>
+    <footer><span>ArenaPay <span className="footer-slash">/</span> Construido para hacer verificable la competencia.</span><span><a href={siteUrl('runbook-pruebas-arenapay.html')}>Guía de pruebas</a><span className="footer-slash">/</span><a href="https://github.com/hvaler/ArenaPay">Código AGPL</a></span><span>Stellar Odyssey Perú 2026 · ArenaPay 0.6.0</span></footer>
   </div>;
 }

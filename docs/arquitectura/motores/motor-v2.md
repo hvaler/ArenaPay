@@ -1,6 +1,11 @@
 # Motor `resource-arena/2.0.0`
 
-Motor de simulación vigente. Todas las partidas nuevas lo usan. Sus reglas viven en
+> **Motor retirado el 21 de septiembre de 2026.** Las partidas nuevas usan
+> [`resource-arena/3.0.0`](motor-v3.md), que corrige un empate de casilla capaz de detener la
+> competición hasta el final. Este motor sigue registrado como histórico y con sus reglas intactas:
+> la evidencia publicada se verifica contra ellas y continúa siendo válida.
+
+Motor de simulación de las partidas creadas hasta el 21 de septiembre de 2026. Sus reglas viven en
 [`src/packages/shared/src/engines/resource-arena-v2.ts`](../../../src/packages/shared/src/engines/resource-arena-v2.ts) y se ejecutan sin cambios
 en Node y en el navegador, que es lo que permite al jurado reproducir una partida en su propia
 máquina y obtener el mismo hash.

@@ -38,16 +38,20 @@ describe('local match API and persistence', () => {
     expect(response.statusCode).toBe(200);
     expect(response.json().engines).toEqual(expect.arrayContaining([
       expect.objectContaining({ engineVersion: 'resource-arena/1.0.0', gameId: 'resource-arena', lifecycle: 'historical', rendererId: 'resource-arena' }),
-      expect.objectContaining({ engineVersion: 'resource-arena/2.0.0', gameId: 'resource-arena', lifecycle: 'active', rendererId: 'resource-arena' }),
+      expect.objectContaining({ engineVersion: 'resource-arena/2.0.0', gameId: 'resource-arena', lifecycle: 'historical', rendererId: 'resource-arena' }),
+      expect.objectContaining({ engineVersion: 'resource-arena/3.0.0', gameId: 'resource-arena', lifecycle: 'active', rendererId: 'resource-arena' }),
     ]));
   });
   it('selects an active engine explicitly and refuses historical engines for new matches', async () => {
-    const selected = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: 'resource-arena/2.0.0' } });
+    const selected = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: 'resource-arena/3.0.0' } });
     expect(selected.statusCode).toBe(201);
-    expect(selected.json().engineVersion).toBe('resource-arena/2.0.0');
-    const historical = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: 'resource-arena/1.0.0' } });
-    expect(historical.statusCode).toBe(400);
-    expect(historical.json().message).toContain('histórico');
+    expect(selected.json().engineVersion).toBe('resource-arena/3.0.0');
+    // 2.0.0 se retiró al corregir el empate de casilla que detenía la competición.
+    for (const retired of ['resource-arena/1.0.0', 'resource-arena/2.0.0']) {
+      const historical = await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 7, engineVersion: retired } });
+      expect(historical.statusCode).toBe(400);
+      expect(historical.json().message).toContain('histórico');
+    }
   });
   it('rejects duplicate and concurrent runs', async () => {
     const created = (await app.inject({ method: 'POST', url: '/api/matches', payload: { seed: 1 } })).json();

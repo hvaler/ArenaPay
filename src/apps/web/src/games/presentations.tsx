@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { ENGINE_VERSION, LEGACY_ENGINE_VERSION, type ArenaState } from '../../../../packages/shared/src/contracts';
+import { ARENA_V2_ENGINE_VERSION, ENGINE_VERSION, LEGACY_ENGINE_VERSION, type ArenaState } from '../../../../packages/shared/src/contracts';
 import { Arena } from '../components/Arena';
 
 export interface GamePresentation<TState = unknown> {
@@ -15,8 +15,11 @@ const resourceArena: GamePresentation<ArenaState> = {
   sizeLabel: '8 × 8', Renderer: Arena,
 };
 
+// Cada versión del motor necesita su entrada, también las retiradas: una evidencia antigua se
+// sigue abriendo y debe dibujarse con el mismo tablero.
 const presentations = new Map<string, GamePresentation<any>>([
   [LEGACY_ENGINE_VERSION, resourceArena],
+  [ARENA_V2_ENGINE_VERSION, resourceArena],
   [ENGINE_VERSION, resourceArena],
 ]);
 

@@ -2,7 +2,10 @@ import { z } from 'zod';
 import type { MatchOutcome } from './replay-envelope';
 
 export const LEGACY_ENGINE_VERSION = 'resource-arena/1.0.0';
-export const ENGINE_VERSION = 'resource-arena/2.0.0';
+// 2.0.0 detenía la partida cuando ambos agentes pedían la misma casilla; se conserva intacta
+// porque la evidencia publicada se verifica contra ella. Las partidas nuevas usan 3.0.0.
+export const ARENA_V2_ENGINE_VERSION = 'resource-arena/2.0.0';
+export const ENGINE_VERSION = 'resource-arena/3.0.0';
 export const TICKS = 60;
 export const GRID_SIZE = 8;
 export const POLICIES = { A: 'collector-v1', B: 'tactician-v1' } as const;
@@ -20,6 +23,7 @@ const replayFields = {
 };
 export const replaySchema = z.discriminatedUnion('engineVersion', [
   z.object({ ...replayFields, engineVersion: z.literal(ENGINE_VERSION), nonce: nonceSchema }).strict(),
+  z.object({ ...replayFields, engineVersion: z.literal(ARENA_V2_ENGINE_VERSION), nonce: nonceSchema }).strict(),
   z.object({ ...replayFields, engineVersion: z.literal(LEGACY_ENGINE_VERSION) }).strict(),
 ]);
 export type Player = z.infer<typeof playerSchema>;
