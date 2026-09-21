@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <a href="#verificar-el-proyecto"><img alt="84 pruebas" src="https://img.shields.io/badge/pruebas-68%20TS%20%2B%2016%20Rust-brightgreen"></a>
+  <a href="#verificar-el-proyecto"><img alt="118 pruebas" src="https://img.shields.io/badge/pruebas-102%20TS%20%2B%2016%20Rust-brightgreen"></a>
   <a href="https://github.com/hvaler/ArenaPay/issues"><img alt="Issues abiertos" src="https://img.shields.io/github/issues/hvaler/ArenaPay?logo=github"></a>
   <a href="https://github.com/hvaler/ArenaPay/commits/main"><img alt="Último commit" src="https://img.shields.io/github/last-commit/hvaler/ArenaPay?logo=git"></a>
   <a href="LICENSE"><img alt="Licencia AGPL 3.0" src="https://img.shields.io/badge/licencia-AGPL--3.0-blue"></a>
@@ -43,11 +43,36 @@
 
 > **ArenaPay es una plataforma para competiciones verificables sobre Soroban. Su MVP enfrenta a Atlas y Nova, dos agentes deterministas.**
 
-| Vídeo | Qué muestra | Duración |
-|---|---|---:|
-| [Demo completa](https://youtu.be/LECz_vXmFi0) | El producto funcionando: crear, financiar, ejecutar, verificar y liquidar una partida en Testnet | 4:09 |
-| [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) | Problema, arquitectura, registro de motores, evidencia, futuros juegos y hoja de ruta | 2:44 |
-| [Presentación inicial de la entrega](https://youtu.be/thcnJ7IS7fE) | Resume el recorrido operativo y se conserva como material histórico | 2:44 |
+| Vídeo | Entregable | Qué muestra | Duración |
+|---|---|---|---:|
+| [Demo completa](https://youtu.be/LECz_vXmFi0) | Vídeo demo | El producto funcionando: crear, financiar, ejecutar, verificar y liquidar una partida en Testnet | 4:09 |
+| [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) | Vídeo pitch | Problema, arquitectura, registro de motores, evidencia, futuros juegos y hoja de ruta | 2:44 |
+
+Una presentación anterior se conserva sin publicar como material histórico; su copia y su huella están en el [archivo audiovisual](docs/evidencia/media/README.md).
+
+## Qué se construyó durante Stellar Odyssey Perú 2026
+
+ArenaPay existía antes del evento, así que esta entrega se acoge a la regla de proyectos previos y declara su punto de partida.
+
+| Dato | Valor |
+|---|---|
+| Commit base | [`800328b`](https://github.com/hvaler/ArenaPay/commit/800328b9079607b8b11c9e8d3403bfc15d7bef6f), etiquetado [`v0.1.0`](https://github.com/hvaler/ArenaPay/releases/tag/v0.1.0) — 14 de septiembre de 2026, último anterior a la ventana |
+| Ventana de desarrollo | Del 19 de septiembre, 09:00, al 26 de septiembre (hora de Perú) |
+| Construido dentro | 20 commits · 132 archivos · +4674 / −345 líneas |
+| Versiones publicadas | De la 0.1.1 a la 0.6.2 |
+
+Todo lo anterior al commit base queda fuera de la evaluación. Para ver exactamente lo construido durante la semana: `git diff v0.1.0..main`.
+
+Antes de la ventana, el proyecto era un motor único acoplado a la aplicación, con el contrato de escrow ya desplegado en Testnet y un ensayo manual documentado. Lo construido durante la semana:
+
+- **Plataforma multimotor.** Se extrajo la frontera `GameEngine` y su registro, de modo que el contrato deja de conocer el juego. Hoy conviven tres motores registrados y cada replay se verifica con el suyo ([ADR-006](docs/adr/ADR-006-frontera-y-registro-de-motores.md), [ADR-007](docs/adr/ADR-007-evidencia-resultados-y-compatibilidad.md)).
+- **Selección de motor y protocolo de turnos.** La creación de partidas admite elegir motor activo y rechaza los históricos; se añadió el adaptador de turnos para juegos interactivos futuros.
+- **Motor `resource-arena/3.0.0`.** Corrige un empate de casilla que detenía la competición: en un barrido de 200 semillas, 109 quedaban congeladas con el motor anterior y ninguna con el nuevo ([detalle](docs/arquitectura/motores/motor-v3.md)).
+- **Backend persistente y despliegue público.** Worker de Cloudflare con Durable Object, edición operativa en Vercel, demo sin servidor en GitHub Pages y enlaces de partida compartibles entre navegadores.
+- **Preparación de la wallet dentro de la aplicación**, corrección de la conexión con Freighter en Edge y Brave, y guía publicada de Friendbot.
+- **Evidencia y documentación**: notas de publicación por versión, runbook de pruebas, guion y archivo audiovisual con huellas SHA-256.
+
+Las pruebas pasaron de 68 a 102 en TypeScript durante la ventana, además de las 16 del contrato en Rust.
 
 ## Resumen del proyecto
 
@@ -230,7 +255,7 @@ El servidor reserva semilla y nonce hasta el replay. Cada depósito requiere fir
 ## Verificar el proyecto
 
 ```sh
-npm test                     # 68 pruebas TypeScript; incluye 1.000 semillas
+npm test                     # 102 pruebas TypeScript; incluye 1.000 semillas
 npm run build                # tipos y compilación web
 npm run test:e2e              # 8 escenarios; Chrome instalado
 npm run test:contract          # 16 pruebas del contrato en Windows
