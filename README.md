@@ -58,10 +58,10 @@ ArenaPay existía antes del evento, así que esta entrega se acoge a la regla de
 |---|---|
 | Commit base | [`800328b`](https://github.com/hvaler/ArenaPay/commit/800328b9079607b8b11c9e8d3403bfc15d7bef6f), etiquetado [`v0.1.0`](https://github.com/hvaler/ArenaPay/releases/tag/v0.1.0) — 14 de septiembre de 2026, último anterior a la ventana |
 | Ventana de desarrollo | Del 19 de septiembre, 09:00, al 26 de septiembre (hora de Perú) |
-| Construido dentro | 20 commits · 132 archivos · +4674 / −345 líneas |
+| Construido dentro | [`v0.1.0...main`](https://github.com/hvaler/ArenaPay/compare/v0.1.0...main) — GitHub cuenta los commits, los archivos y las líneas |
 | Versiones publicadas | De la 0.1.1 a la 0.6.2 |
 
-Todo lo anterior al commit base queda fuera de la evaluación. Para ver exactamente lo construido durante la semana: `git diff v0.1.0..main`.
+Todo lo anterior al commit base queda fuera de la evaluación. El enlace de comparación es la vista exacta de lo construido durante la semana; en local, `git diff v0.1.0..main`. No se fija aquí un recuento porque cambiaría con cada commit.
 
 Antes de la ventana, el proyecto era un motor único acoplado a la aplicación, con el contrato de escrow ya desplegado en Testnet y un ensayo manual documentado. Lo construido durante la semana:
 
