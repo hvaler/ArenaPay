@@ -231,6 +231,25 @@ desde `Funded`: si el árbitro desapareciera, pasado el plazo un participante pu
 devolución y las inscripciones solo pueden volver a quienes las depositaron. La recuperación depende
 de que la red y el estado del contrato sean accesibles. No existe una función de retiro arbitrario.
 
+## Stack y dependencias de terceros
+
+Todo el desarrollo ocurre en **Stellar Testnet**, y el contrato lo impone: rechaza el despliegue si el identificador de red no es el de Testnet (`Error::TestnetOnly`).
+
+| Capa | Qué se usa | Licencia |
+|---|---|---|
+| Contrato | [`soroban-sdk`](https://github.com/stellar/rs-soroban-sdk) `=27.0.6`, versión exacta | Apache-2.0 |
+| Cadena | [`@stellar/stellar-sdk`](https://github.com/stellar/js-stellar-sdk) 17 — construcción, simulación y envío de transacciones | Apache-2.0 |
+| Wallet | [`@stellar/freighter-api`](https://github.com/stellar/freighter) 6 — conexión y firma en el navegador | Apache-2.0 |
+| Interfaz | [React](https://react.dev/) 19 y [TypeScript](https://www.typescriptlang.org/) 5.9, compilados con [Vite](https://vite.dev/) 8 | MIT · Apache-2.0 · MIT |
+| Validación | [Zod](https://zod.dev/) 4 — esquemas de replay, entrada y configuración | MIT |
+| Servidor local | [Fastify](https://fastify.dev/) 5 y `@fastify/cors` | MIT |
+| Backend público | [Cloudflare Workers](https://developers.cloudflare.com/workers/) con Durable Objects, desplegado con [Wrangler](https://developers.cloudflare.com/workers/wrangler/) 4 | MIT OR Apache-2.0 |
+| Pruebas | [Vitest](https://vitest.dev/) 4 y [Playwright](https://playwright.dev/) 1.56 | MIT · Apache-2.0 |
+
+Ninguna dependencia lleva una licencia restrictiva: todas son MIT o Apache-2.0, permisivas y compatibles con la AGPL-3.0 que adopta este repositorio. No se ha partido de una plantilla ni de un starter kit; el proyecto no es un fork. Las versiones exactas están en [`package.json`](package.json), [`package-lock.json`](package-lock.json) y [`Cargo.toml`](src/contracts/arena_escrow/Cargo.toml).
+
+**Freighter en lugar de un selector de wallets.** El MVP se conecta a Freighter directamente, sin capa de abstracción entre varias wallets. Es una decisión de alcance: el recorrido exige firmar cuatro operaciones por partida y bastaba con una wallet bien soportada en Testnet. Añadir un selector es compatible con el diseño, porque la firma está aislada tras la interfaz `Wallet` de [`src/apps/web/src/lib/stellar.ts`](src/apps/web/src/lib/stellar.ts).
+
 ## Inicio rápido
 
 Requisitos: **Node.js ≥22.12 y npm**. Reserva unos 5–10 minutos para la primera instalación y práctica; Rust y Freighter no son necesarios para esta parte.
