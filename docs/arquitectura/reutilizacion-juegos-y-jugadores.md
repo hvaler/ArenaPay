@@ -168,6 +168,32 @@ La tabla está ordenada aproximadamente desde el mejor encaje hasta el mayor tra
 
 Ajedrez es viable y sería una demostración fácil de reconocer. El contrato actual puede pagar al ganador porque no necesita entender las piezas. El motor y el verificador deben aplicar exactamente las mismas reglas. El problema principal son las tablas: el contrato actual solo paga a una dirección y no reparte el premio. Para un MVP se puede usar una serie con colores alternos y un desempate determinista, o declarar de antemano una modalidad sin empate.
 
+### Qué hay que decidir antes de soportar tablas
+
+El soporte de empate no es solo elegir cómo se reparte el bote: cambia el mensaje que firma el árbitro. Estas cuatro decisiones siguen abiertas y conviene cerrarlas antes de escribir el contrato nuevo, no durante.
+
+**1. El árbitro firma un ganador, y en tablas no lo hay.** El resumen que valida el contrato incorpora la dirección ganadora:
+
+```rust
+fn digest(env: &Env, id: &BytesN<32>, record: &MatchRecord, winner: &Address, final_hash: &BytesN<32>) -> BytesN<32>
+```
+
+Un empate no tiene esa dirección, así que no se puede expresar con el formato actual ni rellenando el campo con un valor convenido: el contrato comprueba que sea `player_a` o `player_b`. El mensaje debe pasar a firmar el desenlace, no el ganador. Es un cambio de protocolo, no de reparto.
+
+**2. El separador de dominio debe subir de versión.** El resumen empieza por el símbolo `ARENAPAY_V2`. Si un contrato con tablas conserva ese símbolo, una firma emitida para una versión podría presentarse en la otra. La versión nueva necesita su propio separador.
+
+**3. Devolver o repartir es hoy la misma cifra, y mañana puede no serlo.** El contrato guarda un único `buy_in` y ambos depositan esa cantidad, de modo que la mitad del bote coincide exactamente con la inscripción de cada uno. Las dos políticas solo divergen si en el futuro se admiten inscripciones distintas, una comisión o cantidades impares. Conviene declarar cuál se aplica antes de que aparezca alguno de esos casos, porque entonces la elección ya no será neutral.
+
+**4. Un empate no debería consumir presupuesto como lo hace una cancelación.** La devolución por vencimiento no repone el gasto autorizado, y es deliberado:
+
+```rust
+// Budgets track gross authorized spend. Refunds never silently reauthorize spending.
+```
+
+Tiene sentido cuando la partida falla, porque impide reabrir presupuesto sin que la persona lo autorice. Un empate es un final legítimo, así que hay que decidir expresamente si se comporta igual o repone lo gastado. Ignorar la pregunta hará que un jugador que empata varias veces agote su presupuesto sin haber perdido nunca.
+
+Mientras estas decisiones no se cierren, la vía practicable es elegir juegos que no puedan terminar en tablas —Hex es el caso claro— o declarar de antemano una modalidad con desempate obligatorio. [ADR-007](../adr/ADR-007-evidencia-resultados-y-compatibilidad.md) ya recoge que el contrato vigente solo paga una victoria y que el empate exige una versión nueva del protocolo con una política explícita de devolución.
+
 ### Sobre damas chinas
 
 La variante de dos jugadores encaja. La modalidad habitual con más participantes no cabe en el contrato actual, que solo registra `player_a` y `player_b` y paga a una dirección. Soportarla exigiría rediseñar el contrato y las reglas de depósito y reparto.

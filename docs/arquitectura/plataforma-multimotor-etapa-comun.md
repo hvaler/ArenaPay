@@ -59,7 +59,9 @@ participante, operador o financiación.
 El contrato Soroban publicado continúa liquidando una victoria a una única dirección. No se simula
 una devolución por empate con ese contrato. Antes de Connect Four se deberá desplegar una versión
 contractual que defina la devolución de una tabla, manteniendo disponible el contrato histórico y
-sus recibos.
+sus recibos. Las cuatro decisiones que hay que cerrar antes de escribirla —qué firma el árbitro
+cuando no hay ganador, el separador de dominio, devolver o repartir, y si un empate repone el
+presupuesto— están en [qué hay que decidir antes de soportar tablas](reutilizacion-juegos-y-jugadores.md#qué-hay-que-decidir-antes-de-soportar-tablas).
 
 ## Compatibilidad verificada
 
