@@ -274,7 +274,11 @@ Validación: **68 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la 
 - El árbitro autoriza el resultado; Soroban verifica su firma, sin ejecutar el juego.
 - El operador conoce la semilla: el nonce oculta el compromiso frente a terceros, pero no elimina esa confianza.
 
-[Garantías explicadas](docs/seguridad/garantias-y-confianza.md) · [Modelo de amenazas](docs/seguridad/modelo-de-amenazas.md) · [Invariantes del escrow](docs/seguridad/invariantes-del-escrow.md).
+Para profundizar:
+
+- [Garantías y confianza](docs/seguridad/garantias-y-confianza.md) — qué se demuestra y qué sigue requiriendo confianza
+- [Modelo de amenazas](docs/seguridad/modelo-de-amenazas.md) — quién puede atacar qué, y con qué consecuencia
+- [Invariantes del escrow](docs/seguridad/invariantes-del-escrow.md) — las reglas que el contrato no deja romper
 
 No son promesas: cada propiedad dice dónde comprobarla, y las pruebas se citan por su nombre.
 
@@ -309,9 +313,14 @@ partida compartibles. Después amplía el registro ya creado con un segundo moto
 agentes aportados por terceros dentro de un sandbox y, finalmente, jugadores humanos por turnos.
 Ajedrez es viable cuando estén resueltos salas, reloj, reconexión y tablas.
 
-[Guía para registrar un motor](docs/guias/registrar-un-motor.md) · [Selección y protocolo de turnos](docs/arquitectura/seleccion-y-protocolo-de-turnos.md) · [Guía de reutilización y catálogo de juegos](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) ·
-[Hoja de ruta y estrategia de financiación](docs/producto/roadmap-post-hackathon.md). Estas líneas son visión
-posterior a la hackathon y no funcionalidad disponible en el MVP.
+Cómo se haría, documentado:
+
+- [Registrar un motor nuevo](docs/guias/registrar-un-motor.md) — los pasos para añadir un juego al registro
+- [Selección y protocolo de turnos](docs/arquitectura/seleccion-y-protocolo-de-turnos.md) — la interfaz que falta implementar para jugadores humanos
+- [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) — qué se reutiliza y qué hay que construir en cada caso
+- [Hoja de ruta y estrategia de financiación](docs/producto/roadmap-post-hackathon.md) — el orden propuesto y por qué
+
+Estas líneas son visión posterior a la hackathon y no funcionalidad disponible en el MVP.
 
 ## Límites y decisiones asumidas
 
