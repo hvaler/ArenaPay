@@ -20,7 +20,8 @@ Este índice organiza la documentación técnica, operativa y de producto. El [R
 - [Reutilización con juegos y jugadores](arquitectura/reutilizacion-juegos-y-jugadores.md)
 - [Protocolo y versionado](arquitectura/protocolo-y-versionado.md)
 - [Formato de evidencia y firmas](arquitectura/formato-evidencia.md)
-- [Motor actual `resource-arena/2.0.0`](arquitectura/motores/motor-v2.md)
+- [Motor actual `resource-arena/3.0.0`](arquitectura/motores/motor-v3.md)
+- [Motor histórico `resource-arena/2.0.0`](arquitectura/motores/motor-v2.md)
 - [Motor histórico `resource-arena/1.0.0`](arquitectura/motores/motor-v1-reglas.md)
 - [Cómo crear y registrar un motor](guias/registrar-un-motor.md)
 

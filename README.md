@@ -347,9 +347,66 @@ El servicio decide cuándo ejecutarlo y guarda sus resultados.
 
 ## Más documentación
 
-[Índice completo de documentación](docs/README.md) · [Visión general](docs/arquitectura/vision-general.md) · [Glosario](docs/glosario/README.md) · [Decisiones de arquitectura](docs/adr/README.md) · [Modos de prueba](docs/guias/modos-de-prueba.md) · [Flujo de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md) · [Despliegues](docs/despliegue/README.md).
+Empieza por el índice; abajo están los documentos que se consultan más a menudo.
 
-[Backend persistente en Cloudflare](docs/despliegue/cloudflare.md) · [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) · [Etapa común multimotor](docs/arquitectura/plataforma-multimotor-etapa-comun.md) · [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md) · [Plan de Hex, Connect Four, Damas chinas y Ajedrez](docs/producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md) · [Despliegue público](docs/despliegue/README.md) · [Motor v3](docs/arquitectura/motores/motor-v3.md) · [Motor histórico v2](docs/arquitectura/motores/motor-v2.md) · [Reglas históricas v1](docs/arquitectura/motores/motor-v1-reglas.md) · [Evidencia y firmas](docs/arquitectura/formato-evidencia.md) · [API](docs/referencia/api.md) · [Runbook](docs/guias/runbook-pruebas-arenapay.md) · [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md) · [Decisiones](docs/arquitectura/analisis-y-decisiones.md) · [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md) · [Validación guiada](docs/guias/validacion-guiada.md) · [Guion de vídeo](docs/guias/guion-demo-publica.md) · [Demo final](https://youtu.be/LECz_vXmFi0) · [Arquitectura y plataforma](https://youtu.be/4uiet8NSKwo) · [Archivo audiovisual](docs/evidencia/media/README.md) · [Contribuir](CONTRIBUTING.md).
+- **[Índice completo de documentación](docs/README.md)** — todo, por áreas
+- **[Visión general](docs/arquitectura/vision-general.md)** — qué es ArenaPay y cómo encajan sus piezas
+- **[Glosario](docs/glosario/README.md)** — términos de Stellar, Soroban y del propio proyecto
+
+**Arquitectura**
+
+- [Plataforma y reutilización](docs/arquitectura/plataforma-y-reutilizacion.md) — por qué el contrato no conoce el juego
+- [Etapa común multimotor](docs/arquitectura/plataforma-multimotor-etapa-comun.md) — la frontera y el registro de motores
+- [Selección y protocolo de turnos](docs/arquitectura/seleccion-y-protocolo-de-turnos.md) — cómo entra un juego interactivo
+- [Protocolo y versionado](docs/arquitectura/protocolo-y-versionado.md) — compatibilidad entre versiones de motor
+- [Formato de evidencia y firmas](docs/arquitectura/formato-evidencia.md) — qué se firma y qué se comprueba
+- [Decisiones de arquitectura](docs/adr/README.md) — los siete ADR, del ADR-001 al ADR-007
+- [Análisis y decisiones](docs/arquitectura/analisis-y-decisiones.md) — alternativas descartadas
+
+**Motores de juego**
+
+- [Motor `resource-arena/3.0.0`](docs/arquitectura/motores/motor-v3.md) — el vigente, y el empate de casilla que corrigió
+- [Motor histórico `resource-arena/2.0.0`](docs/arquitectura/motores/motor-v2.md) — retirado, con sus reglas intactas
+- [Reglas históricas `resource-arena/1.0.0`](docs/arquitectura/motores/motor-v1-reglas.md)
+- [Registrar un motor nuevo](docs/guias/registrar-un-motor.md) — la guía práctica
+- [Juegos y jugadores](docs/arquitectura/reutilizacion-juegos-y-jugadores.md) — qué falta para jugadores humanos
+
+**Probar y operar**
+
+- [Runbook de pruebas desde cero](docs/guias/runbook-pruebas-arenapay.md) · [versión HTML](docs/guias/runbook-pruebas-arenapay.html)
+- [Preparar Freighter con XLM de prueba](docs/guias/fondear-freighter-testnet.md) — seleccionar Testnet y usar Friendbot
+- [Configuración local](docs/guias/configuracion-local.md) · [Modos de prueba](docs/guias/modos-de-prueba.md)
+- [Validación guiada](docs/guias/validacion-guiada.md) — recorrido de comprobación
+- [Operación y recuperación](docs/guias/operacion-y-recuperacion.md) — incidencias, plazos vencidos y diagnóstico de wallet
+- [Referencia de la API](docs/referencia/api.md)
+
+**Seguridad**
+
+- [Invariantes del escrow](docs/seguridad/invariantes-del-escrow.md) — lo que el contrato garantiza
+- [Modelo de amenazas](docs/seguridad/modelo-de-amenazas.md) · [Garantías y confianza](docs/seguridad/garantias-y-confianza.md)
+- [Criterios para producción](docs/seguridad/criterios-para-produccion.md) — qué falta para salir de Testnet
+- [Auditoría y correcciones](docs/seguridad/auditoria-correcciones-2026-09-12.md)
+
+**Despliegue**
+
+- [Índice de despliegues](docs/despliegue/README.md)
+- [Vercel](docs/despliegue/vercel.md) · [Cloudflare](docs/despliegue/cloudflare.md) · [GitHub Pages](docs/despliegue/github-pages.md)
+- [Flujo de desarrollo y publicación](docs/guias/flujo-desarrollo-y-publicacion.md) — repositorio privado y clon público
+
+**Producto y evidencia**
+
+- [Índice de evidencia por versión](docs/evidencia/README.md) — recibos, replays y publicaciones
+- [Archivo audiovisual](docs/evidencia/media/README.md) — vídeos, subtítulos y huellas SHA-256
+- [Estado y límites](docs/producto/estado-y-limites.md) · [Roadmap posterior a la hackathon](docs/producto/roadmap-post-hackathon.md)
+- [Plan de Hex, Connect Four, Damas chinas y Ajedrez](docs/producto/plan-motores-hex-connect-four-damas-chinas-ajedrez.md)
+- [Benchmarking](docs/producto/benchmarking-arenapay-2026-09-12.md)
+- [Guion de la demo pública](docs/guias/guion-demo-publica.md) · [Guía de grabación](docs/guias/grabacion-demo-testnet.md)
+
+**Colaborar**
+
+- [Cómo contribuir](CONTRIBUTING.md) · [Licencia y derechos](docs/referencia/licencia-y-derechos.md)
+
+Vídeos: [demo completa](https://youtu.be/LECz_vXmFi0) · [arquitectura y plataforma](https://youtu.be/4uiet8NSKwo).
 
 ## Licencia
 
