@@ -216,6 +216,8 @@ terminó 6–3 con los doce recursos sobre el tablero. En 3.0.0 el empate lo res
 alternante por paridad del tick, la misma que ya ordenaba la recogida: ninguna de esas 200 semillas
 se congela. Las partidas anteriores **siguen siendo válidas y verificables**: 2.0.0 queda registrado
 como histórico con sus reglas intactas, porque la evidencia publicada se comprueba contra ellas.
+Hay un [clip de 20 segundos](docs/evidencia/media/arenapay-competicion-v3-es.mp4) con una partida
+completa en el motor nuevo, si prefieres verlo a leerlo.
 
 **El árbitro no necesita una cuenta financiada en Stellar.** El contrato conserva su clave pública
 Ed25519; el árbitro firma la resolución, pero no firma ni envía la transacción y no paga sus

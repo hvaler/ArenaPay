@@ -12,6 +12,7 @@ No se les asigna etiqueta pública porque ningún commit de ese repositorio decl
 
 | Evidencia | Versión | Registro / incorporación | Qué acredita |
 |---|---|---|---|
+| [Desempate de casilla y motor 3.0.0](publicacion-0.6.0-2026-09-21.md), [documento del motor](../arquitectura/motores/motor-v3.md) y [clip de 20 s](media/arenapay-competicion-v3-es.mp4) | resource-arena/3.0.0 | Publicada 21-sep-2026 | Una partida de Testnet se detuvo en el tick 6 de 60; el motor nuevo la recorre entera. Barrido de 200 semillas: 109 congeladas antes, ninguna después. Los tres replays anteriores siguen validando |
 | [Preparación de Freighter y Friendbot](../guias/fondear-freighter-testnet.md) y [ayuda en la aplicación](publicacion-0.5.0-2026-09-21.md) | 0.5.0 | Publicada 21-sep-2026 | Cuenta Testnet financiada con 10.000 XLM de prueba, comprobación de saldo y preparación explicada dentro del panel de Testnet |
 | [Publicación 0.4.0 — 21-sep-2026](publicacion-0.4.0-2026-09-21.md) | Plataforma multimotor | `main` 26b8727 · `gh-pages` 1741776 | Selección de motores activos, preservación histórica y protocolo común de turnos |
 | [Ensayo manual Freighter v2](../guias/ensayo-manual-freighter-v2.md), [datos](testnet-evidence-v2-manual.json) y [replay](fixtures/testnet-replay-v2-manual.json) | resource-arena/2.0.0 | Código ejecutado ce198d7 | Dos cuentas Freighter, nonce, seis recibos, pago y comparación con cadena; una persona operó ambas cuentas |

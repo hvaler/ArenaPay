@@ -27,6 +27,8 @@ Sobre 200 semillas, comparando ambos motores con las mismas políticas:
 
 Una partida real de Testnet, la semilla `4214622373`, se detuvo en el tick 6 de 60 y terminó 6–3 con los doce recursos sobre el tablero. Con 3.0.0 esa misma semilla se mueve hasta el tick 58 y termina 21–19 sin recursos pendientes.
 
+**Verlo en 20 segundos:** [competición con el motor 3.0.0](../../evidencia/media/arenapay-competicion-v3-es.mp4), grabada sobre la aplicación desplegada. Semilla `2042`, Atlas 27 · Nova 25, tick 60 de 60 y el tablero acaba vacío. GitHub lo reproduce en el navegador; sus datos y su huella están en el [archivo audiovisual](../../evidencia/media/README.md).
+
 ## La regla nueva
 
 Cuando ambos piden la misma casilla, decide la **prioridad alternante por paridad del tick**, la misma que ya ordenaba la recogida de recursos: en los ticks pares entra A, en los impares entra B. El otro agente cede y conserva su casilla.
