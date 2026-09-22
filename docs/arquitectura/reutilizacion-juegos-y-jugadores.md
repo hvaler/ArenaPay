@@ -172,15 +172,19 @@ Ajedrez es viable y sería una demostración fácil de reconocer. El contrato ac
 
 El soporte de empate no es solo elegir cómo se reparte el bote: cambia el mensaje que firma el árbitro. Estas cuatro decisiones siguen abiertas y conviene cerrarlas antes de escribir el contrato nuevo, no durante.
 
-**1. El árbitro firma un ganador, y en tablas no lo hay.** El resumen que valida el contrato incorpora la dirección ganadora:
+**1. El árbitro firma un ganador, y en tablas no lo hay.** El resumen que valida el contrato se construye así:
 
 ```rust
-fn digest(env: &Env, id: &BytesN<32>, record: &MatchRecord, winner: &Address, final_hash: &BytesN<32>) -> BytesN<32>
+fn digest(env: &Env, id: &BytesN<32>, record: &MatchRecord, winner: &Address, final_hash: &BytesN<32>) -> BytesN<32> {
+    let payload = (Symbol::new(env, "ARENAPAY_V2"), env.ledger().network_id(), env.current_contract_address(),
+        id.clone(), record.engine_version.clone(), record.seed_hash.clone(), winner.clone(), final_hash.clone()).to_xdr(env);
+    env.crypto().sha256(&payload).into()
+}
 ```
 
-Un empate no tiene esa dirección, así que no se puede expresar con el formato actual ni rellenando el campo con un valor convenido: el contrato comprueba que sea `player_a` o `player_b`. El mensaje debe pasar a firmar el desenlace, no el ganador. Es un cambio de protocolo, no de reparto.
+La dirección ganadora entra en el mensaje firmado, en `winner.clone()`. Un empate no tiene esa dirección, y no se puede sortear rellenando el campo con un valor convenido: `settle_match` comprueba antes que sea `player_a` o `player_b`. El mensaje debe pasar a firmar el desenlace, no el ganador. Es un cambio de protocolo, no de reparto.
 
-**2. El separador de dominio debe subir de versión.** El resumen empieza por el símbolo `ARENAPAY_V2`. Si un contrato con tablas conserva ese símbolo, una firma emitida para una versión podría presentarse en la otra. La versión nueva necesita su propio separador.
+**2. El separador de dominio debe subir de versión.** El primer elemento del mensaje es el símbolo `ARENAPAY_V2`, visible arriba. Si un contrato con tablas conserva ese símbolo, una firma emitida para una versión podría presentarse en la otra. La versión nueva necesita su propio separador. El mensaje incorpora también `network_id()` y la dirección del contrato, de modo que una firma ya no es reutilizable entre redes ni entre despliegues; la versión del protocolo es la dimensión que falta cubrir.
 
 **3. Devolver o repartir es hoy la misma cifra, y mañana puede no serlo.** El contrato guarda un único `buy_in` y ambos depositan esa cantidad, de modo que la mitad del bote coincide exactamente con la inscripción de cada uno. Las dos políticas solo divergen si en el futuro se admiten inscripciones distintas, una comisión o cantidades impares. Conviene declarar cuál se aplica antes de que aparezca alguno de esos casos, porque entonces la elección ya no será neutral.
 
