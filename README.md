@@ -72,12 +72,14 @@ Antes de la ventana, el proyecto era un motor único acoplado a la aplicación, 
 - **Preparación de la wallet dentro de la aplicación**, corrección de la conexión con Freighter en Edge y Brave, y guía publicada de Friendbot.
 - **Evidencia y documentación**: notas de publicación por versión, runbook de pruebas, guion y archivo audiovisual con huellas SHA-256.
 
-Las pruebas pasaron de 68 a 102 en TypeScript durante la ventana, además de las 16 del contrato en Rust.
+Las pruebas de TypeScript pasaron de 67 a 102 durante la ventana, además de las 16 del contrato en Rust.
+La cifra de partida se obtuvo ejecutando la suite sobre el propio commit base.
 
 ## Resumen del proyecto
 
 ArenaPay separa el juego, la evidencia y el pago. El motor actual enfrenta a dos agentes sobre una
-rejilla de recursos; el replay permite repetir sus 120 movimientos y Soroban conserva las
+rejilla de recursos; el replay permite repetir sus 120 movimientos —60 ticks por dos agentes— y
+Soroban conserva las
 inscripciones y el resultado económico. El contrato es agnóstico al tablero, por lo que después de
 la hackathon puede reutilizarse con otros motores deterministas, jugadores humanos o una plataforma
 centralizada que conserve el sistema de evidencia.
@@ -282,7 +284,7 @@ npm run test:e2e              # 8 escenarios; Chrome instalado
 npm run test:contract          # 16 pruebas del contrato en Windows
 ```
 
-Validación: **68 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
+Validación: **102 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
 
 ## Seguridad: propiedades comprobables
 
