@@ -38,7 +38,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      # Sin scripts de instalación: una dependencia comprometida no ejecuta código al instalarse.
+      # esbuild y workerd solo los usan para comprobar su binario, que npm ya instala como dependencia opcional.
+      - run: npm ci --ignore-scripts
       - name: Pruebas
         run: npm test
       - name: Tipos y compilación de la web
