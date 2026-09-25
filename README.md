@@ -52,7 +52,7 @@ Una presentación anterior se conserva sin publicar como material histórico; su
 
 ## Qué se construyó durante Stellar Odyssey Perú 2026
 
-ArenaPay existía antes del evento, así que esta entrega se acoge a la regla de proyectos previos y declara su punto de partida.
+ArenaPay se creó para este evento: la idea surgió al conocer la convocatoria. Parte de su código se escribió antes de que se abriera la ventana de desarrollo, así que esta entrega declara su punto de partida, como exigen las bases para el trabajo anterior a la ventana.
 
 | Dato | Valor |
 |---|---|

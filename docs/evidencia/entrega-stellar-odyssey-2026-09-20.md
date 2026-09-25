@@ -17,3 +17,7 @@ ArenaPay quedó entregado en la plataforma de Stellar Build Perú. La ficha post
 ![Ficha de ArenaPay después de la entrega](screenshots/entrega-stellar-odyssey-2026-09-20.png)
 
 En el momento de la captura todavía no había comentarios del jurado. La ausencia de feedback no indica un problema con la entrega.
+
+## Actualización del 25 de septiembre de 2026
+
+El pitch entregado el 20 de septiembre, `thcnJ7IS7fE`, ya no es público; su copia se conserva en el [archivo audiovisual](media/README.md). El pitch vigente, registrado en el Dashboard, es <https://youtu.be/4uiet8NSKwo>. El resto de recursos de esta lista no ha cambiado.

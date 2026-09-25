@@ -71,9 +71,9 @@ flowchart TD
 - Aplicación: <https://arenapay.vercel.app/>
 - Repositorio público: <https://github.com/hvaler/ArenaPay>
 - Demostración completa: <https://youtu.be/LECz_vXmFi0>
-- Pitch: <https://youtu.be/thcnJ7IS7fE>
+- Pitch: <https://youtu.be/4uiet8NSKwo>. La presentación inicial, `thcnJ7IS7fE`, ya no es pública; su copia está en el [archivo audiovisual](../evidencia/media/README.md).
 - FigJam del flujo, enfocado en la lámina final: <https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86>
 
 ## Uso en el checkpoint
 
-El FigJam debe compartirse como **Cualquier persona con el enlace puede ver**. En el campo **Repositorio base** se utiliza `https://github.com/hvaler/ArenaPay`. La casilla **Este proyecto ya existía antes del evento** debe dejarse sin marcar: ArenaPay nació como respuesta a esta hackatón, después de conocer la convocatoria. Que el desarrollo comenzara antes del registro o de la aceptación de la participación no lo convierte en un proyecto preexistente.
+El FigJam debe compartirse como **Cualquier persona con el enlace puede ver**. En el campo **Repositorio base** se utiliza `https://github.com/hvaler/ArenaPay`. En el checkpoint se dejó sin marcar la casilla **Este proyecto ya existía antes del evento**, porque ArenaPay se creó para esta hackatón, después de conocer la convocatoria. Aun así, parte del código se escribió antes de que se abriera la ventana de desarrollo el 19 de septiembre a las 09:00. Por eso el [README](../../README.md#qué-se-construyó-durante-stellar-odyssey-perú-2026) declara el commit base `800328b`, etiquetado `v0.1.0`, y separa lo construido desde entonces. Esa declaración es la vigente.

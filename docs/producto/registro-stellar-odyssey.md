@@ -31,7 +31,7 @@ Versión corta, si el formulario limita caracteres:
 - Demo offline: <https://hvaler.github.io/ArenaPay/>
 - Backend público: <https://arenapay.arenapay.workers.dev/>
 - Demo completa: <https://youtu.be/LECz_vXmFi0>
-- Pitch: <https://youtu.be/thcnJ7IS7fE>
+- Pitch: <https://youtu.be/4uiet8NSKwo>. La presentación inicial, `thcnJ7IS7fE`, ya no es pública; su copia está en el [archivo audiovisual](../evidencia/media/README.md).
 - Diagrama editable: <https://www.figma.com/board/CgZaKh4wtUQk1PC4J7BfuX/ArenaPay-%E2%80%94-Flujo-verificable-en-Stellar-Testnet?node-id=9-86>
 - Archivo audiovisual y copias maestras: [docs/evidencia/media](../evidencia/media/README.md)
 

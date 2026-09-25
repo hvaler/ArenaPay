@@ -30,7 +30,7 @@ Presentar ArenaPay en menos de tres minutos, separando el valor del proyecto de 
 
 ## Resultado publicado
 
-- **Pitch:** [https://youtu.be/thcnJ7IS7fE](https://youtu.be/thcnJ7IS7fE)
+- **Pitch:** se publicó como `thcnJ7IS7fE` y ya no es público. La copia maestra y su huella están en el [índice de medios](../evidencia/media/README.md). El pitch vigente es [https://youtu.be/4uiet8NSKwo](https://youtu.be/4uiet8NSKwo).
 - **Demo completa relacionada:** [https://youtu.be/LECz_vXmFi0](https://youtu.be/LECz_vXmFi0)
 - **Archivo audiovisual e integridad:** [índice de medios](../evidencia/media/README.md)
 

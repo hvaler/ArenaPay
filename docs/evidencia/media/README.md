@@ -11,7 +11,7 @@ Esta carpeta conserva los entregables audiovisuales finales y sus subtítulos. L
 | Demo completa en español | [MP4](arenapay-demo-testnet-es.mp4) · [subtítulos SRT](arenapay-demo-testnet-es.srt) | [YouTube](https://youtu.be/LECz_vXmFi0) | 4:09 | Campo **Video Demo URL** y recorrido completo de la aplicación |
 | Arquitectura y plataforma | [MP4](pitch-v2/arenapay-arquitectura-stellar-es.mp4) · [subtítulos SRT](pitch-v2/arenapay-pitch-v2-es.srt) | [YouTube](https://youtu.be/4uiet8NSKwo) | 2:44 | Presentación recomendada: arquitectura, motores, juegos y hoja de ruta |
 | Miniatura de arquitectura | [PNG](pitch-v2/arenapay-arquitectura-thumbnail.png) | Usada en YouTube | 1920 × 1080 | Identidad visual de la presentación recomendada |
-| Presentación inicial | [MP4](arenapay-pitch-es.mp4) · [subtítulos SRT](arenapay-pitch-es.srt) · [miniatura](arenapay-pitch-thumbnail.png) | [YouTube](https://youtu.be/thcnJ7IS7fE) | 2:44 | Pieza histórica utilizada en la entrega inicial |
+| Presentación inicial | [MP4](arenapay-pitch-es.mp4) · [subtítulos SRT](arenapay-pitch-es.srt) · [miniatura](arenapay-pitch-thumbnail.png) | YouTube `thcnJ7IS7fE`, ya no público | 2:44 | Pieza histórica utilizada en la entrega inicial |
 | Competición con el motor 3.0.0 | [MP4](arenapay-competicion-v3-es.mp4) | Sin publicar | 0:20 | Sustituye el fragmento de competición de la demo, grabado con el motor que ya corrige el bloqueo |
 
 ## Presentación de arquitectura publicada
