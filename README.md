@@ -286,6 +286,8 @@ npm run test:contract          # 17 pruebas del contrato en Windows
 
 Validación: **102 TypeScript, 17 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
 
+La [integración continua](.github/workflows/ci.yml) repite en cada push y pull request las pruebas TypeScript y del contrato, la compilación WASM de release y la compilación web. Los escenarios de navegador se ejecutan en local.
+
 ## Seguridad: propiedades comprobables
 
 ### Garantías y confianza

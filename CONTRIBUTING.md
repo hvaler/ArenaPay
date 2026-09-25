@@ -38,6 +38,10 @@ El último comando utiliza Google Chrome instalado y arranca ambos servicios si 
 
 `npm run build` comprueba TypeScript y genera la web en `src/apps/web/dist/`. Ese directorio necesita un servidor y una ruta `/api` hacia el motor para crear partidas; no es una entrega desplegada.
 
+Cada push a `main` y cada pull request ejecutan la [integración continua](.github/workflows/ci.yml): `cargo test`, la compilación WASM de release para `wasm32v1-none`, `npm test` y `npm run build`. Un cambio no se integra con la CI en rojo. Los escenarios de Playwright no forman parte de ella y se siguen ejecutando en local.
+
+Las acciones de GitHub van fijadas por SHA de commit, con la versión en un comentario. No las cambies por una etiqueta: Dependabot propone cada mes el SHA nuevo, y basta con revisar y aceptar su pull request.
+
 Validación del 14 de septiembre de 2026: 67 pruebas TypeScript, 16 pruebas Rust, 8 escenarios locales y 1 escenario de la edición pública superados; tipos, compilación web y empaquetado del Worker correctos. El ensayo real comprueba presupuesto excedido, financiación, replay, firma, pago exacto, doble liquidación rechazada y un único evento `settled`. Las capturas de navegador se guardan en `test-results/`.
 
 

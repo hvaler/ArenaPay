@@ -79,7 +79,8 @@ La evidencia técnica del backend se encuentra en [public-backend-evidence.json]
 
 ### 6. Despliegues automatizados
 
-- [ ] Configurar integración continua para ejecutar pruebas y compilación en cada cambio.
+- [x] Configurar integración continua para ejecutar pruebas y compilación en cada cambio. Hecho el 25 de septiembre de 2026 en [`ci.yml`](../../.github/workflows/ci.yml): pruebas TypeScript y del contrato, compilación WASM de release y compilación web. Los escenarios de Playwright siguen siendo manuales.
+- [x] Fijar las acciones de GitHub por SHA de commit y dejar que Dependabot proponga sus actualizaciones cada mes.
 - [ ] Automatizar el despliegue del Worker y de Vercel solamente después de superar las validaciones.
 - [ ] Mantener los secretos en los proveedores de despliegue.
 - [ ] Añadir comprobaciones posteriores al despliegue y una ruta de reversión.
@@ -90,6 +91,7 @@ La evidencia técnica del backend se encuentra en [public-backend-evidence.json]
 ### 7. Preparación para fondos reales
 
 - [ ] Resolver todos los criterios de [criterios-para-produccion.md](../seguridad/criterios-para-produccion.md).
+- [ ] Pasar el análisis estático de Scout (CoinFabrik) al contrato y añadirlo a la CI. Está a la espera de `cargo-scout-audit` 0.3.17: la 0.3.16 publicada no analiza contratos del SDK 27 ([issue #341](https://github.com/CoinFabrik/scout-audit/issues/341)).
 - [ ] Obtener una auditoría independiente del contrato, backend y flujo de firmas.
 - [ ] Definir gestión segura y rotación de las claves de administración y árbitro.
 - [ ] Diseñar alta disponibilidad, copias de seguridad y recuperación probada.
