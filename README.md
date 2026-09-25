@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <a href="#verificar-el-proyecto"><img alt="118 pruebas" src="https://img.shields.io/badge/pruebas-102%20TS%20%2B%2016%20Rust-brightgreen"></a>
+  <a href="#verificar-el-proyecto"><img alt="119 pruebas" src="https://img.shields.io/badge/pruebas-102%20TS%20%2B%2017%20Rust-brightgreen"></a>
   <a href="https://github.com/hvaler/ArenaPay/issues"><img alt="Issues abiertos" src="https://img.shields.io/github/issues/hvaler/ArenaPay?logo=github"></a>
   <a href="https://github.com/hvaler/ArenaPay/commits/main"><img alt="Último commit" src="https://img.shields.io/github/last-commit/hvaler/ArenaPay?logo=git"></a>
   <a href="LICENSE"><img alt="Licencia AGPL 3.0" src="https://img.shields.io/badge/licencia-AGPL--3.0-blue"></a>
@@ -72,7 +72,7 @@ Antes de la ventana, el proyecto era un motor único acoplado a la aplicación, 
 - **Preparación de la wallet dentro de la aplicación**, corrección de la conexión con Freighter en Edge y Brave, y guía publicada de Friendbot.
 - **Evidencia y documentación**: notas de publicación por versión, runbook de pruebas, guion y archivo audiovisual con huellas SHA-256.
 
-Las pruebas de TypeScript pasaron de 67 a 102 durante la ventana, además de las 16 del contrato en Rust.
+Las pruebas de TypeScript pasaron de 67 a 102 durante la ventana, y las del contrato en Rust, de 16 a 17.
 La cifra de partida se obtuvo ejecutando la suite sobre el propio commit base.
 
 ## Resumen del proyecto
@@ -281,10 +281,10 @@ El servidor reserva semilla y nonce hasta el replay. Cada depósito requiere fir
 npm test                     # 102 pruebas TypeScript; incluye 1.000 semillas
 npm run build                # tipos y compilación web
 npm run test:e2e              # 8 escenarios; Chrome instalado
-npm run test:contract          # 16 pruebas del contrato en Windows
+npm run test:contract          # 17 pruebas del contrato en Windows
 ```
 
-Validación: **102 TypeScript, 16 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
+Validación: **102 TypeScript, 17 Rust, 8 escenarios locales y 1 escenario de la edición pública**, más tipos, compilación y empaquetado del Worker. El escenario de lectura real de Testnet se omite si no hay ensayo configurado. En Windows, usa el [ayudante de Cargo](CONTRIBUTING.md#compilar-y-desplegar-el-contrato).
 
 ## Seguridad: propiedades comprobables
 
@@ -320,7 +320,7 @@ No son promesas: cada propiedad dice dónde comprobarla, y las pruebas se citan 
 | Arbitraje | Árbitro único y semilla reservada por el servidor | Reducir confianza, revisar disputas y aleatoriedad |
 | Persistencia | JSON local o Durable Object SQLite público; almacenamiento Soroban con TTL | Ensayar restauración y definir retención |
 | Operación | API pública limitada, secretos en Cloudflare y RPC de lectura con respaldo configurable | Autenticación, custodia avanzada y monitorización con alertas |
-| Contrato | 16 pruebas y liquidación verificada; restringido a Testnet | Auditoría formal y revisión explícita para otra red |
+| Contrato | 17 pruebas y liquidación verificada; restringido a Testnet | Auditoría formal y revisión explícita para otra red |
 
 ### Evolución después de la hackathon
 

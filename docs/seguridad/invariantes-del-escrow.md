@@ -7,6 +7,7 @@ Fuente: [implementación Rust](../../src/contracts/arena_escrow/src/lib.rs). Pru
 | Regla | Prueba concreta |
 |---|---|
 | Solo el administrador crea; cada jugador autoriza su presupuesto y depósito | requires_real_authorization_for_admin_player_and_budget |
+| Cada operación consume solo la autoridad esperada: la firma del depósito cubre la transferencia exacta del token, la liquidación no pide firma de nadie y la devolución solo la del participante que la solicita | each_entry_point_consumes_only_the_expected_authority |
 | No se aceptan participantes iguales, importe inválido o vencimiento inválido | rejects_invalid_creation_parameters |
 | Una inscripción por participante; no se admiten terceros ni IDs repetidos | rejects_duplicate_or_unrelated_deposits_and_ids |
 | Un solo depósito no permite pagar el premio | does_not_settle_with_one_deposit |
@@ -29,4 +30,6 @@ Para cada partida, la suma de depósitos efectivamente recibidos debe coincidir 
 
 Cancelar no devuelve comisiones y no repone presupuesto gastado. Tampoco funciona de forma automática al llegar la hora: alguien autorizado debe enviar la operación. El vencimiento se mide en ledgers, no en minutos fijos.
 
-La extensión de TTL comprobada por Rust no implica que simular un getter por RPC escriba esa extensión en cadena. Las 16 pruebas cubren casos concretos; no son una demostración formal ni una auditoría independiente.
+La extensión de TTL comprobada por Rust no implica que simular un getter por RPC escriba esa extensión en cadena. Las 17 pruebas cubren casos concretos; no son una demostración formal ni una auditoría independiente.
+
+Cada rechazo se comprueba por su código exacto. Una firma inválida y una autorización ausente llegan al llamante con el mismo error del host, `Error(Context, InvalidAction)`, por lo que esas pruebas comprueban además que no se movieron fondos. Un depósito sin saldo devuelve `Error(Contract, #10)`, que es el `BalanceError` del token y coincide en número con `Error::Expired` del escrow: el código de un depósito fallido no debe interpretarse como propio del contrato.

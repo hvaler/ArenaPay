@@ -1,7 +1,29 @@
 extern crate std;
 use super::*;
 use ed25519_dalek::{Signer, SigningKey};
-use soroban_sdk::{testutils::{Address as _, Ledger, Events}, xdr};
+use soroban_sdk::{testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation, Ledger, Events}, xdr, IntoVal, Val, Vec};
+
+/// Fails with exactly this contract error, not merely with some error.
+macro_rules! fails_with {
+    ($call:expr, $error:expr) => {
+        assert_eq!($call.err(), Some(Ok(soroban_sdk::Error::from_contract_error($error as u32))))
+    };
+}
+/// Fails in the host, outside the contract's own codes. A rejected ed25519
+/// signature and a missing authorization both reach the caller as this same
+/// error, so the tests that use it also check that no funds moved.
+macro_rules! host_rejects {
+    ($call:expr) => {
+        assert_eq!($call.err(), Some(Ok(soroban_sdk::Error::from_type_and_code(xdr::ScErrorType::Context, xdr::ScErrorCode::InvalidAction))))
+    };
+}
+
+fn invocation(contract: &Address, function: &str, args: Vec<Val>, sub_invocations: std::vec::Vec<AuthorizedInvocation>) -> AuthorizedInvocation {
+    AuthorizedInvocation {
+        function: AuthorizedFunction::Contract((contract.clone(), Symbol::new(contract.env(), function), args)),
+        sub_invocations,
+    }
+}
 
 struct Fixture {
     env: Env, contract: Address, admin: Address, a: Address, b: Address,
@@ -51,23 +73,23 @@ fn pays_exactly_once_and_emits_evidence() {
     let result = f.client().get_match(&f.id);
     assert_eq!(result.status, MatchStatus::Settled); assert_eq!(result.winner, Some(f.a.clone()));
     assert_eq!(result.final_state_hash, Some(f.hash.clone()));
-    assert!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &signature).is_err());
+    fails_with!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &signature), Error::InvalidState);
     assert_eq!(f.balance(&f.a), 1100);
 }
 
 #[test]
 fn rejects_invalid_signature_without_moving_funds() {
     let f = Fixture::new(); f.fund();
-    assert!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &BytesN::from_array(&f.env, &[0;64])).is_err());
+    host_rejects!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &BytesN::from_array(&f.env, &[0;64])));
     assert_eq!(f.balance(&f.contract), 200); assert_eq!(f.client().get_match(&f.id).status, MatchStatus::Funded);
 }
 
 #[test]
 fn rejects_other_winner_and_mutated_final_hash() {
     let f = Fixture::new(); f.fund(); let signature = f.signature(&f.a);
-    assert!(f.client().try_settle_match(&f.id, &f.b, &f.hash, &signature).is_err());
-    assert!(f.client().try_settle_match(&f.id, &f.admin, &f.hash, &signature).is_err());
-    assert!(f.client().try_settle_match(&f.id, &f.a, &BytesN::from_array(&f.env, &[3;32]), &signature).is_err());
+    host_rejects!(f.client().try_settle_match(&f.id, &f.b, &f.hash, &signature));
+    fails_with!(f.client().try_settle_match(&f.id, &f.admin, &f.hash, &signature), Error::InvalidWinner);
+    host_rejects!(f.client().try_settle_match(&f.id, &f.a, &BytesN::from_array(&f.env, &[3;32]), &signature));
     assert_eq!(f.balance(&f.contract), 200);
 }
 
@@ -80,24 +102,24 @@ fn prevents_signature_reuse_between_contracts() {
     client.authorize_budget(&f.a, &300, &1000); client.authorize_budget(&f.b, &300, &1000);
     client.create_match(&f.id, &f.a, &f.b, &100, &String::from_str(&f.env, "resource-arena/1.0.0"), &BytesN::from_array(&f.env, &[2;32]), &200);
     client.deposit(&f.id, &f.a); client.deposit(&f.id, &f.b);
-    assert!(client.try_settle_match(&f.id, &f.a, &f.hash, &signature).is_err());
+    host_rejects!(client.try_settle_match(&f.id, &f.a, &f.hash, &signature));
     assert_eq!(f.balance(&other), 200);
 }
 
 #[test]
 fn rejects_duplicate_or_unrelated_deposits_and_ids() {
     let f = Fixture::new(); f.create();
-    assert!(f.client().try_deposit(&f.id, &f.admin).is_err());
+    fails_with!(f.client().try_deposit(&f.id, &f.admin), Error::NotPlayer);
     f.client().deposit(&f.id, &f.a);
-    assert!(f.client().try_deposit(&f.id, &f.a).is_err());
+    fails_with!(f.client().try_deposit(&f.id, &f.a), Error::AlreadyDeposited);
     assert_eq!(f.balance(&f.a), 900);
-    assert!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &String::from_str(&f.env, "v1"), &f.hash, &200).is_err());
+    fails_with!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &String::from_str(&f.env, "v1"), &f.hash, &200), Error::AlreadyExists);
 }
 
 #[test]
 fn does_not_settle_with_one_deposit() {
     let f = Fixture::new(); f.create(); f.client().deposit(&f.id, &f.a);
-    assert!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &f.signature(&f.a)).is_err());
+    fails_with!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &f.signature(&f.a)), Error::InvalidState);
     assert_eq!(f.balance(&f.contract), 100);
 }
 
@@ -107,29 +129,29 @@ fn refunds_exactly_the_received_deposits_after_timeout() {
         let f = Fixture::new(); f.create();
         if deposits > 0 { f.client().deposit(&f.id, &f.a); }
         if deposits > 1 { f.client().deposit(&f.id, &f.b); }
-        assert!(f.client().try_cancel_match(&f.id, &f.a).is_err());
+        fails_with!(f.client().try_cancel_match(&f.id, &f.a), Error::TooEarly);
         f.expire();
-        assert!(f.client().try_cancel_match(&f.id, &f.admin).is_err());
+        fails_with!(f.client().try_cancel_match(&f.id, &f.admin), Error::NotPlayer);
         f.client().cancel_match(&f.id, &f.b);
         assert_eq!(f.balance(&f.a), 1000); assert_eq!(f.balance(&f.b), 1000); assert_eq!(f.balance(&f.contract), 0);
         assert_eq!(f.client().get_match(&f.id).status, MatchStatus::Cancelled);
-        assert!(f.client().try_cancel_match(&f.id, &f.a).is_err());
-        assert!(f.client().try_deposit(&f.id, &f.a).is_err());
+        fails_with!(f.client().try_cancel_match(&f.id, &f.a), Error::InvalidState);
+        fails_with!(f.client().try_deposit(&f.id, &f.a), Error::InvalidState);
     }
 }
 
 #[test]
 fn expired_funded_match_cannot_settle_and_settled_match_cannot_cancel() {
     let f = Fixture::new(); f.fund(); let signature = f.signature(&f.a); f.expire();
-    assert!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &signature).is_err());
+    fails_with!(f.client().try_settle_match(&f.id, &f.a, &f.hash, &signature), Error::Expired);
     let g = Fixture::new(); g.fund(); g.client().settle_match(&g.id, &g.a, &g.hash, &g.signature(&g.a)); g.expire();
-    assert!(g.client().try_cancel_match(&g.id, &g.a).is_err());
+    fails_with!(g.client().try_cancel_match(&g.id, &g.a), Error::InvalidState);
 }
 
 #[test]
 fn enforces_budget_without_spending_on_failure() {
     let f = Fixture::new(); f.create(); f.client().authorize_budget(&f.a, &99, &1000);
-    assert!(f.client().try_deposit(&f.id, &f.a).is_err());
+    fails_with!(f.client().try_deposit(&f.id, &f.a), Error::BudgetExceeded);
     assert_eq!(f.balance(&f.a), 1000); assert_eq!(f.client().get_budget(&f.a).unwrap().spent, 0);
     f.client().authorize_budget(&f.a, &100, &1000); f.client().deposit(&f.id, &f.a);
     f.client().authorize_budget(&f.a, &100, &1000);
@@ -142,7 +164,9 @@ fn enforces_budget_without_spending_on_failure() {
 fn token_failure_rolls_back_budget_and_deposit() {
     let f = Fixture::new(); f.create();
     token::Client::new(&f.env, &f.token).transfer(&f.a, &f.admin, &1000);
-    assert!(f.client().try_deposit(&f.id, &f.a).is_err());
+    // The Stellar Asset Contract's own BalanceError (#10) propagates unchanged. It shares its
+    // number with Error::Expired, so a caller must not read a failed deposit's code as the escrow's.
+    assert_eq!(f.client().try_deposit(&f.id, &f.a).err(), Some(Ok(soroban_sdk::Error::from_contract_error(10))));
     assert_eq!(f.client().get_budget(&f.a).unwrap().spent, 0);
     assert!(!f.client().get_match(&f.id).funded_a);
 }
@@ -151,20 +175,47 @@ fn token_failure_rolls_back_budget_and_deposit() {
 fn rejects_invalid_creation_parameters() {
     let f = Fixture::new(); let v = String::from_str(&f.env, "v1");
     for amount in [0, -1, i128::MAX] {
-        assert!(f.client().try_create_match(&f.id, &f.a, &f.b, &amount, &v, &f.hash, &200).is_err());
+        fails_with!(f.client().try_create_match(&f.id, &f.a, &f.b, &amount, &v, &f.hash, &200), Error::InvalidAmount);
     }
-    assert!(f.client().try_create_match(&f.id, &f.a, &f.a, &100, &v, &f.hash, &200).is_err());
-    assert!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &v, &f.hash, &100).is_err());
-    assert!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &v, &f.hash, &20_000).is_err());
+    fails_with!(f.client().try_create_match(&f.id, &f.a, &f.a, &100, &v, &f.hash, &200), Error::InvalidPlayers);
+    fails_with!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &v, &f.hash, &100), Error::InvalidTimeout);
+    fails_with!(f.client().try_create_match(&f.id, &f.a, &f.b, &100, &v, &f.hash, &20_000), Error::InvalidTimeout);
 }
 
 #[test]
 fn requires_real_authorization_for_admin_player_and_budget() {
     let f = Fixture::new(); f.create(); f.env.mock_auths(&[]);
-    assert!(f.client().try_deposit(&f.id, &f.a).is_err());
-    assert!(f.client().try_authorize_budget(&f.a, &900, &1000).is_err());
-    assert!(f.client().try_create_match(&BytesN::from_array(&f.env, &[4;32]), &f.a, &f.b, &100, &String::from_str(&f.env, "v1"), &f.hash, &200).is_err());
-    f.expire(); assert!(f.client().try_cancel_match(&f.id, &f.a).is_err());
+    host_rejects!(f.client().try_deposit(&f.id, &f.a));
+    host_rejects!(f.client().try_authorize_budget(&f.a, &900, &1000));
+    host_rejects!(f.client().try_create_match(&BytesN::from_array(&f.env, &[4;32]), &f.a, &f.b, &100, &String::from_str(&f.env, "v1"), &f.hash, &200));
+    f.expire(); host_rejects!(f.client().try_cancel_match(&f.id, &f.a));
+}
+
+#[test]
+fn each_entry_point_consumes_only_the_expected_authority() {
+    let f = Fixture::new(); let e = &f.env;
+    f.client().authorize_budget(&f.a, &300, &1000);
+    assert_eq!(e.auths(), std::vec![(f.a.clone(), invocation(&f.contract, "authorize_budget", (&f.a, 300_i128, 1000_u32).into_val(e), std::vec![]))]);
+
+    let version = String::from_str(e, "resource-arena/1.0.0"); let seed = BytesN::from_array(e, &[2;32]);
+    f.client().create_match(&f.id, &f.a, &f.b, &100, &version, &seed, &200);
+    assert_eq!(e.auths(), std::vec![(f.admin.clone(), invocation(&f.contract, "create_match",
+        (&f.id, &f.a, &f.b, 100_i128, &version, &seed, 200_u32).into_val(e), std::vec![]))]);
+
+    // The player's signature covers the deposit and, nested inside it, the exact token transfer.
+    f.client().deposit(&f.id, &f.a);
+    assert_eq!(e.auths(), std::vec![(f.a.clone(), invocation(&f.contract, "deposit", (&f.id, &f.a).into_val(e),
+        std::vec![invocation(&f.token, "transfer", (&f.a, &f.contract, 100_i128).into_val(e), std::vec![])]))]);
+
+    // Settlement is authorized by the referee signature alone, so anyone can relay it.
+    f.client().deposit(&f.id, &f.b);
+    f.client().settle_match(&f.id, &f.a, &f.hash, &f.signature(&f.a));
+    assert_eq!(e.auths(), std::vec![]);
+
+    // Refunds leave the escrow on its own authority: only the requesting player signs.
+    let g = Fixture::new(); g.create(); g.client().deposit(&g.id, &g.a); g.expire();
+    g.client().cancel_match(&g.id, &g.b);
+    assert_eq!(g.env.auths(), std::vec![(g.b.clone(), invocation(&g.contract, "cancel_match", (&g.id, &g.b).into_val(&g.env), std::vec![]))]);
 }
 
 #[test]
@@ -199,7 +250,7 @@ fn matches_typescript_xdr_and_signature_vector() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected = "Error(Contract, #13)")]
 fn refuses_deployment_on_other_networks() {
     let env = Env::default();
     env.register(ArenaEscrow, (Address::generate(&env), Address::generate(&env), BytesN::from_array(&env, &[1;32])));
@@ -210,8 +261,8 @@ fn budget_expiry_and_missing_budget_prevent_deposits() {
     let f = Fixture::new(); f.create();
     f.client().authorize_budget(&f.a, &300, &101);
     f.env.ledger().with_mut(|ledger| ledger.sequence_number = 101);
-    assert!(f.client().try_deposit(&f.id, &f.a).is_err());
+    fails_with!(f.client().try_deposit(&f.id, &f.a), Error::Expired);
     f.env.as_contract(&f.contract, || f.env.storage().persistent().remove(&Key::Budget(f.b.clone())));
-    assert!(f.client().try_deposit(&f.id, &f.b).is_err());
+    fails_with!(f.client().try_deposit(&f.id, &f.b), Error::BudgetMissing);
     assert_eq!(f.balance(&f.contract), 0);
 }
